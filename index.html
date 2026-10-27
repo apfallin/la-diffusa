@@ -1,0 +1,558 @@
+
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>La Diffusa — la biblioteca diffusa / die verteilte Bibliothek</title>
+<style>
+  :root{
+    --paper:#faf6ef; --card:#fffdf8; --ink:#2f2a24; --mut:#8a8070; --line:#e8e0d0;
+    --green:#3a6b4f; --greendk:#2c5239; --greenbg:#eef4ec; --greenline:#cdddcd;
+    --terra:#c4664a; --terrabg:#faf0e8; --terraline:#ecd5c5;
+    --gold:#b98a2f;
+    --radius:.85rem;
+    --shadow:0 1px 3px rgba(60,50,30,.06),0 4px 14px rgba(60,50,30,.07);
+    --font-head:"Iowan Old Style",Georgia,"Times New Roman",serif;
+  }
+  :root.dark{
+    --paper:#211d17; --card:#2a251d; --ink:#ece5d8; --mut:#a19681; --line:#3d362a;
+    --green:#8fc4a5; --greendk:#a9d5bb; --greenbg:#24312a; --greenline:#3a5245;
+    --terra:#e0937a; --terrabg:#32261f; --terraline:#4d3a2e;
+    --gold:#d4b25e;
+    --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.35);
+  }
+  :root.dark .pill.kiez{background:#232a36;color:#9db4d8;border-color:#36415a}
+  :root.dark .chip.on{background:var(--terra);color:#211d17}
+  .chip.teen.on{background:var(--gold);border-color:var(--gold);color:#fff}
+  :root.dark .chip.kids.on{background:var(--green);color:#211d17}
+  :root.dark .chip.teen.on{background:var(--gold);color:#211d17}
+  :root.dark .vbtn.on{background:var(--ink);color:var(--paper)}
+  :root.dark .gcover .badge{background:rgba(33,29,23,.85);color:var(--ink)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:system-ui,-apple-system,"Segoe UI",sans-serif;background:var(--paper);color:var(--ink);line-height:1.5;padding:0 0 4rem;max-width:46rem;margin:0 auto}
+  /* ---------- hero ---------- */
+  .hero{
+    background:
+      radial-gradient(circle at 85% -10%, var(--terrabg) 0%, transparent 55%),
+      radial-gradient(circle at -10% 110%, var(--greenbg) 0%, transparent 50%),
+      var(--paper);
+    border-bottom:1px solid var(--line);
+    padding:1.3rem .9rem 1.1rem;margin-bottom:1rem;
+  }
+  .toprow{display:flex;align-items:center;gap:.6rem;flex-wrap:wrap;max-width:46rem;margin:0 auto}
+  .logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:.45rem}
+  .logo .bk{color:var(--green);font-style:italic}
+  .logo .mark{font-size:1.3rem}
+  .langSel{font-size:.85rem;border:1px solid var(--line);border-radius:.45rem;padding:.3rem .4rem;background:var(--card);color:var(--ink)}
+  .themeBtn{border:1px solid var(--line);border-radius:.45rem;padding:.3rem .45rem;background:var(--card);cursor:pointer;font-size:.9rem;margin-left:.45rem}
+  .tagline{font-family:var(--font-head);font-style:italic;font-size:.85rem;color:var(--mut);margin-top:.35rem;max-width:46rem;margin-left:auto;margin-right:auto}
+  .main{padding:0 .9rem;max-width:46rem;margin:0 auto}
+  /* ---------- action buttons ---------- */
+  .actions{display:grid;grid-template-columns:1fr 1fr;gap:.7rem;margin-bottom:1rem}
+  .abtn{display:flex;flex-direction:column;align-items:center;gap:.1rem;text-decoration:none;border-radius:var(--radius);padding:.85rem .5rem .7rem;font-size:1rem;font-weight:700;font-family:var(--font-head);border:1.5px solid transparent;transition:transform .12s,box-shadow .12s;box-shadow:var(--shadow)}
+  .abtn:active{transform:scale(.97)}
+  .abtn .big{font-size:1.5rem}
+  .abtn .sub{font-size:.7rem;font-weight:400;color:var(--mut);font-family:system-ui,sans-serif}
+  .abtn.offer{background:var(--greenbg);border-color:var(--greenline);color:var(--greendk)}
+  .abtn.wishb{background:var(--terrabg);border-color:var(--terraline);color:var(--terra)}
+  /* ---------- how ---------- */
+  details.how{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+  details.how summary{cursor:pointer;font-size:.95rem;font-weight:600;font-family:var(--font-head);list-style:none;color:var(--greendk)}
+  details.how summary::-webkit-details-marker{display:none}
+  details.how summary::before{content:"ℹ️ "}
+  details.how[open] summary{margin-bottom:.35rem}
+  .how ol{padding-left:1.2rem;font-size:.85rem}
+  .how ol li{margin-bottom:.25rem}
+  .how ol li::marker{color:var(--terra);font-weight:700}
+  .how .note{font-size:.75rem;color:var(--mut);margin-top:.5rem}
+  /* ---------- controls ---------- */
+  .controls{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.7rem;position:sticky;top:.5rem;z-index:5;box-shadow:var(--shadow)}
+  .ctlgrid{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
+  .ctl{flex:1 1 8.5rem;display:flex;align-items:center;gap:.4rem}
+  .ctl label{font-size:.72rem;color:var(--mut);white-space:nowrap}
+  select.ctl{border:1px solid var(--line);border-radius:.55rem;padding:.45rem .5rem;font-size:.85rem;background:var(--paper);color:var(--ink);flex:1}
+  .agechips{display:flex;gap:.35rem;flex:1 1 100%;flex-wrap:wrap;justify-content:flex-start}
+  .agechips.sub{display:none;margin-top:.3rem}
+  .agechips.sub.show{display:flex}
+  .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
+  .chip:hover{border-color:var(--terra)}
+  .chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
+  .chip.kids.on{background:var(--green);border-color:var(--green);color:#fff}
+  .qwrap{position:relative;margin-top:.55rem}
+  .qwrap input{width:100%;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:.5rem 1rem .5rem 2.1rem;font-size:.85rem;color:var(--ink);outline:none;transition:border-color .12s}
+  .qwrap::before{content:"🔍";position:absolute;left:.65rem;top:50%;transform:translateY(-50%);font-size:.8rem;opacity:.6}
+  .qwrap input:focus{border-color:var(--terra);background:var(--card)}
+  /* ---------- view bar ---------- */
+  .viewbar{display:flex;justify-content:space-between;align-items:center;margin:.1rem .1rem .5rem}
+  #count{font-size:.78rem;color:var(--mut);font-style:italic;font-family:var(--font-head)}
+  .vswitch{display:flex;border:1px solid var(--line);border-radius:.55rem;overflow:hidden;background:var(--card)}
+  .vbtn{border:none;background:transparent;padding:.25rem .7rem;font-size:.78rem;cursor:pointer;color:var(--mut)}
+  .vbtn.on{background:var(--ink);color:var(--paper)}
+  .dice{border:1px solid var(--terraline);border-radius:999px;background:var(--terrabg);color:var(--terra);font-size:.78rem;padding:.3rem .8rem;cursor:pointer;font-weight:600}
+  .dice:active{transform:scale(.95)}
+  .gcell.flash{animation:bbflash 2s ease}
+  @keyframes bbflash{0%,60%{outline:3px solid var(--terra);outline-offset:2px;box-shadow:0 0 0 6px rgba(196,102,74,.25)}100%{outline:0 solid transparent;box-shadow:var(--shadow)}}
+  .totop{position:fixed;bottom:1.1rem;right:1.1rem;z-index:50;border:1px solid var(--greenline);border-radius:999px;background:var(--green);color:#fff;font-size:1rem;padding:.5rem .7rem;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s,transform .15s}
+  .totop.show{opacity:1;pointer-events:auto}
+  .totop:hover{transform:translateY(-2px)}
+  .totop:active{transform:scale(.93)}
+  /* ---------- detail modal ---------- */
+  .overlay{position:fixed;inset:0;background:rgba(40,32,20,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center}
+  .sheet{background:var(--card);width:100%;max-width:26rem;border-radius:1.1rem 1.1rem 0 0;padding:1rem 1rem 1.3rem;box-shadow:0 -8px 30px rgba(0,0,0,.3);max-height:85vh;overflow:auto}
+  .sheet .closeRow{display:flex;justify-content:flex-end;margin-bottom:-.5rem}
+  .sheet .close{border:1px solid var(--line);background:var(--paper);border-radius:999px;width:1.7rem;height:1.7rem;cursor:pointer;font-size:.9rem;color:var(--mut)}
+  .sheet .dcover{height:13rem;border-radius:.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem;font-weight:700;font-family:var(--font-head);text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative;overflow:hidden;margin-bottom:.7rem;box-shadow:var(--shadow)}
+  .sheet .dcover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .sheet .dtitle{font-family:var(--font-head);font-size:1.15rem;font-weight:700;line-height:1.3}
+  .sheet .dauthor{font-size:.85rem;color:var(--mut);font-style:italic;margin-top:.15rem}
+  .sheet .dpills{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.6rem}
+  .sheet .downer{margin-top:.7rem;font-size:.85rem;color:var(--mut)}
+  .sheet .downer b{color:var(--ink);font-weight:600}
+  .sheet .dnote{margin-top:.5rem;font-size:.75rem;color:var(--mut);background:var(--paper);border:1px solid var(--line);border-radius:.5rem;padding:.5rem .6rem}
+  .sheet .ddesc{margin-top:.6rem;font-size:.78rem;line-height:1.45;color:var(--ink)}
+  .sheet .ddesc .more{display:none}
+  .sheet .ddesc.open .more{display:inline}
+  .sheet .ddesc .toggle{color:var(--terra);cursor:pointer;font-weight:600;white-space:nowrap}
+  .sheet .contact{display:block;text-align:center;text-decoration:none;margin-top:.9rem;border-radius:.65rem;padding:.7rem;font-weight:700;font-family:var(--font-head);border:none;cursor:pointer;width:100%;font-size:.95rem}
+  .sheet .contact.offer{background:var(--green);color:#fff}
+  .sheet .contact.wishc{background:var(--terra);color:#fff}
+  .sheet .dfoot{margin-top:.5rem;text-align:center;font-size:.7rem;color:var(--mut)}
+  /* ---------- list view ---------- */
+  .book{display:flex;gap:.7rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.55rem;box-shadow:var(--shadow);border-left:4px solid var(--green);transition:transform .12s;cursor:pointer}
+  .book:hover{transform:translateY(-1px)}
+  .book.wish{border-left-color:var(--terra);background:var(--terrabg)}
+  .book.lent{border-left-color:var(--mut);opacity:.65}
+  .cover{flex:0 0 3.2rem;height:4.4rem;border-radius:.35rem .45rem .45rem .35rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;font-family:var(--font-head);text-shadow:0 1px 2px rgba(0,0,0,.3);box-shadow:inset 3px 0 0 rgba(255,255,255,.25),inset -2px 0 0 rgba(0,0,0,.15),0 1px 4px rgba(0,0,0,.25);position:relative;overflow:hidden}
+  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .bbody{flex:1;min-width:0}
+  .bhead{display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap}
+  .btitle{font-weight:600;font-size:.92rem;font-family:var(--font-head)}
+  .bauthor{font-size:.78rem;color:var(--mut);font-style:italic}
+  .bmeta{display:flex;gap:.4rem;flex-wrap:wrap;margin-top:.35rem}
+  .pill{font-size:.66rem;border-radius:999px;padding:.1rem .5rem;background:var(--greenbg);color:var(--greendk);border:1px solid var(--greenline)}
+  .pill.kiez{background:#eef2f8;color:#3d5a80;border-color:#cfdcea}
+  .pill.age{background:#f7f0fa;color:#6b21a8;border-color:#e5d5f0}
+  .pill.wish{background:var(--terrabg);color:var(--terra);border-color:var(--terraline)}
+  .pill.lentp{background:var(--paper);color:var(--mut);border-color:var(--line)}
+  .bowner{font-size:.74rem;color:var(--mut);margin-top:.3rem}
+  .bowner b{color:var(--ink);font-weight:500}
+  /* ---------- grid view ---------- */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.5rem,1fr));gap:.8rem}
+  .gcell{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .15s;box-shadow:var(--shadow)}
+  .gcell:hover{box-shadow:0 6px 20px rgba(60,50,30,.18);transform:translateY(-3px)}
+  .gcell.wish{background:var(--terrabg);border-color:var(--terraline)}
+  .gcell.lent{opacity:.65}
+  .gcover{height:9.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:2rem;font-family:var(--font-head);text-shadow:0 1px 3px rgba(0,0,0,.3);position:relative;box-shadow:inset 5px 0 0 rgba(255,255,255,.22),inset -3px 0 0 rgba(0,0,0,.14)}
+  .gcover .badge{position:absolute;top:.4rem;left:.4rem;font-size:.62rem;background:rgba(255,252,244,.92);border-radius:.4rem;padding:.08rem .4rem;color:var(--ink);font-weight:600}
+  .gcover .lentb{position:absolute;bottom:.4rem;right:.4rem;font-size:.62rem;background:rgba(0,0,0,.6);color:#fff;border-radius:.4rem;padding:.1rem .4rem}
+  .gcover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .ginfo{padding:.45rem .55rem .55rem}
+  .gtitle{font-size:.76rem;font-weight:600;font-family:var(--font-head);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.9rem}
+  .gmeta{font-size:.68rem;margin-top:.25rem;display:flex;flex-direction:column;gap:.08rem}
+  .gmeta .row1{display:flex;justify-content:space-between;gap:.3rem}
+  .gmeta .l{color:var(--terra);font-style:italic}
+  .gmeta .k{color:var(--green)}
+  .gowner2{font-size:.66rem;color:var(--mut);margin-top:.3rem;border-top:1px solid var(--line);padding-top:.25rem}
+  .empty{font-size:.85rem;color:var(--mut);text-align:center;padding:2rem 0;font-style:italic;font-family:var(--font-head)}
+  footer{margin-top:2.5rem;font-size:.75rem;color:var(--mut);border-top:2px solid var(--line);padding-top:1rem;text-align:center;font-style:italic;font-family:var(--font-head)}
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="toprow">
+    <div class="logo"><span class="mark">📖</span>La <span class="bk">Diffusa</span></div>
+    <select id="langSel" class="langSel" aria-label="Language">
+      <option value="it">Italiano</option>
+      <option value="de">Deutsch</option>
+      <option value="en">English</option>
+    </select>
+    <button id="themeBtn" class="themeBtn" aria-label="Tema">🌙</button>
+  </div>
+  <p class="tagline" id="tagline"></p>
+</div>
+
+<div class="main">
+<section class="actions">
+  <a class="abtn offer" id="btnOffer" href="https://cryptpad.fr/form/#/2/form/view/hMMwvouLztTu7wZbMNu5pCH6jVVIBy7NTAiENuCbZ6Q/" target="_blank" rel="noopener">
+    <span class="big">📚</span><span id="lblOffer"></span><span class="sub" id="subOffer"></span>
+  </a>
+  <a class="abtn wishb" id="btnWish" href="https://cryptpad.fr/form/#/2/form/view/hMMwvouLztTu7wZbMNu5pCH6jVVIBy7NTAiENuCbZ6Q/" target="_blank" rel="noopener">
+    <span class="big">✨</span><span id="lblWish"></span><span class="sub" id="subWish"></span>
+  </a>
+</section>
+
+<details class="how" id="how">
+  <summary id="howTitle"></summary>
+  <ol id="howList"></ol>
+  <p class="note" id="howNote"></p>
+</details>
+
+<section class="controls">
+  <div class="ctlgrid">
+    <div class="ctl">
+      <label for="kiezSel">📍</label>
+      <select id="kiezSel" class="ctl"></select>
+    </div>
+    <div class="ctl">
+      <label for="langBookSel">🌐</label>
+      <select id="langBookSel" class="ctl"></select>
+    </div>
+    <div class="ctl">
+      <label for="genreSel">🏷️</label>
+      <select id="genreSel" class="ctl"></select>
+    </div>
+    <div class="ctl agechips" id="typeRow"></div>
+    <div class="ctl agechips" id="ageRow"></div>
+    <div class="ctl agechips sub" id="ageRow2"></div>
+  </div>
+  <div class="qwrap"><input id="q" type="search" placeholder=""></div>
+</section>
+
+<div class="viewbar">
+  <span id="count"></span>
+  <div style="display:flex;gap:.5rem;align-items:center">
+    <button class="dice" id="dice"></button>
+    <div class="vswitch">
+    <button class="vbtn" id="vList"></button>
+    <button class="vbtn on" id="vTable"></button>
+  </div>
+  </div>
+</div>
+<div id="list"></div>
+<button class="totop" id="totop" aria-label="Torna su">↑</button>
+<div class="overlay" id="overlay" style="display:none">
+  <div class="sheet" id="sheet"></div>
+</div>
+<div id="table" style="display:none"></div>
+
+<footer id="foot"></footer>
+</div>
+
+<script>
+"use strict";
+// ============ DATA ============
+// type: "offer" | "wish"   status: "ok" | "lent"
+// cover: colore placeholder della copertina (nel passo 2 sarà la foto caricata dal form)
+const BOOKS = [
+  {title:"Il Piccolo Principe",author:"Antoine de Saint-Exupéry",isbn:"9788845278617",lang:"Italiano",kiez:"Neukölln",age:"6-9",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Un aviatore, solo nel deserto dopo un guasto, incontra un bambino biondo venuto da un altro pianeta: il piccolo principe, che con la sua semplicità disarmante racconta di rose, volpi e fiere che bisogna addomesticare. Una poesia sull'amicizia e sull'essenziale invisibile agli occhi, amata da bambini e adulti da ottant'anni.",cover:"#0d9488"},
+  {title:"La Storia della Gabbianella e del Gatto che le insegnò a volare",author:"Luis Sepúlveda",isbn:"9788893810739",lang:"Italiano",kiez:"Neukölln",age:"6-9",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Fortunata, una gabbianella intrisa di petrolio, viene salvata dal gatto Zorba e dai suoi amici del porto di Amburgo. Per la promessa fatta alla gabbianella morente, i gatti dovranno fare l'impossibile: insegnarle a volare. Una favola moderna sull'amicizia, le promesse e l'impegno verso chi è diverso.",cover:"#2563eb"},
+  {title:"Favole al telefono",author:"Gianni Rodari",isbn:"9788806207527",lang:"Italiano",kiez:"Kreuzberg",age:"6-9",type:"offer",status:"ok",owner:"Giulia",genre:"fiction",desc:"Venti storie nate per la figlia di notte, al telefono: il ponte della verità, il pianeta degli alberi di Natale, il paese con l'accento. Rodari gioca con le parole e con la logica dei bambini in quella che resta la sua raccolta più libera e visionaria.",cover:"#dc2626"},
+  {title:"Die Kleine Hexe",author:"Otfried Preußler",isbn:"9783522201500",lang:"Deutsch",kiez:"Pankow",age:"6-9",type:"offer",status:"ok",owner:"Markus",genre:"fiction",desc:"La piccola strega ha 127 anni — troppo pochi per volare al Bloksberg con le streghe grandi. Con il corvo Abraxas studia il libro delle stregonerie e aiuta la gente del villaggio, ma quando finalmente viene ammessa alla notte delle streghe scopre cosa significhi davvero essere una brava strega. Un classico dei libri per bambini in tedesco.",cover:"#7c3aed"},
+  {title:"Le Petit Nicolas",author:"René Goscinny",isbn:"9782070362203",lang:"Français",kiez:"Wedding",age:"9-12",type:"offer",status:"lent",owner:"Sophie",note:"30 nov.",genre:"fiction",desc:"Le vicende indimenticabili del piccolo Nicolas e dei suoi compagni di scuola — Joachim, Alceste il ghiottone, Agnan il primo della classe — raccontate con ironia perfetta e le illustrazioni di Sempé. Il classico francese dell'infanzia per eccellenza.",cover:"#ea580c"},
+  {title:"Harry Potter e la pietra filosofale",author:"J. K. Rowling",isbn:"9788877827029",lang:"Italiano",kiez:"Mitte",age:"9-12",type:"offer",status:"ok",owner:"Marco",genre:"sff",desc:"Harry Potter, orfano cresciuto dagli zii che lo trattano male, scopre a undici anni di essere un mago e parte per Hogwarts, la scuola di magia. Un ragazzino, un cappello parlante, una pietra filosofale nascosta — e la storia che ha rimesso il mondo a leggere.",cover:"#6b8e23"},
+  {title:"Il Nome della Rosa",author:"Umberto Eco",isbn:"9788845296833",lang:"Italiano",kiez:"Mitte",age:"adults",type:"offer",status:"ok",owner:"Marco",genre:"mystery",desc:"In un'abbazia benedettina del Trecento, tra manoscritti miniati e dispute teologiche, arriva il francescano Guglielmo da Baskerville a indagare una morte inspiegabile. Poi i morti si moltiplicano, e il labirinto della biblioteca custodisce un segreto. Il giallo medievale più celebre della letteratura italiana.",cover:"#4b5563"},
+  {title:"Der Vorleser",author:"Bernhard Schlink",isbn:"9783257233000",lang:"Deutsch",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",owner:"Lena",genre:"history",desc:"Germania, anni Cinquanta: l'adolescente Michael Berg inizia una relazione con Hanna, donna enigmatica, che un giorno sparisce. Anni dopo, da studente in legge, la ritrova imputata in un processo: il suo segreto cambia tutto. Un romanzo breve e potente su colpa, memoria e amori che tornano a difenderci.",cover:"#0f766e"},
+  {title:"Berlin Alexanderplatz",author:"Alfred Döblin",isbn:"9780141191547",lang:"English",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",owner:"Tom",genre:"fiction",desc:"Franz Biberkopf, ex scaricatore di porto, esce dal carcere e cerca di sopravvivere a Alexanderplatz, tra amici falsi, donne e crimini. Berlino anni Venti fatta romanzo: il capolavoro di Döblin, montaggio di voci, canzoni e notizie di cronaca.",cover:"#be123c"},
+  {title:"Cuore",author:"Edmondo De Amicis",isbn:"9788852021857",lang:"Italiano",kiez:"Schöneberg",age:"9-12",type:"offer",status:"ok",owner:"Anna",genre:"fiction",desc:"Il diario di Enrico Bottini, scolaro di terza elementare a Torino nel 1881: le piccole e grandi storie dei compagni, dei maestri, dei genitori, con l'incubo della guerra e l'orgoglio della bandiera. Il libro che ha insegnato per generazioni cosa significhi essere «cuore» — in edizione moderna per giovani lettori.",cover:"#0369a1"},
+  {title:"CERCO: libri per bambini in italiano (3-6 anni)",author:"—",lang:"Italiano",kiez:"Neukölln",age:"3-6",type:"wish",kind:"theme",status:"ok",owner:"Andrea",cover:"#f59e0b"},
+  {title:"GESUCH: Kinderbücher auf Italienisch",author:"—",lang:"Italiano",kiez:"Kreuzberg",age:"3-6",type:"wish",kind:"theme",status:"ok",owner:"Elena",cover:"#f59e0b"},
+  {title:"Elena Ferrante, Olga Tokarczuk",author:"—",lang:"Italiano",kiez:"Mitte",age:"adults",type:"wish",kind:"similar",status:"ok",owner:"Sara",cover:"#f59e0b"},
+  {title:"The Hunger Games",author:"Suzanne Collins",isbn:"9780439023481",lang:"English",kiez:"Friedrichshain",age:"12+",type:"offer",status:"ok",owner:"Tom",genre:"sff",desc:"In un Nordamerica futuro, la Capitolio sceglie ragazzi dei dodici distretti per combattersi fino alla morte in un'arena televisiva. Quando la sorella viene sorteggiata, Katniss si offre al suo posto. Il romanzo che ha definito la YA dystopian di un'intera generazione.",cover:"#b91c1c"},
+  {title:"LOOKING FOR: Turkish novels in translation",author:"—",lang:"English",kiez:"Wedding",age:"adults",type:"wish",kind:"theme",status:"ok",owner:"Tom",cover:"#f59e0b"}
+];
+const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg"];
+const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
+const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
+
+// ============ UI STRINGS ============
+const T = {
+  it:{
+    tagline:"La Diffusa — la biblioteca diffusa e internazionale di Berlino. I titoli che le biblioteche non hanno, prestati tra vicini: il Kiez è un orientamento, non un confine.",
+    howTitle:"Come funziona",
+    how:["Hai libri in altre lingue che dormono sullo scaffale? Mettili a disposizione del tuo Kiez.",
+      "Cerchi un libro in una lingua particolare? Pubblica il tuo desiderio.",
+      "Chi presta e chi riceve si mettono in contatto e decidono come e quando incontrarsi.",
+      "Ogni prestito viene registrato: il libro risulta “in prestito”, e promemoria gentili e automatici ricordano la restituzione — nessun libro perso, nessuno deve fare il poliziotto."],
+    howNote:"📱 Prototipo ottimizzato per il telefono: apri il form, inquadra il codice a barre del libro con la fotocamera e la copertina finisce qui. La piattaforma con registrazione, database e promemoria automatici arriverà nel prossimo passo.",
+    lblOffer:"Offri un libro",subOffer:"foto della copertina, e via",
+    lblWish:"Cerco un libro",subWish:"pubblica il tuo desiderio",
+    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",
+    genres:{fiction:"Narrativa",mystery:"Giallo / Thriller",sff:"Fantascienza / Fantasy",comics:"Fumetti",poetry:"Poesia e teatro",nonfiction:"Saggistica",history:"Storia / Biografie"},
+    kids:"🧒 Bambini",teen:"🌟 Ragazzi (12+)",adults:"👤 Adulti",allAges:"Tutte le età",
+    subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
+    search:"Cerca titolo, autore…",
+    count:(n)=>`${n} libri`,
+    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",owner:(n)=>`offerto da <b>${n}</b>`,
+    allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
+    kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",
+    similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
+    wishOwner:(n)=>`desiderio di <b>${n}</b>`,
+    empty:"Nessun libro corrisponde ai filtri.",
+    askOffer:"📨 Scrivi a chi lo offre",
+    askWish:"💬 Rispondi a questo desiderio",
+    contactNote:"Nel prototipo i contatti sono dimostrativi — nella versione completa qui parte il messaggio e il prestito viene registrato.",
+    stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
+    th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
+    vList:"Lista",vTable:"Copertine",dice:"🎲 Sorprendimi",
+    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone."
+  },
+  de:{
+    tagline:"La Diffusa — die verteilte, internationale Bibliothek Berlins. Die Titel, die die Bibliotheken nicht haben, geliehen unter Nachbarn: der Kiez ist eine Orientierung, keine Grenze.",
+    howTitle:"So funktioniert's",
+    how:["Du hast Bücher in anderen Sprachen im Regal stehen? Stell sie deinem Kiez zur Verfügung.",
+      "Du suchst ein Buch in einer bestimmten Sprache? Veröffentliche deinen Wunsch.",
+      "Geber und Nehmer nehmen Kontakt auf und vereinbaren, wie und wo sie sich treffen.",
+      "Jede Ausleihe wird vermerkt: das Buch gilt als „ausgeliehen“, und freundliche, automatische Erinnerungen bitten um Rückgabe — kein Buch geht verloren, niemand muss Polizist spielen."],
+    howNote:"📱 Fürs Handy optimiert: Formular öffnen, den Barcode des Buches mit der Kamera scannen — und das Cover landet hier. Die Plattform mit Registrierung, Datenbank und automatischen Erinnerungen kommt im nächsten Schritt.",
+    lblOffer:"Buch anbieten",subOffer:"Foto des Covers, und los",
+    lblWish:"Buch gesucht",subWish:"Veröffentliche deinen Wunsch",
+    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",
+    genres:{fiction:"Belletristik",mystery:"Krimi / Thriller",sff:"Science-Fiction / Fantasy",comics:"Comics",poetry:"Lyrik und Theater",nonfiction:"Sachbücher",history:"Geschichte / Biografien"},
+    kids:"🧒 Kinder",teen:"🌟 Jugendliche (12+)",adults:"👤 Erwachsene",allAges:"Alle Altersgruppen",
+    subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
+    search:"Titel, Autor suchen…",
+    count:(n)=>`${n} Bücher`,
+    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",owner:(n)=>`angeboten von <b>${n}</b>`,
+    allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
+    kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",
+    similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
+    wishOwner:(n)=>`Wunsch von <b>${n}</b>`,
+    empty:"Keine Bücher entsprechen den Filtern.",
+    askOffer:"📨 Schreib dem Anbieter",
+    askWish:"💬 Antworte auf diesen Wunsch",
+    contactNote:"Im Prototyp sind die Kontakte nur Demo — in der Vollversion startet hier die Nachricht, und die Ausleihe wird registriert.",
+    stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
+    th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
+    vList:"Liste",vTable:"Cover",dice:"🎲 Überrasch mich",
+    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt."
+  },
+  en:{
+    tagline:"La Diffusa — the distributed, international library of Berlin. The titles the public libraries don't have, lent between neighbours: the Kiez is an orientation, not a boundary.",
+    howTitle:"How it works",
+    how:["Got books in other languages gathering dust? Offer them to your Kiez.",
+      "Looking for a book in a particular language? Post your wish.",
+      "Lender and borrower get in touch and arrange how and where to meet.",
+      "Every loan is recorded: the book shows as “on loan”, and gentle automatic reminders ask for its return — no book gets lost, and nobody has to play detective."],
+    howNote:"📱 Optimised for your phone: open the form, scan the book's barcode with your camera — and the cover lands here. The platform with sign-up, database and automatic reminders comes next.",
+    lblOffer:"Offer a book",subOffer:"photo of the cover, done",
+    lblWish:"Looking for a book",subWish:"post your wish",
+    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",
+    genres:{fiction:"Fiction",mystery:"Crime / Thriller",sff:"Sci-fi / Fantasy",comics:"Comics",poetry:"Poetry & plays",nonfiction:"Non-fiction",history:"History / Biography"},
+    kids:"🧒 Kids",teen:"🌟 Teens (12+)",adults:"👤 Adults",allAges:"All ages",
+    subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
+    search:"Search title, author…",
+    count:(n)=>`${n} books`,
+    lent:"On loan",wishLabel:"Wish",avail:"Available",owner:(n)=>`offered by <b>${n}</b>`,
+    allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
+    kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",
+    similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
+    wishOwner:(n)=>`wish by <b>${n}</b>`,
+    empty:"No books match the filters.",
+    askOffer:"📨 Message the lender",
+    askWish:"💬 Reply to this wish",
+    contactNote:"Contacts are demo-only in this prototype — in the full version your message starts here and the loan gets registered.",
+    stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
+    th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
+    vList:"List",vTable:"Covers",dice:"🎲 Surprise me",
+    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly."
+  }
+};
+
+// ============ STATE ============
+const store = (()=>{ try { return window.localStorage; } catch(e){ return {getItem:()=>null,setItem:()=>{}}; } })();
+const S = {lang:"it", blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", theme:store.getItem("bb-theme")||"light"};
+const $ = id => document.getElementById(id);
+const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : {matches:false,addEventListener:()=>{}};
+
+function applyTheme(){
+  const dark = S.theme==="dark" || (S.theme==="auto" && mq.matches);
+  document.documentElement.classList.toggle("dark",dark);
+  $("themeBtn").textContent = dark ? "☀️" : "🌙";
+  $("themeBtn").title = S.theme==="auto" ? "auto" : S.theme;
+}
+$("themeBtn").addEventListener("click",()=>{
+  S.theme = S.theme==="light" ? "dark" : S.theme==="dark" ? "light" : "light";
+  try { store.setItem("bb-theme",S.theme); } catch(e){}
+  applyTheme();
+});
+try { mq.addEventListener("change",applyTheme); } catch(e){}
+applyTheme();
+
+// ============ RENDER ============
+function filtered(){
+  const q=S.q.toLowerCase();
+  return BOOKS.filter(b=>
+    (!S.blang||b.lang===S.blang) &&
+    (!S.kiez||b.kiez===S.kiez) &&
+    (S.age==="all" || (S.age==="kids" ? ["0-3","3-6","6-9","9-12"].includes(b.age) :
+      S.age==="teen" ? b.age==="12+" : b.age==="adults")) &&
+    (!S.subAge || b.age===S.subAge) &&
+    (S.type==="all"||b.type===S.type) &&
+    (!S.genre||b.genre===S.genre) &&
+    (!q || (b.title+" "+b.author+" "+b.lang).toLowerCase().includes(q))
+  );
+}
+
+function cardRow(b){
+  const t=T[S.lang];
+  const pills = [
+    `<span class="pill">${b.lang}</span>`,
+    `<span class="pill kiez">${b.kiez}</span>`,
+    b.age==="12+" ? `<span class="pill age">${t.teen}</span>` :
+    b.age!=="adults" ? `<span class="pill age">${t.subAges[b.age]||b.age}</span>` : "",
+    b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind=="theme"?t.kindTheme:t.wishLabel}</span>` : "",
+    b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}</span>` : ""
+  ].join("");
+  const owner = b.type==="wish"
+    ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
+    : t.owner(b.owner);
+  const note = b.note ? ` · <i>${b.note}</i>` : "";
+  return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
+    <div class="cover" style="background:${b.cover}">${b.isbn?`<img src="https://covers.openlibrary.org/b/isbn/${b.isbn}-M.jpg" loading="lazy" alt="" onerror="this.remove()">`:""}${b.title.charAt(0)}</div>
+    <div class="bbody">
+      <div class="bhead"><span class="btitle">${b.title}</span><span class="bauthor">${b.author!=="—"?b.author:""}</span></div>
+      <div class="bmeta">${pills}</div>
+      <p class="bowner">${owner}${note}</p>
+    </div>
+  </div>`;
+}
+
+function gridCells(list){
+  const t=T[S.lang];
+  return `<div class="grid">` + list.map(b=>{
+    const badge = b.type==="wish" ? (b.kind==="similar" ? t.kindSimilar : b.kind==="theme" ? t.kindTheme : `✨ ${t.wishLabel}`) :
+      b.age==="12+" ? t.teen : (b.age!=="adults" ? t.subAges[b.age]||"" : "");
+    const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
+    const owner = (b.type==="wish"
+      ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
+      : t.owner(b.owner)).replace(/<\/?b>/g,"");
+    return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
+      <div class="gcover" style="background:${b.cover}">
+        ${b.isbn?`<img src="https://covers.openlibrary.org/b/isbn/${b.isbn}-M.jpg" loading="lazy" alt="" onerror="this.remove()">`:""}
+        ${badge?`<span class="badge">${badge}</span>`:""}
+        ${b.title.charAt(0)}
+        ${lentb?`<span class="lentb">${lentb}</span>`:""}
+      </div>
+      <div class="ginfo">
+        <div class="gtitle" title="${b.title} — ${b.author==="—"?"":b.author}">${b.title}</div>
+        <div class="gmeta">
+          <div class="row1"><span class="l">${b.lang}</span><span class="k">${b.kiez}</span></div>
+        </div>
+        <div class="gowner2">${owner}</div>
+      </div>
+    </div>`;
+  }).join("") + `</div>`;
+}
+
+// ============ DETAIL SHEET ============
+function openSheet(b){
+  const t=T[S.lang];
+  const pills = [
+    `<span class="pill">${b.lang}</span>`,
+    `<span class="pill kiez">📍 ${b.kiez}</span>`,
+    b.age==="12+" ? `<span class="pill age">${t.teen}</span>` :
+    b.age!=="adults" ? `<span class="pill age">${t.subAges[b.age]||b.age}</span>` : "",
+    b.genre ? `<span class="pill">${t.genres[b.genre]}</span>` : "",
+    b.type==="wish" ? `<span class="pill wish">✨ ${b.kind=="similar"?t.kindSimilar:b.kind=="theme"?t.kindTheme:t.wishLabel}</span>` : "",
+    b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
+  ].join("");
+  const owner = b.type==="wish"
+    ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
+    : t.owner(b.owner);
+  $("sheet").innerHTML =
+    `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="dcover" style="background:${b.cover}">${b.isbn?`<img src="https://covers.openlibrary.org/b/isbn/${b.isbn}-L.jpg" alt="" onerror="this.remove()">`:""}${b.isbn?"":b.title.charAt(0)}</div>`+
+    `<div class="dtitle">${b.title}</div>`+
+    (b.author!=="—"&&b.author?`<div class="dauthor">${b.author}</div>`:"")+
+    `<div class="dpills">${pills}</div>`+
+    `<div class="downer">${owner}</div>`+
+    (b.desc?`<div class="ddesc" id="ddesc">${b.desc.length>220
+      ? `${b.desc.slice(0,220)}… <span class="toggle" onclick="document.getElementById('ddesc').classList.add('open');this.style.display='none'">${t.more}</span><span class="more">${b.desc.slice(220)}</span>`
+      : b.desc}</div>`:"")+
+    (b.type!=="wish"?(b.status==="lent"?`<div class="dnote">${t.stateLent} <b>${b.note||"—"}</b></div>`:`<div class="dnote">${t.stateAvail}</div>`):"")+
+    `<button class="contact ${b.type==="wish"?"wishc":"offer"}">${b.type==="wish"?t.askWish:t.askOffer}</button>`+
+    `<div class="dfoot">${t.contactNote}</div>`;
+  $("overlay").style.display="flex";
+  $("sheetClose").addEventListener("click",closeSheet);
+}
+function closeSheet(){ $("overlay").style.display="none"; }
+$("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
+
+function renderAll(){
+  const t=T[S.lang], list=filtered();
+  $("list").innerHTML = list.length ? list.map(cardRow).join("") : `<p class="empty">${t.empty}</p>`;
+  $("table").innerHTML = list.length ? gridCells(list) : `<p class="empty">${t.empty}</p>`;
+  $("count").textContent = t.count(list.length);
+  $("list").style.display = S.view==="list"?"":"none";
+  $("table").style.display = S.view!=="list"?"":"none";
+  $("vList").classList.toggle("on",S.view=="list");
+  $("vTable").classList.toggle("on",S.view!=="list");
+}
+
+function applyLang(){
+  const t=T[S.lang];
+  document.documentElement.lang=S.lang;
+  $("tagline").textContent=t.tagline;
+  $("howTitle").textContent=t.howTitle;
+  $("howList").innerHTML=t.how.map(s=>`<li>${s}</li>`).join("");
+  $("howNote").textContent=t.howNote;
+  $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
+  $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
+  $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join("");
+  $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
+  $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
+  $("typeRow").innerHTML=
+    `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
+    `<button class="chip kids ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
+    `<button class="chip teen ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
+  $("ageRow").innerHTML=
+    `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${t.allAges}</button>`+
+    `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${t.kids}</button>`+
+    `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${t.teen}</button>`+
+    `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${t.adults}</button>`;
+  $("ageRow2").innerHTML=
+    Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("");
+  $("ageRow2").classList.toggle("show",S.age==="kids");
+  $("q").placeholder=t.search;
+  $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
+  $("dice").textContent=t.dice;
+  $("foot").textContent=t.foot;
+  renderAll();
+}
+
+// ============ EVENTS ============
+$("dice").addEventListener("click",()=>{
+  const list=filtered(); if(!list.length)return;
+  const b=list[Math.floor(Math.random()*list.length)];
+  const idx=BOOKS.indexOf(b);
+  const all=document.querySelectorAll(`[data-idx="${idx}"]`);
+  const el=[...all].find(el=>el.offsetParent!==null) || all[0];
+  if(!el)return;
+  el.classList.remove("flash");
+  void el.offsetWidth; // riavvia l'animazione
+  el.classList.add("flash");
+  try { el.scrollIntoView({block:"center"}); } catch(e){}
+  try {
+    const y=el.getBoundingClientRect().top + window.scrollY - (window.innerHeight/2) + (el.offsetHeight/2);
+    if (Math.abs(window.scrollY-y)>4) window.scrollTo(0,Math.max(0,y));
+  } catch(e){}
+});
+$("totop").addEventListener("click",()=>{ try{window.scrollTo({top:0});}catch(e){window.scrollTo(0,0);} });
+window.addEventListener("scroll",()=>{ $("totop").classList.toggle("show",window.scrollY>400); },{passive:true});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+$("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;renderAll();});
+$("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;renderAll();});
+$("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
+$("typeRow").addEventListener("click",e=>{
+  const c=e.target.closest(".chip"); if(!c)return;
+  S.type = S.type===c.dataset.v ? "all" : c.dataset.v;
+  applyLang();
+});
+$("ageRow").addEventListener("click",e=>{
+  const c=e.target.closest(".chip"); if(!c)return;
+  S.age=c.dataset.v; S.subAge=""; applyLang();
+});
+$("ageRow2").addEventListener("click",e=>{
+  const c=e.target.closest(".chip"); if(!c)return;
+  S.subAge = S.subAge===c.dataset.v ? "" : c.dataset.v; applyLang();
+});
+$("q").addEventListener("input",e=>{S.q=e.target.value;renderAll();});
+$("vList").addEventListener("click",()=>{S.view="list";renderAll();});
+$("vTable").addEventListener("click",()=>{S.view="grid";renderAll();});
+$("langSel").addEventListener("change",e=>{S.lang=e.target.value;applyLang();});
+
+applyLang();
+</script>
+</body>
+</html>
