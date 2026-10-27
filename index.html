@@ -120,6 +120,8 @@
   .sheet .contact.offer{background:var(--green);color:#fff}
   .sheet .contact.wishc{background:var(--terra);color:#fff}
   .sheet .dfoot{margin-top:.5rem;text-align:center;font-size:.7rem;color:var(--mut)}
+  .sheet .cmsg{width:100%;box-sizing:border-box;margin-top:.7rem;border:1px solid var(--line);border-radius:.65rem;padding:.7rem;font-size:1rem;font-family:inherit;background:var(--paper);color:var(--ink);resize:none}
+  .sheet .contact.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);margin-top:.5rem}
   /* ---------- list view ---------- */
   .book{display:flex;gap:.7rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.55rem;box-shadow:var(--shadow);border-left:4px solid var(--green);transition:transform .12s;cursor:pointer}
   .book:hover{transform:translateY(-1px)}
@@ -244,6 +246,7 @@ const BOOKS = [
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
 const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
+const SITE_CONTACT = ""; // alias email pubblico del sito (vuoto finché non è pronto)
 
 // ============ UI STRINGS ============
 const T = {
@@ -271,7 +274,15 @@ const T = {
     empty:"Nessun libro corrisponde ai filtri.",
     askOffer:"📨 Scrivi a chi lo offre",
     askWish:"💬 Rispondi a questo desiderio",
-    contactNote:"Nel prototipo i contatti sono dimostrativi — nella versione completa qui parte il messaggio e il prestito viene registrato.",
+    contactNote:"Nessun contatto viene pubblicato sul sito: il tuo messaggio passa dal gestore, che lo inoltra alla persona giusta.",
+    cTitle:"📝 Messaggio per il prestito",
+    cIntro:"Copia il messaggio, aggiungi il tuo contatto e invialo al contatto del sito: lo inoltreremo a chi offre il libro.",
+    cMsgOffer:(ti,au,k)=>`Ciao! Vorrei prendere in prestito «${ti}» di ${au} (Kiez: ${k}) — l'ho visto su La Diffusa. Il mio contatto: `,
+    cMsgWish:(ti,k)=>`Ciao! Forse ho il libro che cerchi: «${ti}» (Kiez: ${k}) — l'ho visto su La Diffusa. Il mio contatto: `,
+    cCopy:"📋 Copia il messaggio",cCopied:"✅ Copiato!",cBack:"Torna al libro",
+    cSend:(c)=>`Invia il messaggio a: <b>${c}</b>`,
+    cSendSoon:"L'indirizzo email del sito è in arrivo — finché non c'è, il contatto avviene tramite il gestore.",
+    cPriv:"Il tuo contatto resta privato: viene inoltrato solo a chi offre il libro, mai pubblicato.",
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Sorprendimi",
@@ -301,7 +312,15 @@ const T = {
     empty:"Keine Bücher entsprechen den Filtern.",
     askOffer:"📨 Schreib dem Anbieter",
     askWish:"💬 Antworte auf diesen Wunsch",
-    contactNote:"Im Prototyp sind die Kontakte nur Demo — in der Vollversion startet hier die Nachricht, und die Ausleihe wird registriert.",
+    contactNote:"Keine Kontaktdaten werden auf der Website veröffentlicht: Deine Nachricht läuft über den Betreiber, der sie an die richtige Person weiterleitet.",
+    cTitle:"📝 Nachricht für die Ausleihe",
+    cIntro:"Kopiere die Nachricht, ergänze deine Kontaktangabe und schicke sie an den Kontakt der Website: Wir leiten sie an die Person weiter, die das Buch anbietet.",
+    cMsgOffer:(ti,au,k)=>`Hallo! Ich würde gern «${ti}» von ${au} ausleihen (Kiez: ${k}) — gesehen auf La Diffusa. Meine Kontaktangabe: `,
+    cMsgWish:(ti,k)=>`Hallo! Vielleicht habe ich das Buch, das du suchst: «${ti}» (Kiez: ${k}) — gesehen auf La Diffusa. Meine Kontaktangabe: `,
+    cCopy:"📋 Nachricht kopieren",cCopied:"✅ Kopiert!",cBack:"Zurück zum Buch",
+    cSend:(c)=>`Schick die Nachricht an: <b>${c}</b>`,
+    cSendSoon:"Die E-Mail-Adresse der Website kommt bald — bis dahin läuft der Kontakt über den Betreiber.",
+    cPriv:"Deine Kontaktangabe bleibt privat: Sie wird nur an die bietende Person weitergeleitet, nie veröffentlicht.",
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überrasch mich",
@@ -331,7 +350,15 @@ const T = {
     empty:"No books match the filters.",
     askOffer:"📨 Message the lender",
     askWish:"💬 Reply to this wish",
-    contactNote:"Contacts are demo-only in this prototype — in the full version your message starts here and the loan gets registered.",
+    contactNote:"No contact details are ever published on the site: your message goes through the keeper, who forwards it to the right person.",
+    cTitle:"📝 Loan message",
+    cIntro:"Copy the message, add your contact and send it to the site's contact: we'll forward it to the person offering the book.",
+    cMsgOffer:(ti,au,k)=>`Hi! I'd like to borrow «${ti}» by ${au} (Kiez: ${k}) — saw it on La Diffusa. My contact: `,
+    cMsgWish:(ti,k)=>`Hi! I might have the book you're looking for: «${ti}» (Kiez: ${k}) — saw it on La Diffusa. My contact: `,
+    cCopy:"📋 Copy message",cCopied:"✅ Copied!",cBack:"Back to the book",
+    cSend:(c)=>`Send the message to: <b>${c}</b>`,
+    cSendSoon:"The site's email address is coming soon — meanwhile the contact goes through the site's keeper.",
+    cPriv:"Your contact stays private: it's only forwarded to the person offering the book, never published.",
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise me",
@@ -455,12 +482,34 @@ function openSheet(b){
       ? `${b.desc.slice(0,220)}… <span class="toggle" onclick="document.getElementById('ddesc').classList.add('open');this.style.display='none'">${t.more}</span><span class="more">${b.desc.slice(220)}</span>`
       : b.desc}</div>`:"")+
     (b.type!=="wish"?(b.status==="lent"?`<div class="dnote">${t.stateLent} <b>${b.note||"—"}</b></div>`:`<div class="dnote">${t.stateAvail}</div>`):"")+
-    `<button class="contact ${b.type==="wish"?"wishc":"offer"}">${b.type==="wish"?t.askWish:t.askOffer}</button>`+
+    `<button class="contact ${b.type==="wish"?"wishc":"offer"}" onclick="contactSheet(BOOKS[${BOOKS.indexOf(b)}])">${b.type==="wish"?t.askWish:t.askOffer}</button>`+
     `<div class="dfoot">${t.contactNote}</div>`;
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
 }
 function closeSheet(){ $("overlay").style.display="none"; }
+function contactSheet(b){
+  const t=T[S.lang];
+  const msg=b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez);
+  $("sheet").innerHTML=
+    `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="dtitle">${t.cTitle}</div>`+
+    `<div class="downer">${t.cIntro}</div>`+
+    `<textarea class="cmsg" id="cmsg" rows="4" readonly>${msg}</textarea>`+
+    `<button class="contact offer" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
+    `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
+    `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${t.cPriv}</div>`;
+  $("overlay").style.display="flex";
+  $("sheetClose").addEventListener("click",closeSheet);
+}
+function copyMsg(){
+  const ta=$("cmsg"),btn=$("copyBtn");
+  ta.focus();ta.select();ta.setSelectionRange&&ta.setSelectionRange(0,ta.value.length);
+  const done=()=>{ btn.textContent=T[S.lang].cCopied; };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(done,()=>{ try{document.execCommand("copy");}catch(e){} done(); });
+  }else{ try{document.execCommand("copy");}catch(e){} done(); }
+}
 $("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
 
 function renderAll(){
