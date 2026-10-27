@@ -233,7 +233,7 @@
 "use strict";
 // ============ DATA ============
 // type: "offer" | "wish"   status: "ok" | "lent"
-// cover: colore placeholder della copertina (nel passo 2 sarà la foto caricata dal form)
+// cover: colore placeholder della copertina; coverUrl: URL copertina esplicito
 const BOOKS = [
   {title:"Il Piccolo Principe",author:"Antoine de Saint-Exupéry",isbn:"9788845278617",lang:"Italiano",kiez:"Neukölln",age:"6-9",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Un aviatore, solo nel deserto dopo un guasto, incontra un bambino biondo venuto da un altro pianeta: il piccolo principe, che con la sua semplicità disarmante racconta di rose, volpi e fiere che bisogna addomesticare. Una poesia sull'amicizia e sull'essenziale invisibile agli occhi, amata da bambini e adulti da ottant'anni.",cover:"#0d9488"},
   {title:"La Storia della Gabbianella e del Gatto che le insegnò a volare",author:"Luis Sepúlveda",isbn:"9788893810739",lang:"Italiano",kiez:"Neukölln",age:"6-9",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Fortunata, una gabbianella intrisa di petrolio, viene salvata dal gatto Zorba e dai suoi amici del porto di Amburgo. Per la promessa fatta alla gabbianella morente, i gatti dovranno fare l'impossibile: insegnarle a volare. Una favola moderna sull'amicizia, le promesse e l'impegno verso chi è diverso.",cover:"#2563eb"},
@@ -250,7 +250,7 @@ const BOOKS = [
   {title:"Elena Ferrante, Olga Tokarczuk",author:"—",lang:"Italiano",kiez:"Mitte",age:"adults",type:"wish",kind:"similar",status:"ok",owner:"Sara",cover:"#f59e0b"},
   {title:"The Hunger Games",author:"Suzanne Collins",isbn:"9780439023481",lang:"English",kiez:"Friedrichshain",age:"12+",type:"offer",status:"ok",owner:"Tom",genre:"sff",desc:"In un Nordamerica futuro, la Capitolio sceglie ragazzi dei dodici distretti per combattersi fino alla morte in un'arena televisiva. Quando la sorella viene sorteggiata, Katniss si offre al suo posto. Il romanzo che ha definito la YA dystopian di un'intera generazione.",cover:"#b91c1c"},
   {title:"LOOKING FOR: Turkish novels in translation",author:"—",lang:"English",kiez:"Wedding",age:"adults",type:"wish",kind:"theme",status:"ok",owner:"Tom",cover:"#f59e0b"},
-  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea"}
+  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
@@ -385,6 +385,10 @@ function filtered(){
   );
 }
 
+function coverImg(b,size){
+  const src=b.coverUrl||(b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg`:'');
+  return src?`<img src="${src}" loading="lazy" alt="" onerror="this.remove()">`:'';
+}
 function cardRow(b){
   const t=T[S.lang];
   const pills = [
@@ -400,7 +404,7 @@ function cardRow(b){
     : t.owner(b.owner);
   const note = b.note ? ` · <i>${b.note}</i>` : "";
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
-    <div class="cover" style="background:${b.cover}">${b.isbn?`<img src="https://covers.openlibrary.org/b/isbn/${b.isbn}-M.jpg" loading="lazy" alt="" onerror="this.remove()">`:""}${b.title.charAt(0)}</div>
+    <div class="cover" style="background:${b.cover}">${coverImg(b,"M")}${b.title.charAt(0)}</div>
     <div class="bbody">
       <div class="bhead"><span class="btitle">${b.title}</span><span class="bauthor">${b.author!=="—"?b.author:""}</span></div>
       <div class="bmeta">${pills}</div>
@@ -412,7 +416,7 @@ function cardRow(b){
 function gridCells(list){
   const t=T[S.lang];
   return `<div class="grid">` + list.map(b=>{
-    const badge = b.type==="wish" ? (b.kind==="similar" ? t.kindSimilar : b.kind==="theme" ? t.kindTheme : `✨ ${t.wishLabel}`) :
+    const badge = b.type==="wish" ? (b.kind==="similar" ? t.kindSimilar : b.kind=="theme" ? t.kindTheme : `✨ ${t.wishLabel}`) :
       b.age==="12+" ? t.teen : (b.age!=="adults" ? t.subAges[b.age]||"" : "");
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
     const owner = (b.type==="wish"
@@ -420,7 +424,7 @@ function gridCells(list){
       : t.owner(b.owner)).replace(/<\/?b>/g,"");
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
       <div class="gcover" style="background:${b.cover}">
-        ${b.isbn?`<img src="https://covers.openlibrary.org/b/isbn/${b.isbn}-M.jpg" loading="lazy" alt="" onerror="this.remove()">`:""}
+        ${coverImg(b,"M")}
         ${badge?`<span class="badge">${badge}</span>`:""}
         ${b.title.charAt(0)}
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
@@ -449,11 +453,11 @@ function openSheet(b){
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
   ].join("");
   const owner = b.type==="wish"
-    ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
+    ? (b.kind=="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
     : t.owner(b.owner);
   $("sheet").innerHTML =
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover" style="background:${b.cover}">${b.isbn?`<img src="https://covers.openlibrary.org/b/isbn/${b.isbn}-L.jpg" alt="" onerror="this.remove()">`:""}${b.isbn?"":b.title.charAt(0)}</div>`+
+    `<div class="dcover" style="background:${b.cover}">${coverImg(b,"L")}${b.isbn||b.coverUrl?"":b.title.charAt(0)}</div>`+
     `<div class="dtitle">${b.title}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${b.author}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
