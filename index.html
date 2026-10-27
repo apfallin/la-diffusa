@@ -372,8 +372,8 @@ function filtered(){
 }
 
 function coverImg(b,size){
-  const src=b.coverUrl||(b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg`:"");
-  return src?`<img src="${src}" loading="lazy" alt="" onerror="this.remove()">`:"";
+  const src=b.coverUrl||(b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg?default=false`:"");
+  return src?`<img src="${src}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="copertina: ${b.title.replace(/"/g,"&quot;")}" onerror="this.remove()">`:"";
 }
 function cardRow(b){
   const t=T[S.lang];
@@ -443,7 +443,7 @@ function openSheet(b){
     : t.owner(b.kiez);
   $("sheet").innerHTML =
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover" style="background:${b.cover}">${coverImg(b,"L")}${b.isbn||b.coverUrl?"":b.title.charAt(0)}</div>`+
+    `<div class="dcover" style="background:${b.cover}">${coverImg(b,"L")}${b.title.charAt(0)}</div>`+
     `<div class="dtitle">${b.title}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${b.author}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
