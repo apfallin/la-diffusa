@@ -101,8 +101,10 @@
   .sheet{background:var(--card);width:100%;max-width:26rem;border-radius:1.1rem 1.1rem 0 0;padding:1rem 1rem 1.3rem;box-shadow:0 -8px 30px rgba(0,0,0,.3);max-height:85vh;overflow:auto}
   .sheet .closeRow{display:flex;justify-content:flex-end;margin-bottom:-.5rem}
   .sheet .close{border:1px solid var(--line);background:var(--paper);border-radius:999px;width:1.7rem;height:1.7rem;cursor:pointer;font-size:.9rem;color:var(--mut)}
-  .sheet .dcover{height:13rem;border-radius:.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-size:3rem;font-weight:700;font-family:var(--font-head);text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative;overflow:hidden;margin-bottom:.7rem;box-shadow:var(--shadow)}
-  .sheet .dcover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .sheet .dcover{height:13rem;border-radius:.5rem;display:flex;flex-direction:column;gap:.45rem;align-items:center;justify-content:center;color:#fff;font-size:3rem;font-weight:700;font-family:var(--font-head);text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative;overflow:hidden;margin-bottom:.7rem;box-shadow:var(--shadow)}
+  .sheet .dcover img{position:absolute;inset:.5rem;width:calc(100% - 1rem);height:calc(100% - 1rem);object-fit:contain;border-radius:.3rem}
+  .sheet .dcover .ncmsg{display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1rem;text-align:center}
+  .sheet .dcover .ncmsg span{font-size:.72rem;font-weight:600;opacity:.92}
   .sheet .dtitle{font-family:var(--font-head);font-size:1.15rem;font-weight:700;line-height:1.3}
   .sheet .dauthor{font-size:.85rem;color:var(--mut);font-style:italic;margin-top:.15rem}
   .sheet .dpills{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.6rem}
@@ -123,7 +125,7 @@
   .book.wish{border-left-color:var(--terra);background:var(--terrabg)}
   .book.lent{border-left-color:var(--mut);opacity:.65}
   .cover{flex:0 0 3.2rem;height:4.4rem;border-radius:.35rem .45rem .45rem .35rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:1.1rem;font-family:var(--font-head);text-shadow:0 1px 2px rgba(0,0,0,.3);box-shadow:inset 3px 0 0 rgba(255,255,255,.25),inset -2px 0 0 rgba(0,0,0,.15),0 1px 4px rgba(0,0,0,.25);position:relative;overflow:hidden}
-  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .cover img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
   .bbody{flex:1;min-width:0}
   .bhead{display:flex;gap:.5rem;align-items:baseline;flex-wrap:wrap}
   .btitle{font-weight:600;font-size:.92rem;font-family:var(--font-head)}
@@ -145,7 +147,7 @@
   .gcover{height:9.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:2rem;font-family:var(--font-head);text-shadow:0 1px 3px rgba(0,0,0,.3);position:relative;box-shadow:inset 5px 0 0 rgba(255,255,255,.22),inset -3px 0 0 rgba(0,0,0,.14)}
   .gcover .badge{position:absolute;top:.4rem;left:.4rem;font-size:.62rem;background:rgba(255,252,244,.92);border-radius:.4rem;padding:.08rem .4rem;color:var(--ink);font-weight:600}
   .gcover .lentb{position:absolute;bottom:.4rem;right:.4rem;font-size:.62rem;background:rgba(0,0,0,.6);color:#fff;border-radius:.4rem;padding:.1rem .4rem}
-  .gcover img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+  .gcover img{position:absolute;inset:.25rem;width:calc(100% - .5rem);height:calc(100% - .5rem);object-fit:contain;border-radius:.25rem}
   .ginfo{padding:.45rem .55rem .55rem}
   .gtitle{font-size:.76rem;font-weight:600;font-family:var(--font-head);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.9rem}
   .gmeta{font-size:.68rem;margin-top:.25rem;display:flex;flex-direction:column;gap:.08rem}
@@ -260,7 +262,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Cerca titolo, autore…",
     count:(n)=>`${n} libri`,
-    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",owner:(k)=>`offerto da un vicino di <b>${k}</b>`,
+    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",owner:(k)=>`offerto da un vicino di <b>${k}</b>`,
     allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
     kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
@@ -290,7 +292,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Titel, Autor suchen…",
     count:(n)=>`${n} Bücher`,
-    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",owner:(k)=>`angeboten von einem Nachbarn aus <b>${k}</b>`,
+    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",owner:(k)=>`angeboten von einem Nachbarn aus <b>${k}</b>`,
     allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
     kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
@@ -320,7 +322,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Search title, author…",
     count:(n)=>`${n} books`,
-    lent:"On loan",wishLabel:"Wish",avail:"Available",owner:(k)=>`offered by a neighbour in <b>${k}</b>`,
+    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",owner:(k)=>`offered by a neighbour in <b>${k}</b>`,
     allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
     kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
@@ -443,7 +445,7 @@ function openSheet(b){
     : t.owner(b.kiez);
   $("sheet").innerHTML =
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover" style="background:${b.cover}">${coverImg(b,"L")}${b.title.charAt(0)}</div>`+
+    `<div class="dcover" style="background:${b.cover}">${coverImg(b,"L")}<div class="ncmsg"><b>${b.title.charAt(0)}</b><span>${t.noCover}</span></div></div>`+
     `<div class="dtitle">${b.title}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${b.author}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
