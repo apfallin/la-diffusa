@@ -249,9 +249,10 @@ const BOOKS = [
   {title:"GESUCH: Kinderbücher auf Italienisch",author:"—",lang:"Italiano",kiez:"Kreuzberg",age:"3-6",type:"wish",kind:"theme",status:"ok",owner:"Elena",cover:"#f59e0b"},
   {title:"Elena Ferrante, Olga Tokarczuk",author:"—",lang:"Italiano",kiez:"Mitte",age:"adults",type:"wish",kind:"similar",status:"ok",owner:"Sara",cover:"#f59e0b"},
   {title:"The Hunger Games",author:"Suzanne Collins",isbn:"9780439023481",lang:"English",kiez:"Friedrichshain",age:"12+",type:"offer",status:"ok",owner:"Tom",genre:"sff",desc:"In un Nordamerica futuro, la Capitolio sceglie ragazzi dei dodici distretti per combattersi fino alla morte in un'arena televisiva. Quando la sorella viene sorteggiata, Katniss si offre al suo posto. Il romanzo che ha definito la YA dystopian di un'intera generazione.",cover:"#b91c1c"},
-  {title:"LOOKING FOR: Turkish novels in translation",author:"—",lang:"English",kiez:"Wedding",age:"adults",type:"wish",kind:"theme",status:"ok",owner:"Tom",cover:"#f59e0b"}
+  {title:"LOOKING FOR: Turkish novels in translation",author:"—",lang:"English",kiez:"Wedding",age:"adults",type:"wish",kind:"theme",status:"ok",owner:"Tom",cover:"#f59e0b"},
+  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea"}
 ];
-const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg"];
+const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
 const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
 
@@ -444,7 +445,7 @@ function openSheet(b){
     b.age==="12+" ? `<span class="pill age">${t.teen}</span>` :
     b.age!=="adults" ? `<span class="pill age">${t.subAges[b.age]||b.age}</span>` : "",
     b.genre ? `<span class="pill">${t.genres[b.genre]}</span>` : "",
-    b.type==="wish" ? `<span class="pill wish">✨ ${b.kind=="similar"?t.kindSimilar:b.kind=="theme"?t.kindTheme:t.wishLabel}</span>` : "",
+    b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind=="theme"?t.kindTheme:t.wishLabel}</span>` : "",
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
   ].join("");
   const owner = b.type==="wish"
