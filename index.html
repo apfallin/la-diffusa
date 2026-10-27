@@ -281,7 +281,7 @@ const T = {
     cMsgWish:(ti,k)=>`Ciao! Forse ho il libro che cerchi: «${ti}» (Kiez: ${k}) — l'ho visto su La Diffusa. Puoi rispondere direttamente a questa email.`,
     cCopy:"📋 Copia il messaggio",cCopied:"✅ Copiato!",cBack:"Torna al libro",
     cSend:(c)=>`Invia il messaggio a: <b>${c}</b>`,
-    cSubj:(ti)=>`Prestito «${ti}» — La Diffusa`,
+    cSubj:(ti,b)=>b.isbn?`Prestito «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Prestito «${ti}» — La Diffusa`,
     cSendNow:"📨 Apri l'email pronta",
     cSendSoon:"L'indirizzo email del sito è in arrivo — finché non c'è, il contatto avviene tramite il gestore.",
     cPriv:"Il tuo contatto resta privato: viene inoltrato solo a chi offre il libro, mai pubblicato.",
@@ -321,7 +321,7 @@ const T = {
     cMsgWish:(ti,k)=>`Hallo! Vielleicht habe ich das Buch, das du suchst: «${ti}» (Kiez: ${k}) — gesehen auf La Diffusa. Du kannst direkt auf diese E-Mail antworten.`,
     cCopy:"📋 Nachricht kopieren",cCopied:"✅ Kopiert!",cBack:"Zurück zum Buch",
     cSend:(c)=>`Schick die Nachricht an: <b>${c}</b>`,
-    cSubj:(ti)=>`Ausleihe «${ti}» — La Diffusa`,
+    cSubj:(ti,b)=>b.isbn?`Ausleihe «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Ausleihe «${ti}» — La Diffusa`,
     cSendNow:"📨 E-Mail fertigstellen",
     cSendSoon:"Die E-Mail-Adresse der Website kommt bald — bis dahin läuft der Kontakt über den Betreiber.",
     cPriv:"Deine Kontaktangabe bleibt privat: Sie wird nur an die bietende Person weitergeleitet, nie veröffentlicht.",
@@ -361,7 +361,7 @@ const T = {
     cMsgWish:(ti,k)=>`Hi! I might have the book you're looking for: «${ti}» (Kiez: ${k}) — saw it on La Diffusa. You can reply directly to this email.`,
     cCopy:"📋 Copy message",cCopied:"✅ Copied!",cBack:"Back to the book",
     cSend:(c)=>`Send the message to: <b>${c}</b>`,
-    cSubj:(ti)=>`Loan «${ti}» — La Diffusa`,
+    cSubj:(ti,b)=>b.isbn?`Loan «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Loan «${ti}» — La Diffusa`,
     cSendNow:"📨 Open the ready-made email",
     cSendSoon:"The site's email address is coming soon — meanwhile the contact goes through the site's keeper.",
     cPriv:"Your contact stays private: it's only forwarded to the person offering the book, never published.",
@@ -502,7 +502,7 @@ function contactSheet(b){
     `<div class="dtitle">${t.cTitle}</div>`+
     `<div class="downer">${t.cIntro}</div>`+
     `<textarea class="cmsg" id="cmsg" rows="4" readonly>${msg}</textarea>`+
-    (SITE_CONTACT?`<a class="contact offer" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
+    (SITE_CONTACT?`<a class="contact offer" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
     `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
     `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
     `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${t.cPriv}</div>`;
