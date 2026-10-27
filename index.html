@@ -232,9 +232,11 @@
 "use strict";
 // ============ DATA ============
 // type: "offer" | "wish"   status: "ok" | "lent"
+// IL FORM NON RACCOGLIE NOMI: mai mostrare nomi/nick sul sito — solo "un vicino di <kiez>".
+// kind (per i desideri): "similar" con campo likes = autori amati ("piace X, cerca simili") | "theme"
 // cover: colore placeholder della copertina (nel passo 2 sarà la foto caricata dal form)
 const BOOKS = [
-  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",owner:"Andrea",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell Beater e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg"}
+  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell Beater e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
@@ -258,11 +260,11 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Cerca titolo, autore…",
     count:(n)=>`${n} libri`,
-    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",owner:(n)=>`offerto da <b>${n}</b>`,
+    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",owner:(k)=>`offerto da un vicino di <b>${k}</b>`,
     allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
     kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
-    wishOwner:(n)=>`desiderio di <b>${n}</b>`,
+    wishOwner:(k)=>`desiderio di un vicino di <b>${k}</b>`,
     empty:"Nessun libro corrisponde ai filtri.",
     askOffer:"📨 Scrivi a chi lo offre",
     askWish:"💬 Rispondi a questo desiderio",
@@ -288,11 +290,11 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Titel, Autor suchen…",
     count:(n)=>`${n} Bücher`,
-    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",owner:(n)=>`angeboten von <b>${n}</b>`,
+    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",owner:(k)=>`angeboten von einem Nachbarn aus <b>${k}</b>`,
     allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
     kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
-    wishOwner:(n)=>`Wunsch von <b>${n}</b>`,
+    wishOwner:(k)=>`Wunsch von einem Nachbarn aus <b>${k}</b>`,
     empty:"Keine Bücher entsprechen den Filtern.",
     askOffer:"📨 Schreib dem Anbieter",
     askWish:"💬 Antworte auf diesen Wunsch",
@@ -318,11 +320,11 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Search title, author…",
     count:(n)=>`${n} books`,
-    lent:"On loan",wishLabel:"Wish",avail:"Available",owner:(n)=>`offered by <b>${n}</b>`,
+    lent:"On loan",wishLabel:"Wish",avail:"Available",owner:(k)=>`offered by a neighbour in <b>${k}</b>`,
     allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
     kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
-    wishOwner:(n)=>`wish by <b>${n}</b>`,
+    wishOwner:(k)=>`wish by a neighbour in <b>${k}</b>`,
     empty:"No books match the filters.",
     askOffer:"📨 Message the lender",
     askWish:"💬 Reply to this wish",
@@ -384,8 +386,8 @@ function cardRow(b){
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}</span>` : ""
   ].join("");
   const owner = b.type==="wish"
-    ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
-    : t.owner(b.owner);
+    ? (b.kind==="similar" ? t.similarNote(b.likes||"") : t.wishOwner(b.kiez))
+    : t.owner(b.kiez);
   const note = b.note ? ` · <i>${b.note}</i>` : "";
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
     <div class="cover" style="background:${b.cover}">${coverImg(b,"M")}${b.title.charAt(0)}</div>
@@ -404,8 +406,8 @@ function gridCells(list){
       b.age==="12+" ? t.teen : (b.age!=="adults" ? t.subAges[b.age]||"" : "");
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
     const owner = (b.type==="wish"
-      ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
-      : t.owner(b.owner)).replace(/<\/?b>/g,"");
+      ? (b.kind==="similar" ? t.similarNote(b.likes||"") : t.wishOwner(b.kiez))
+      : t.owner(b.kiez)).replace(/<\/?b>/g,"");
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
       <div class="gcover" style="background:${b.cover}">
         ${coverImg(b,"M")}
@@ -437,8 +439,8 @@ function openSheet(b){
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
   ].join("");
   const owner = b.type==="wish"
-    ? (b.kind==="similar" ? t.similarNote(b.owner) : t.wishOwner(b.owner))
-    : t.owner(b.owner);
+    ? (b.kind==="similar" ? t.similarNote(b.likes||"") : t.wishOwner(b.kiez))
+    : t.owner(b.kiez);
   $("sheet").innerHTML =
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dcover" style="background:${b.cover}">${coverImg(b,"L")}${b.isbn||b.coverUrl?"":b.title.charAt(0)}</div>`+
