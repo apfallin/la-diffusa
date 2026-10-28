@@ -121,6 +121,8 @@
   .sheet .contact.wishc{background:var(--terra);color:#fff}
   .sheet .dfoot{margin-top:.5rem;text-align:center;font-size:.7rem;color:var(--mut)}
   .sheet .cmsg{width:100%;box-sizing:border-box;margin-top:.7rem;border:1px solid var(--line);border-radius:.65rem;padding:.7rem;font-size:1rem;font-family:inherit;background:var(--paper);color:var(--ink);resize:none}
+  .sheet .durLbl{display:block;margin-top:.6rem;font-size:.75rem;color:var(--mut)}
+  .sheet select.ctl{width:100%;margin:.3rem 0 .1rem}
   .sheet .contact.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);margin-top:.5rem}
   /* ---------- list view ---------- */
   .book{display:flex;gap:.7rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.55rem;box-shadow:var(--shadow);border-left:4px solid var(--green);transition:transform .12s;cursor:pointer}
@@ -246,7 +248,7 @@ const BOOKS = [
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
 const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
-const SITE_CONTACT = "ladiffusa.fjkrx@passinbox.com"; // alias email pubblico del sito
+const SITE_CONTACT = "6btksjfx@anonaddy.me"; // alias email pubblico del sito (addy.io → Gmail di lavoro)
 
 // ============ UI STRINGS ============
 const T = {
@@ -279,6 +281,11 @@ const T = {
     cIntro:"Apri l'email già pronta e inviala: chi riceve risponde direttamente al tuo indirizzo email — non serve scrivere il tuo contatto.",
     cMsgOffer:(ti,au,k)=>`Ciao! Vorrei prendere in prestito «${ti}» di ${au} (Kiez: ${k}) — l'ho visto su La Diffusa. Puoi rispondere direttamente a questa email.`,
     cMsgWish:(ti,k)=>`Ciao! Forse ho il libro che cerchi: «${ti}» (Kiez: ${k}) — l'ho visto su La Diffusa. Puoi rispondere direttamente a questa email.`,
+    dLabel:"⏳ Per quanto lo vorresti? (facoltativo)",
+    dOpts:["1-2 settimane","Un mese circa","Più di un mese","Flessibile, dipende"],
+    dDef:"Da concordare",
+    dLine:(d)=>`Vorrei tenerlo per: ${d} (indicazione non vincolante, tanto per aiutare chi presta).`,
+    dNone:"Durata: da concordare direttamente con chi presta.",
     cCopy:"📋 Copia il messaggio",cCopied:"✅ Copiato!",cBack:"Torna al libro",
     cSend:(c)=>`Invia il messaggio a: <b>${c}</b>`,
     cSubj:(ti,b)=>b.isbn?`Prestito «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Prestito «${ti}» — La Diffusa`,
@@ -319,6 +326,11 @@ const T = {
     cIntro:"Öffne die fertige E-Mail und schick sie ab: Wer sie erhält, antwortet direkt an deine E-Mail-Adresse — deine Kontaktangabe musst du nicht dazuschreiben.",
     cMsgOffer:(ti,au,k)=>`Hallo! Ich würde gern «${ti}» von ${au} ausleihen (Kiez: ${k}) — gesehen auf La Diffusa. Du kannst direkt auf diese E-Mail antworten.`,
     cMsgWish:(ti,k)=>`Hallo! Vielleicht habe ich das Buch, das du suchst: «${ti}» (Kiez: ${k}) — gesehen auf La Diffusa. Du kannst direkt auf diese E-Mail antworten.`,
+    dLabel:"⏳ Wie lange würdest du es gern behalten? (optional)",
+    dOpts:["1-2 Wochen","Etwa ein Monat","Mehr als ein Monat","Flexibel, kommt drauf an"],
+    dDef:"Abzusprechen",
+    dLine:(d)=>`Ich würde es gern so lange behalten: ${d} (unverbindlich, nur damit die verleihende Person weiß, was sie erwartet).`,
+    dNone:"Dauer: direkt mit der verleihenden Person abzusprechen.",
     cCopy:"📋 Nachricht kopieren",cCopied:"✅ Kopiert!",cBack:"Zurück zum Buch",
     cSend:(c)=>`Schick die Nachricht an: <b>${c}</b>`,
     cSubj:(ti,b)=>b.isbn?`Ausleihe «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Ausleihe «${ti}» — La Diffusa`,
@@ -359,6 +371,11 @@ const T = {
     cIntro:"Open the ready-made email and send it: whoever receives it replies straight to your email address — no need to write your contact down.",
     cMsgOffer:(ti,au,k)=>`Hi! I'd like to borrow «${ti}» by ${au} (Kiez: ${k}) — saw it on La Diffusa. You can reply directly to this email.`,
     cMsgWish:(ti,k)=>`Hi! I might have the book you're looking for: «${ti}» (Kiez: ${k}) — saw it on La Diffusa. You can reply directly to this email.`,
+    dLabel:"⏳ How long would you like to keep it? (optional)",
+    dOpts:["1-2 weeks","About a month","More than a month","Flexible, depends"],
+    dDef:"To be agreed",
+    dLine:(d)=>`I'd like to keep it for: ${d} (non-binding, just so the lender knows what to expect).`,
+    dNone:"Duration: to be agreed directly with the lender.",
     cCopy:"📋 Copy message",cCopied:"✅ Copied!",cBack:"Back to the book",
     cSend:(c)=>`Send the message to: <b>${c}</b>`,
     cSubj:(ti,b)=>b.isbn?`Loan «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Loan «${ti}» — La Diffusa`,
@@ -496,18 +513,31 @@ function openSheet(b){
 function closeSheet(){ $("overlay").style.display="none"; }
 function contactSheet(b){
   const t=T[S.lang];
-  const msg=b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez);
+  CURB=b;
+  const msg=(b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez))+"\n"+t.dNone;
   $("sheet").innerHTML=
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dtitle">${t.cTitle}</div>`+
     `<div class="downer">${t.cIntro}</div>`+
     `<textarea class="cmsg" id="cmsg" rows="4" readonly>${msg}</textarea>`+
-    (SITE_CONTACT?`<a class="contact offer" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
+    `<label class="durLbl" for="durSel">${t.dLabel}</label>`+
+    `<select id="durSel" class="ctl" onchange="updMsg()"><option value="">${t.dDef}</option>${t.dOpts.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}</select>`+
+    (SITE_CONTACT?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
     `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
     `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
     `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${t.cPriv}</div>`;
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
+}
+function updMsg(){
+  const t=T[S.lang],b=CURB,sel=$("durSel");
+  if(!b)return;
+  let msg=b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez);
+  if(sel&&sel.value!=="") msg+="\n"+t.dLine(t.dOpts[sel.value]);
+  else msg+="\n"+t.dNone;
+  $("cmsg").value=msg;
+  const mb=$("mailBtn");
+  if(mb&&SITE_CONTACT) mb.href=`mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}`;
 }
 function copyMsg(){
   const ta=$("cmsg"),btn=$("copyBtn");
