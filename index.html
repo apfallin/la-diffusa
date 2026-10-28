@@ -263,7 +263,7 @@
 // kind (per i desideri): "similar" con campo likes = autori amati ("piace X, cerca simili") | "theme"
 // cover: colore placeholder della copertina (nel passo 2 sarà la foto caricata dal form)
 const BOOKS = [
-  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell Beater e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg",added:"2026-10-27"},
+  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Palahniuk riscrive Cenerentola nel suo stile satirico e spietato. Satira feroce su pubblicità e desideri di consumo — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg",added:"2026-10-27"},
   {title:"Il mio piccolo Vivaldi",author:"Emilie Collet",isbn:"9788893480642",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"offer",status:"lent",note:"11 Nov 2026",genre:"nonfiction",desc:"Libro sonoro cartonato: sfiora il chip e ascolta Le quattro stagioni e altre melodie di Vivaldi. Collana Classici sonori di Gallucci, da 1 anno.",cover:"#9a3412",added:"2026-10-28"},
   {title:"Tout ce que tu peux faire avec une fourchette",author:"Claire Waniecki, Soledad Bravi",isbn:"9782075233507",lang:"Français",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"fiction",desc:"Tous les mauvais usages de la fourchette passés en revue, avec une surprise pop-up. Éveil, éditions Marcel et Joachim, dès 2 ans.",cover:"#db2777",added:"2026-10-28"},
   {title:"Sapiens: A Brief History of Humankind",author:"Yuval Noah Harari",isbn:"9780099590088",lang:"English",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",genre:"history",desc:"How Homo sapiens came to dominate the planet, from the Cognitive Revolution to today. The multi-million copy bestseller, Vintage 2015 edition.",cover:"#334155",added:"2026-10-28"},
@@ -321,7 +321,7 @@ const T = {
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Sorprendimi",
-    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone.",
+    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone. Il catalogo va da 0 a 99 anni: ogni libro porta la sua etichetta di età.",
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nServizio comunitario in fase beta: facciamo del nostro meglio, ma prestiti e accordi avvengono direttamente tra le persone, che ne restano le uniche responsabili."
   },
   de:{
@@ -367,7 +367,7 @@ const T = {
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überrasch mich",
-    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt.",
+    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt. Der Katalog reicht von 0 bis 99: Jedes Buch trägt eine Altersangabe.",
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nGemeinschaftsdienst in der Beta-Phase: Wir geben unser Bestes, aber Ausleihe und Absprachen erfolgen direkt zwischen den Personen, die dafür verantwortlich bleiben."
   },
   en:{
@@ -413,7 +413,7 @@ const T = {
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise me",
-    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly.",
+    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly. The catalogue ranges from 0 to 99: every book carries an age label.",
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nCommunity service in beta: we do our best, but lending and arrangements happen directly between people, who remain the only ones responsible."
   }
 };
@@ -463,7 +463,8 @@ function cardRow(b){
     `<span class="pill">${b.lang}</span>`,
     `<span class="pill kiez">${b.kiez}</span>`,
     b.age==="12+" ? `<span class="pill age">${t.teen}</span>` :
-    b.age!=="adults" ? `<span class="pill age">${t.subAges[b.age]||b.age}</span>` : "",
+    b.age==="adults" ? `<span class="pill age">${t.adults}</span>` :
+    `<span class="pill age">${t.subAges[b.age]||b.age}</span>`,
     b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.wishLabel}</span>` : "",
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}</span>` : ""
   ].join("");
@@ -485,7 +486,7 @@ function gridCells(list){
   const t=T[S.lang];
   return `<div class="grid">` + list.map(b=>{
     const badge = b.type==="wish" ? (b.kind==="similar" ? t.kindSimilar : b.kind==="theme" ? t.kindTheme : `✨ ${t.wishLabel}`) :
-      b.age==="12+" ? t.teen : (b.age!=="adults" ? t.subAges[b.age]||"" : "");
+      b.age==="12+" ? t.teen : (b.age==="adults" ? t.adults : t.subAges[b.age]||"");
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
     const owner = (b.type==="wish"
       ? t.wishOwner(b.kiez)
@@ -516,7 +517,8 @@ function openSheet(b){
     `<span class="pill">${b.lang}</span>`,
     `<span class="pill kiez">📍 ${b.kiez}</span>`,
     b.age==="12+" ? `<span class="pill age">${t.teen}</span>` :
-    b.age!=="adults" ? `<span class="pill age">${t.subAges[b.age]||b.age}</span>` : "",
+    b.age==="adults" ? `<span class="pill age">${t.adults}</span>` :
+    `<span class="pill age">${t.subAges[b.age]||b.age}</span>`,
     b.genre ? `<span class="pill">${t.genres[b.genre]}</span>` : "",
     b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.wishLabel}</span>` : "",
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
