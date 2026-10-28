@@ -307,7 +307,8 @@ const T = {
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Sorprendimi",
-    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone."
+    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone.",
+    mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nServizio comunitario in fase beta: facciamo del nostro meglio, ma prestiti e accordi avvengono direttamente tra le persone, che ne restano le uniche responsabili."
   },
   de:{
     tagline:"La Diffusa — die verteilte, internationale Bibliothek Berlins. Die Titel, die die Bibliotheken nicht haben, geliehen unter Nachbarn: der Kiez ist eine Orientierung, keine Grenze.",
@@ -352,7 +353,8 @@ const T = {
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überrasch mich",
-    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt."
+    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt.",
+    mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nGemeinschaftsdienst in der Beta-Phase: Wir geben unser Bestes, aber Ausleihe und Absprachen erfolgen direkt zwischen den Personen, die dafür verantwortlich bleiben."
   },
   en:{
     tagline:"La Diffusa — the distributed, international library of Berlin. The titles the public libraries don't have, lent between neighbours: the Kiez is an orientation, not a boundary.",
@@ -397,7 +399,8 @@ const T = {
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise me",
-    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly."
+    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly.",
+    mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nCommunity service in beta: we do our best, but lending and arrangements happen directly between people, who remain the only ones responsible."
   }
 };
 
@@ -547,6 +550,7 @@ function updMsg(){
   let msg=b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez);
   if(sel&&sel.value!=="") msg+="\n"+t.dLine(t.dOpts[sel.value]);
   else msg+="\n"+t.dNone;
+  msg+="\n\n"+t.mailFoot;
   $("cmsg").value=msg;
   const mb=$("mailBtn");
   if(mb&&SITE_CONTACT) mb.href=`mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}`;
