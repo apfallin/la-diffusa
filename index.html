@@ -74,9 +74,12 @@
   /* ---------- controls ---------- */
   .controls{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.7rem;position:sticky;top:.5rem;z-index:5;box-shadow:var(--shadow)}
   .ctlgrid{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
-  .ctl{flex:1 1 8.5rem;display:flex;align-items:center;gap:.4rem}
+  .ctl{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:.4rem}
   .ctl label{font-size:.72rem;color:var(--mut);white-space:nowrap}
-  select.ctl{border:1px solid var(--line);border-radius:.55rem;padding:.4rem .5rem;font-size:1rem;background:var(--paper);color:var(--ink);flex:1}
+  select.ctl{border:1px solid var(--line);border-radius:.55rem;padding:.4rem .5rem;font-size:.85rem;background:var(--paper);color:var(--ink);flex:1}
+  select.ctl:focus{font-size:1rem} /* iOS: no auto-zoom al focus */
+  .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer}
+  .vswitch .vsort:focus{font-size:1rem}
   .agechips{display:flex;gap:.35rem;flex:1 1 100%;flex-wrap:wrap;justify-content:flex-start}
   .agechips.sub{display:none;margin-top:.3rem}
   .agechips.sub.show{display:flex}
@@ -214,20 +217,13 @@
 <section class="controls">
   <div class="ctlgrid">
     <div class="ctl">
-      <label for="kiezSel">📍</label>
       <select id="kiezSel" class="ctl"></select>
     </div>
     <div class="ctl">
-      <label for="langBookSel">🌐</label>
       <select id="langBookSel" class="ctl"></select>
     </div>
     <div class="ctl">
-      <label for="genreSel">🏷️</label>
       <select id="genreSel" class="ctl"></select>
-    </div>
-    <div class="ctl">
-      <label for="sortSel">↕️</label>
-      <select id="sortSel" class="ctl" aria-label="Ordina"></select>
     </div>
     <div class="ctl agechips" id="typeRow"></div>
     <div class="ctl agechips" id="ageRow"></div>
@@ -239,10 +235,11 @@
 <div class="viewbar">
   <span id="count"></span>
   <div style="display:flex;gap:.5rem;align-items:center">
-    <button class="dice" id="dice"></button>
+    <button class="dice" id="dice" title=""></button>
     <div class="vswitch">
     <button class="vbtn" id="vList"></button>
     <button class="vbtn on" id="vTable"></button>
+    <select id="sortSel" class="vsort" aria-label="Ordina"></select>
   </div>
   </div>
 </div>
@@ -620,7 +617,7 @@ function applyLang(){
   $("ageRow2").classList.toggle("show",S.age==="kids");
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
-  $("dice").textContent=t.dice;
+  $("dice").textContent="🎲"; $("dice").title=t.dice;
   $("foot").textContent=t.foot;
   renderAll();
 }
