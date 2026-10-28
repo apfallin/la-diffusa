@@ -212,6 +212,10 @@
       <label for="genreSel">🏷️</label>
       <select id="genreSel" class="ctl"></select>
     </div>
+    <div class="ctl">
+      <label for="sortSel">↕️</label>
+      <select id="sortSel" class="ctl" aria-label="Ordina"></select>
+    </div>
     <div class="ctl agechips" id="typeRow"></div>
     <div class="ctl agechips" id="ageRow"></div>
     <div class="ctl agechips sub" id="ageRow2"></div>
@@ -247,11 +251,11 @@
 // kind (per i desideri): "similar" con campo likes = autori amati ("piace X, cerca simili") | "theme"
 // cover: colore placeholder della copertina (nel passo 2 sarà la foto caricata dal form)
 const BOOKS = [
-  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell Beater e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg"},
-  {title:"Il mio piccolo Vivaldi",author:"Emilie Collet",isbn:"9788893480642",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"nonfiction",desc:"Libro sonoro cartonato: sfiora il chip e ascolta Le quattro stagioni e altre melodie di Vivaldi. Collana Classici sonori di Gallucci, da 1 anno.",cover:"#9a3412"},
-  {title:"Tout ce que tu peux faire avec une fourchette",author:"Claire Waniecki, Soledad Bravi",isbn:"9782075233507",lang:"Français",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"fiction",desc:"Tous les mauvais usages de la fourchette passés en revue, avec une surprise pop-up. Éveil, éditions Marcel et Joachim, dès 2 ans.",cover:"#db2777"},
-  {title:"Sapiens: A Brief History of Humankind",author:"Yuval Noah Harari",isbn:"9780099590088",lang:"English",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",genre:"history",desc:"How Homo sapiens came to dominate the planet, from the Cognitive Revolution to today. The multi-million copy bestseller, Vintage 2015 edition.",cover:"#334155"},
-  {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",cover:"#111827"}
+  {title:"Beautiful You",author:"Chuck Palahniuk",isbn:"9788804652403",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Penny Harrigan, giovane impiegata newyorkese dai desideri opachi, viene notata dal miliardario Maxwell Beater e coinvolta nel collaudo di una linea di prodotti chiamata proprio Beautiful You. Palahniuk riscrive Cenerentola nel suo stile satirico e spietato — romanzo esplicito, per lettori adulti.",cover:"#9333ea",coverUrl:"https://img2.libreriauniversitaria.it/BIT/340/240/9788804652403.jpg",added:"2026-10-27"},
+  {title:"Il mio piccolo Vivaldi",author:"Emilie Collet",isbn:"9788893480642",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"nonfiction",desc:"Libro sonoro cartonato: sfiora il chip e ascolta Le quattro stagioni e altre melodie di Vivaldi. Collana Classici sonori di Gallucci, da 1 anno.",cover:"#9a3412",added:"2026-10-28"},
+  {title:"Tout ce que tu peux faire avec une fourchette",author:"Claire Waniecki, Soledad Bravi",isbn:"9782075233507",lang:"Français",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"fiction",desc:"Tous les mauvais usages de la fourchette passés en revue, avec une surprise pop-up. Éveil, éditions Marcel et Joachim, dès 2 ans.",cover:"#db2777",added:"2026-10-28"},
+  {title:"Sapiens: A Brief History of Humankind",author:"Yuval Noah Harari",isbn:"9780099590088",lang:"English",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",genre:"history",desc:"How Homo sapiens came to dominate the planet, from the Cognitive Revolution to today. The multi-million copy bestseller, Vintage 2015 edition.",cover:"#334155",added:"2026-10-28"},
+  {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",cover:"#111827",added:"2026-10-28"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
@@ -270,7 +274,7 @@ const T = {
     howNote:"📱 Pensato per il telefono: apri il form e inquadra il codice a barre del libro con la fotocamera — l'ISBN si compila da solo, tu completi le altre risposte e il libro arriva sullo scaffale dopo una rapida revisione. La piattaforma con registrazione, database e promemoria automatici arriverà nel prossimo passo.",
     lblOffer:"Offri un libro",subOffer:"un breve form dal telefono",
     lblWish:"Cerco un libro",subWish:"pubblica il tuo desiderio",
-    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",
+    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi arrivati",sortOld:"Prima i più datati",
     genres:{fiction:"Narrativa",mystery:"Giallo / Thriller",sff:"Fantascienza / Fantasy",comics:"Fumetti",poetry:"Poesia e teatro",nonfiction:"Saggistica",history:"Storia / Biografie"},
     kids:"🧒 Bambini",teen:"🌟 Ragazzi (12+)",adults:"👤 Adulti",allAges:"Tutte le età",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -315,7 +319,7 @@ const T = {
     howNote:"📱 Fürs Handy gedacht: Formular öffnen und den Barcode des Buches mit der Kamera scannen — die ISBN füllt sich von selbst ein, du vervollständigst die restlichen Angaben, und nach einer kurzen Prüfung landet das Buch im Regal. Die Plattform mit Registrierung, Datenbank und automatischen Erinnerungen kommt im nächsten Schritt.",
     lblOffer:"Buch anbieten",subOffer:"kurzes Formular vom Handy",
     lblWish:"Buch gesucht",subWish:"Veröffentliche deinen Wunsch",
-    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",
+    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neu zuerst",sortOld:"Ältere zuerst",
     genres:{fiction:"Belletristik",mystery:"Krimi / Thriller",sff:"Science-Fiction / Fantasy",comics:"Comics",poetry:"Lyrik und Theater",nonfiction:"Sachbücher",history:"Geschichte / Biografien"},
     kids:"🧒 Kinder",teen:"🌟 Jugendliche (12+)",adults:"👤 Erwachsene",allAges:"Alle Altersgruppen",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -360,7 +364,7 @@ const T = {
     howNote:"📱 Built for your phone: open the form and scan the book's barcode with your camera — the ISBN fills itself in, you complete the remaining answers, and after a quick check the book lands on the shelf. The platform with sign-up, database and automatic reminders comes next.",
     lblOffer:"Offer a book",subOffer:"a short form from your phone",
     lblWish:"Looking for a book",subWish:"post your wish",
-    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",
+    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest first",sortOld:"Oldest first",
     genres:{fiction:"Fiction",mystery:"Crime / Thriller",sff:"Sci-fi / Fantasy",comics:"Comics",poetry:"Poetry & plays",nonfiction:"Non-fiction",history:"History / Biography"},
     kids:"🧒 Kids",teen:"🌟 Teens (12+)",adults:"👤 Adults",allAges:"All ages",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -399,7 +403,7 @@ const T = {
 
 // ============ STATE ============
 const store = (()=>{ try { return window.localStorage; } catch(e){ return {getItem:()=>null,setItem:()=>{}}; } })();
-const S = {lang:"it", blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", theme:store.getItem("bb-theme")||"light"};
+const S = {lang:"it", blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"};
 const $ = id => document.getElementById(id);
 const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : {matches:false,addEventListener:()=>{}};
 
@@ -557,8 +561,9 @@ function copyMsg(){
 }
 $("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
 
+function sortedList(list){ return [...list].sort((a,b)=> (S.sort==="old"?1:-1)*String(b.added||"").localeCompare(String(a.added||""))); }
 function renderAll(){
-  const t=T[S.lang], list=filtered();
+  const t=T[S.lang], list=sortedList(filtered());
   $("list").innerHTML = list.length ? list.map(cardRow).join("") : `<p class="empty">${t.empty}</p>`;
   $("table").innerHTML = list.length ? gridCells(list) : `<p class="empty">${t.empty}</p>`;
   $("count").textContent = t.count(list.length);
@@ -580,6 +585,8 @@ function applyLang(){
   $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join("");
   $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
   $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
+  $("sortSel").innerHTML=`<option value="new">${t.sortNew}</option><option value="old">${t.sortOld}</option>`;
+  $("sortSel").value=S.sort;
   $("typeRow").innerHTML=
     `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
     `<button class="chip kids ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
@@ -622,6 +629,7 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 $("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;renderAll();});
 $("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;renderAll();});
 $("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
+$("sortSel").addEventListener("change",e=>{S.sort=e.target.value;try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll();});
 $("typeRow").addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
   S.type = S.type===c.dataset.v ? "all" : c.dataset.v;
