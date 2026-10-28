@@ -171,6 +171,14 @@
   .gowner2{font-size:.66rem;color:var(--mut);margin-top:.3rem;border-top:1px solid var(--line);padding-top:.25rem}
   .empty{font-size:.85rem;color:var(--mut);text-align:center;padding:2rem 0;font-style:italic;font-family:var(--font-head)}
   footer{margin-top:2.5rem;font-size:.75rem;color:var(--mut);border-top:2px solid var(--line);padding-top:1rem;text-align:center;font-style:italic;font-family:var(--font-head)}
+  /* ---------- desktop (laptop) pass ---------- */
+  @media (min-width:48rem){
+    .overlay{align-items:center;padding:1.5rem}
+    .sheet{border-radius:1.1rem;max-width:30rem;max-height:88vh}
+    .agechips{flex:0 1 auto} /* chip dei filtri in linea coi select, niente righe a capo */
+    .agechips.sub{margin-left:auto;margin-top:0}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))} /* copertine più generose */
+  }
 </style>
 </head>
 <body>
