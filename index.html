@@ -150,7 +150,7 @@
   .gcell.wish{background:var(--terrabg);border-color:var(--terraline)}
   .gcell.lent{opacity:.65}
   .gcover{height:9.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:2rem;font-family:var(--font-head);text-shadow:0 1px 3px rgba(0,0,0,.3);position:relative;box-shadow:inset 5px 0 0 rgba(255,255,255,.22),inset -3px 0 0 rgba(0,0,0,.14)}
-  .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:linear-gradient(135deg,#fde8e0 0%,#fdf3d8 25%,#eaf5e2 50%,#ddeef9 75%,#f0e4f7 100%)!important}
+  .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:linear-gradient(135deg,#f7b8cb 0%,#fbd9a0 25%,#f5ef9a 50%,#aee6c5 75%,#b5d7f5 100%)!important}
   .book.wish .fb,.gcell.wish .fb{color:var(--terra);text-shadow:none}
   .sheet .dcover.wish{color:var(--terra);text-shadow:none}
   .sheet .dcover.wish .ncmsg span{font-family:system-ui,sans-serif;font-size:.95rem;font-weight:400;color:var(--mut)}
@@ -276,7 +276,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Cerca titolo, autore…",
     count:(n)=>`${n} libri`,
-    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",wishCover:"un desiderio, non un libro",owner:(k)=>`offerto da un vicino di <b>${k}</b>`,
+    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",wishCover:"qualcuno cerca questo libro",owner:(k)=>`offerto da un vicino di <b>${k}</b>`,
     allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
     kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
@@ -321,7 +321,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Titel, Autor suchen…",
     count:(n)=>`${n} Bücher`,
-    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"ein Wunsch, kein Buch",owner:(k)=>`angeboten von einem Nachbarn aus <b>${k}</b>`,
+    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"jemand sucht dieses Buch",owner:(k)=>`angeboten von einem Nachbarn aus <b>${k}</b>`,
     allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
     kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
@@ -366,7 +366,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Search title, author…",
     count:(n)=>`${n} books`,
-    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",wishCover:"a wish, not a book",owner:(k)=>`offered by a neighbour in <b>${k}</b>`,
+    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",wishCover:"someone is looking for this book",owner:(k)=>`offered by a neighbour in <b>${k}</b>`,
     allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
     kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
