@@ -174,6 +174,11 @@
   .gowner2{font-size:.66rem;color:var(--mut);margin-top:.3rem;border-top:1px solid var(--line);padding-top:.25rem}
   .empty{font-size:.85rem;color:var(--mut);text-align:center;padding:2rem 0;font-style:italic;font-family:var(--font-head)}
   footer{margin-top:2.5rem;font-size:.75rem;color:var(--mut);border-top:2px solid var(--line);padding-top:1rem;text-align:center;font-style:italic;font-family:var(--font-head)}
+  #legalLink{font-style:normal;font-family:system-ui,sans-serif;text-decoration:underline;cursor:pointer}
+  #legal{display:none;margin-top:1rem;text-align:left;font-style:normal;font-family:system-ui,sans-serif;font-size:.72rem;line-height:1.55;color:var(--mut);max-width:46rem;margin-left:auto;margin-right:auto}
+  #legal.open{display:block}
+  #legal h4{margin:.7rem 0 .2rem;color:var(--ink);font-size:.78rem}
+  #legal p{margin:.25rem 0}
   /* ---------- desktop (laptop) pass ---------- */
   @media (min-width:48rem){
     .overlay{align-items:center;padding:1.5rem}
@@ -252,7 +257,7 @@
 </div>
 <div id="table" style="display:none"></div>
 
-<footer id="foot"></footer>
+<footer id="foot"><span id="footTxt"></span><br><a href="#" id="legalLink">Impressum &amp; Datenschutz</a><div id="legal"></div></footer>
 </div>
 
 <script>
@@ -623,11 +628,34 @@ function applyLang(){
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
   $("dice").textContent="🎲"; $("dice").title=t.dice;
-  $("foot").textContent=t.foot;
+  $("footTxt").textContent=t.foot;
   renderAll();
 }
 
 // ============ EVENTS ============
+// Impressum: dati personali OFFUSCATI (char-code, anti-spam — MAI in HTML statico)
+const IMP_NAME=[65,110,100,114,101,97,32,80,105,114,97,115,60,98,114,62,90,119,105,110,103,108,105,115,116,114,97,223,101,32,50,54,60,98,114,62,49,48,53,53,53,32,66,101,114,108,105,110,60,98,114,62,68,101,117,116,115,99,104,108,97,110,100];
+const impStr=a=>a.map(c=>String.fromCharCode(c)).join("");
+$("legalLink").addEventListener("click",e=>{
+  e.preventDefault();
+  const L=$("legal");
+  if(!L.dataset.filled){
+    L.innerHTML=`
+    <h4>Impressum</h4>
+    <p>Angaben gemäß § 5 DDG. Verantwortlich für den Inhalt dieser Website (nichtkommerzielles Gemeinschaftsprojekt):</p>
+    <p>${impStr(IMP_NAME)}</p>
+    <p>E-Mail: ${SITE_CONTACT}</p>
+    <p>Verantwortlich nach § 18 Abs. 2 MStV: wie oben.</p>
+    <h4>Datenschutzerklärung</h4>
+    <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Im Browser werden nur die gewählten Einstellungen (Sprache, Thema, Sortierung, Ansicht) lokal gespeichert (localStorage) und nicht übertragen.</p>
+    <p>Buchcover werden von externen Anbietern (u.a. Open Library) geladen; dabei werden technisch notwendige Daten (u.a. die IP-Adresse) an den jeweiligen Anbieter übermittelt (Hinweis nach § 27 MDStV / § 5 DDG). Ohne Verbindung oder ohne Cover wird ein farbiger Platzhalter angezeigt.</p>
+    <p>Angebote und Wünsche werden über ein Google-Formular eingesammelt und vor der Veröffentlichung vom Betreiber geprüft; dabei gelten die Datenschutzhinweise von Google. Kontaktdaten werden niemals auf dieser Website veröffentlicht.</p>
+    <p>Hosting: GitHub Pages (github.com); es gilt die Datenschutzerklärung von GitHub.</p>`;
+    L.dataset.filled="1";
+  }
+  L.classList.toggle("open");
+  if(L.classList.contains("open"))L.scrollIntoView({behavior:"smooth"});
+});
 $("dice").addEventListener("click",()=>{
   const list=filtered(); if(!list.length)return;
   const b=list[Math.floor(Math.random()*list.length)];
