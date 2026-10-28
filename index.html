@@ -247,7 +247,7 @@ const BOOKS = [
   {title:"Il mio piccolo Vivaldi",author:"Emilie Collet",isbn:"9788893480642",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"nonfiction",desc:"Libro sonoro cartonato: sfiora il chip e ascolta Le quattro stagioni e altre melodie di Vivaldi. Collana Classici sonori di Gallucci, da 1 anno.",cover:"#9a3412"},
   {title:"Tout ce que tu peux faire avec une fourchette",author:"Claire Waniecki, Soledad Bravi",isbn:"9782075233507",lang:"Français",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"fiction",desc:"Tous les mauvais usages de la fourchette passés en revue, avec une surprise pop-up. Éveil, éditions Marcel et Joachim, dès 2 ans.",cover:"#db2777"},
   {title:"Sapiens: A Brief History of Humankind",author:"Yuval Noah Harari",isbn:"9780099590088",lang:"English",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",genre:"history",desc:"How Homo sapiens came to dominate the planet, from the Cognitive Revolution to today. The multi-million copy bestseller, Vintage 2015 edition.",cover:"#334155"},
-  {title:"Qualcosa di simile a Zorro",author:"",kind:"similar",likes:"Zorro (ma più moderno)",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",desc:"Simile a Zorro ma più moderno.",cover:"#111827"}
+  {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",cover:"#111827"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
@@ -443,7 +443,7 @@ function cardRow(b){
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}</span>` : ""
   ].join("");
   const owner = b.type==="wish"
-    ? (b.kind==="similar" ? t.similarNote(b.likes||"") : t.wishOwner(b.kiez))
+    ? t.wishOwner(b.kiez)
     : t.owner(b.kiez);
   const note = b.note ? ` · <i>${b.note}</i>` : "";
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
@@ -463,7 +463,7 @@ function gridCells(list){
       b.age==="12+" ? t.teen : (b.age!=="adults" ? t.subAges[b.age]||"" : "");
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
     const owner = (b.type==="wish"
-      ? (b.kind==="similar" ? t.similarNote(b.likes||"") : t.wishOwner(b.kiez))
+      ? t.wishOwner(b.kiez)
       : t.owner(b.kiez)).replace(/<\/?b>/g,"");
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
       <div class="gcover" style="background:${b.cover}">
@@ -496,7 +496,7 @@ function openSheet(b){
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
   ].join("");
   const owner = b.type==="wish"
-    ? (b.kind==="similar" ? t.similarNote(b.likes||"") : t.wishOwner(b.kiez))
+    ? t.wishOwner(b.kiez)
     : t.owner(b.kiez);
   $("sheet").innerHTML =
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
