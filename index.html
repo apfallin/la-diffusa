@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<link rel="preconnect" href="https://covers.openlibrary.org">
 <title>La Diffusa — la biblioteca diffusa / die verteilte Bibliothek</title>
 <style>
   :root{
@@ -14,6 +16,7 @@
     --radius:.85rem;
     --shadow:0 1px 3px rgba(60,50,30,.06),0 4px 14px rgba(60,50,30,.07);
     --font-head:"Iowan Old Style",Georgia,"Times New Roman",serif;
+    color-scheme:light;
   }
   :root.dark{
     --paper:#211d17; --card:#2a251d; --ink:#ece5d8; --mut:#a19681; --line:#3d362a;
@@ -21,6 +24,7 @@
     --terra:#e0937a; --terrabg:#32261f; --terraline:#4d3a2e;
     --gold:#d4b25e;
     --shadow:0 1px 3px rgba(0,0,0,.3),0 4px 14px rgba(0,0,0,.35);
+    color-scheme:dark;
   }
   :root.dark .pill.kiez{background:#232a36;color:#9db4d8;border-color:#36415a}
   :root.dark .chip.on{background:var(--terra);color:#211d17}
@@ -45,6 +49,7 @@
   .logo .bk{color:var(--green);font-style:italic}
   .logo .mark{font-size:1.3rem}
   .langSel{font-size:.85rem;border:1px solid var(--line);border-radius:.45rem;padding:.3rem .4rem;background:var(--card);color:var(--ink)}
+  .langSel:focus{font-size:1rem} /* iOS: no auto-zoom al focus (16px al momento del tap) */
   .themeBtn{border:1px solid var(--line);border-radius:.45rem;padding:.3rem .45rem;background:var(--card);cursor:pointer;font-size:.9rem;margin-left:.45rem}
   .tagline{font-family:var(--font-head);font-style:italic;font-size:.85rem;color:var(--mut);margin-top:.35rem;max-width:46rem;margin-left:auto;margin-right:auto}
   .main{padding:0 .9rem;max-width:46rem;margin:0 auto}
@@ -649,7 +654,8 @@ $("ageRow2").addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
   S.subAge = S.subAge===c.dataset.v ? "" : c.dataset.v; applyLang();
 });
-$("q").addEventListener("input",e=>{S.q=e.target.value;renderAll();});
+let qTimer=null; // debounce ricerca (~150ms): niente re-render a ogni tasto
+$("q").addEventListener("input",e=>{clearTimeout(qTimer);const v=e.target.value;qTimer=setTimeout(()=>{S.q=v;renderAll();},150);});
 $("vList").addEventListener("click",()=>{S.view="list";renderAll();});
 $("vTable").addEventListener("click",()=>{S.view="grid";renderAll();});
 $("langSel").addEventListener("change",e=>{S.lang=e.target.value;applyLang();});
@@ -658,3 +664,4 @@ applyLang();
 </script>
 </body>
 </html>
+
