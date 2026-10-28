@@ -178,7 +178,9 @@
   @media (min-width:48rem){
     .overlay{align-items:center;padding:1.5rem}
     .sheet{border-radius:1.1rem;max-width:30rem;max-height:88vh}
-    .agechips{flex:0 1 auto} /* chip dei filtri in linea coi select, niente righe a capo */
+    select.ctl{font-size:1rem} /* sul laptop niente vincolo iOS: font pieno */
+    .ctl{flex:1 1 10rem;min-width:8.5rem} /* select RIGIDE: mai schiacciabili a zero */
+    .agechips{flex:0 1 auto}
     .agechips.sub{margin-left:auto;margin-top:0}
     .grid{grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))} /* copertine più generose */
   }
