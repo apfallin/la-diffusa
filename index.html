@@ -607,7 +607,7 @@ function copyMsg(){
 }
 $("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
 
-function sortedList(list){ return [...list].sort((a,b)=> (S.sort==="old"?1:-1)*String(b.added||"").localeCompare(String(a.added||""))); }
+function sortedList(list){ return [...list].sort((a,b)=>{ if(S.sort==="new") return String(b.added||"").localeCompare(String(a.added||"")); return String(a.added||"").localeCompare(String(b.added||"")); }); }
 function renderAll(){
   const t=T[S.lang], list=sortedList(filtered());
   $("list").innerHTML = list.length ? list.map(cardRow).join("") : `<p class="empty">${t.empty}</p>`;
