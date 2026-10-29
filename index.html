@@ -672,7 +672,7 @@ function applyLang(){
     `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${plain(t.adults)}</button>`+
     `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${plain(t.teen)}</button>`+
     `<span class="kidwrap"><button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${plain(t.kids)}</button>`+
-    (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("")+`</span>`:"")+`</span>`; // fasce precise alla destra di Bambini, pacchetto indivisibile: mai a capo da sole
+    (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${plain(t.subAges[a])}</button>`).join("")+`</span>`:"")+`</span>`; // fasce alla destra di Bambini, SENZA emoji (plain): il pacchetto entra su una riga anche su schermi stretti
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
   $("dice").textContent="🎲"; $("dice").title=t.dice;
