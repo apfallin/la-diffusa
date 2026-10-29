@@ -318,6 +318,9 @@ const T = {
     dDef:"Da concordare",
     dLine:(d)=>`Vorrei tenerlo per: ${d} (indicazione non vincolante, tanto per aiutare chi presta).`,
     dNone:"Durata: da concordare direttamente con chi presta.",
+    dLabelW:"⏳ Per quanto puoi prestarlo? (facoltativo)",
+    dLineW:(d)=>`Posso prestartelo per: ${d} (indicazione non vincolante, poi ci mettiamo d'accordo).`,
+    dNoneW:"Durata: da concordare direttamente tra voi.",
     cCopy:"📋 Copia il messaggio",cCopied:"✅ Copiato!",cBack:"Torna al libro",
     cSend:(c)=>`Invia il messaggio a: <b>${c}</b>`,
     cSubj:(ti,b)=>b.isbn?`Prestito «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Prestito «${ti}» — La Diffusa`,
@@ -364,6 +367,9 @@ const T = {
     dDef:"Abzusprechen",
     dLine:(d)=>`Ich würde es gern so lange behalten: ${d} (unverbindlich, nur damit die verleihende Person weiß, was sie erwartet).`,
     dNone:"Dauer: direkt mit der verleihenden Person abzusprechen.",
+    dLabelW:"⏳ Wie lange kannst du es verleihen? (optional)",
+    dLineW:(d)=>`Ich kann es dir so lange leihen: ${d} (unverbindlich, wir sprechen uns dann ab).`,
+    dNoneW:"Dauer: direkt zwischen euch abzusprechen.",
     cCopy:"📋 Nachricht kopieren",cCopied:"✅ Kopiert!",cBack:"Zurück zum Buch",
     cSend:(c)=>`Schick die Nachricht an: <b>${c}</b>`,
     cSubj:(ti,b)=>b.isbn?`Ausleihe «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Ausleihe «${ti}» — La Diffusa`,
@@ -410,6 +416,9 @@ const T = {
     dDef:"To be agreed",
     dLine:(d)=>`I'd like to keep it for: ${d} (non-binding, just so the lender knows what to expect).`,
     dNone:"Duration: to be agreed directly with the lender.",
+    dLabelW:"⏳ How long can you lend it? (optional)",
+    dLineW:(d)=>`I can lend it to you for: ${d} (non-binding, we can sort it out together).`,
+    dNoneW:"Duration: to be agreed directly between you two.",
     cCopy:"📋 Copy message",cCopied:"✅ Copied!",cBack:"Back to the book",
     cSend:(c)=>`Send the message to: <b>${c}</b>`,
     cSubj:(ti,b)=>b.isbn?`Loan «${ti}» (ISBN ${b.isbn}) — La Diffusa`:`Loan «${ti}» — La Diffusa`,
@@ -552,13 +561,13 @@ function closeSheet(){ $("overlay").style.display="none"; }
 function contactSheet(b){
   const t=T[S.lang];
   CURB=b;
-  const msg=(b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez))+"\n"+t.dNone;
+  const msg=(b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez))+"\n"+(b.type==="wish"?t.dNoneW:t.dNone);
   $("sheet").innerHTML=
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dtitle">${t.cTitle}</div>`+
     `<div class="downer">${t.cIntro}</div>`+
     `<textarea class="cmsg" id="cmsg" rows="4" readonly>${msg}</textarea>`+
-    `<label class="durLbl" for="durSel">${t.dLabel}</label>`+
+    `<label class="durLbl" for="durSel">${b.type==="wish"?t.dLabelW:t.dLabel}</label>`+
     `<select id="durSel" class="ctl" onchange="updMsg()"><option value="">${t.dDef}</option>${t.dOpts.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}</select>`+
     (SITE_CONTACT?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
     `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
@@ -571,8 +580,8 @@ function updMsg(){
   const t=T[S.lang],b=CURB,sel=$("durSel");
   if(!b)return;
   let msg=b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez);
-  if(sel&&sel.value!=="") msg+="\n"+t.dLine(t.dOpts[sel.value]);
-  else msg+="\n"+t.dNone;
+  if(sel&&sel.value!=="") msg+="\n"+(b.type==="wish"?t.dLineW(t.dOpts[sel.value]):t.dLine(t.dOpts[sel.value]));
+  else msg+="\n"+(b.type==="wish"?t.dNoneW:t.dNone);
   msg+="\n\n"+t.mailFoot;
   $("cmsg").value=msg;
   const mb=$("mailBtn");
