@@ -81,9 +81,9 @@
   .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer}
   .vswitch .vsort:focus{font-size:1rem}
   .agechips{display:flex;gap:.35rem;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-start}
-  .ageGroup{flex:1 1 100%;flex-wrap:wrap;border:1px solid var(--line);border-radius:.7rem;padding:.26rem .4rem;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.05)} /* gruppo ETÀ: pillole + sottofasce dentro UNA sola scatola, mai sparse */
-  #ageRow{gap:.3rem}
-  #ageRow .chip{font-size:.74rem;padding:.26rem .55rem} /* compatte: Tutte le età+Adulti+Ragazzi in UNA riga, Bambini(+fasce) sotto → si guadagna una riga */
+  .ageGroup{flex:1 1 100%;flex-wrap:wrap;border:1px solid var(--line);border-radius:.7rem;padding:.22rem .3rem;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.05)} /* gruppo ETÀ: pillole + sottofasce dentro UNA sola scatola, mai sparse */
+  #ageRow{gap:.25rem}
+  #ageRow .chip{font-size:.74rem;padding:.26rem .5rem} /* compatte: Tutte le età+Adulti+Ragazzi in UNA riga, Bambini(+fasce) sotto → si guadagna una riga */
   #typeRow{flex:1 1 100%;display:flex;border:1px solid var(--line);border-radius:.6rem;overflow:hidden;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.06)} /* segmented control Tutto/Offerte/Desideri: pezzo unico, famiglia "selettori" */
   #typeRow .chip{flex:1 1 0;border:none;border-radius:0;background:transparent;box-shadow:none;font-size:.78rem;padding:.42rem .25rem;text-align:center;color:var(--ink)}
   #typeRow .chip+.chip{border-left:1px solid var(--line)}
@@ -96,11 +96,11 @@
   :root.dark #typeRow .chip.on{background:var(--ink);color:var(--paper)}
   :root.dark #typeRow .chip.offer.on{background:var(--green);color:#211d17}
   :root.dark #typeRow .chip.wish.on{background:var(--terra);color:#211d17}
-  .agechips.sub{display:none;gap:.25rem;align-items:center} /* fasce: niente box verde annidato, solo mini-pillole dentro la scatola età */
-  .agechips.sub::before{content:"";width:1px;height:1.4rem;background:var(--greenline);margin-right:.3rem} /* sottile divisore dopo Bambini */
+  .agechips.sub{display:none;gap:.15rem;align-items:center} /* fasce: niente box verde annidato, solo mini-pillole dentro la scatola età */
+  .agechips.sub::before{content:"";width:1px;height:1.4rem;background:var(--greenline);margin-right:.2rem} /* sottile divisore dopo Bambini */
   .agechips.sub.show{display:inline-flex} /* fluisce inline dopo le chip età, nessuna riga dedicata */
-  .kidwrap{display:inline-flex;align-items:center;gap:.25rem;flex-wrap:wrap;max-width:100%} /* Bambini + fasce: preferibilmente uniti; se non entrano proprio, vanno a capo DENTRO la scatola, mai fuori */
-  #ageRow2 .chip,.agechips.sub .chip{font-size:.65rem;padding:.12rem .42rem}
+  .kidwrap{display:inline-flex;align-items:center;gap:.2rem;flex-wrap:wrap;max-width:100%} /* Bambini + fasce: preferibilmente uniti; se non entrano proprio, vanno a capo DENTRO la scatola, mai fuori */
+  #ageRow2 .chip,.agechips.sub .chip{font-size:.62rem;padding:.1rem .35rem}
   .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
   .chip:hover{border-color:var(--terra)}
   .chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
