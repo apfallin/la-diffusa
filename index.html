@@ -81,16 +81,18 @@
   .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer}
   .vswitch .vsort:focus{font-size:1rem}
   .agechips{display:flex;gap:.35rem;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-start}
-  #typeRow{flex:1 1 100%} /* chip tipo: riga propria */
-  /* chip TIPO = famiglia "selettori" (come le select): opache, bordo pieno, ombra leggera — ben distinte dalle pillole età */
-  .tchip{background:var(--paper);border:1px solid var(--line);border-radius:.55rem;font-size:.8rem;padding:.38rem .8rem;box-shadow:0 1px 2px rgba(60,50,30,.07)}
-  .tchip.on{box-shadow:none;color:#fff}
-  .tchip.offer.on{background:var(--green);border-color:var(--green)}
-  .tchip.wish.on{background:var(--terra);border-color:var(--terra)}
-  :root.dark .tchip{background:var(--paper);border-color:var(--line);box-shadow:none}
-  :root.dark .tchip.on{color:#211d17}
-  :root.dark .tchip.offer.on{background:var(--green);border-color:var(--green)}
-  :root.dark .tchip.wish.on{background:var(--terra);border-color:var(--terra)}
+  #typeRow{flex:1 1 100%;display:flex;border:1px solid var(--line);border-radius:.6rem;overflow:hidden;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.06)} /* segmented control Tutto/Offerte/Desideri: pezzo unico, famiglia "selettori" */
+  #typeRow .chip{flex:1 1 0;border:none;border-radius:0;background:transparent;box-shadow:none;font-size:.78rem;padding:.42rem .25rem;text-align:center;color:var(--ink)}
+  #typeRow .chip+.chip{border-left:1px solid var(--line)}
+  #typeRow .chip:hover{border-color:transparent;background:var(--greenbg)}
+  #typeRow .chip.on{background:var(--ink);color:var(--paper)}
+  #typeRow .chip.offer.on{background:var(--green);color:#fff}
+  #typeRow .chip.wish.on{background:var(--terra);color:#fff}
+  :root.dark #typeRow{background:var(--card)}
+  :root.dark #typeRow .chip{color:var(--ink)}
+  :root.dark #typeRow .chip.on{background:var(--ink);color:var(--paper)}
+  :root.dark #typeRow .chip.offer.on{background:var(--green);color:#211d17}
+  :root.dark #typeRow .chip.wish.on{background:var(--terra);color:#211d17}
   .agechips.sub{display:none;gap:.25rem;padding:.28rem .35rem;background:var(--greenbg);border:1px solid var(--greenline);border-radius:.7rem;align-items:center}
   .agechips.sub.show{display:inline-flex} /* fluisce inline dopo le chip età, nessuna riga dedicata */
   #ageRow2 .chip{font-size:.7rem;padding:.16rem .55rem}
@@ -298,7 +300,7 @@ const BOOKS = [
   {title:"L'orso che voleva danzare",author:"Stephanie Stansbie, Wendy Warren",lang:"Italiano",kiez:"Moabit",age:"3-6",type:"offer",status:"ok",genre:"fiction",desc:"Rita sogna di diventare una ballerina, ma è preoccupata che il suo corpo non sia della forma giusta. Riuscirà a trovare dentro di sé la forza per realizzare il suo sogno e per amare le sue meravigliose fattezze da orso? Una storia illustrata sulla propria identità e sulla gioia della danza. Sassi Junior.",cover:"#be185d",added:"2026-10-29"},
   {title:"Post Office",author:"Charles Bukowski",isbn:"9788850246977",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Il leggendario alter ego Henry Chinaski, assunto dall\u2019amministrazione postale americana, si ritrova con la sacca di cuoio sulle spalle a girare la squallida periferia di Los Angeles. Tra sbornie, puntate all\u2019ippodromo e nottate in motel sgangherati, il romanzo autobiografico con cui Bukowski ha raccontato il lavoro, l\u2019alcol e la vita. TEA.",cover:"#4c1d95",added:"2026-10-29"},
   {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",genre:"fiction",cover:"#111827",added:"2026-10-28"},
-  {title:"Canzoni per bambini con accordi",author:"",kind:"theme",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"wish",genre:"poetry",desc:"Canzoni per bambini con accordi per accompagnarle; va bene anche per bambini più grandi (et\u00e0 Kindergarten).",cover:"#111827",added:"2026-10-29"}
+  {title:"Canzoni per bambini con accordi",author:"",kind:"theme",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"wish",genre:"poetry",desc:"Canzoni per bambini con accordi per accompagnarle; va bene anche per bambini più grandi (età Kindergarten).",cover:"#111827",added:"2026-10-29"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","English","Français"]; // NO Deutsch: la lingua del luogo la coprono le biblioteche VBB — il concetto del sito sono i libri in ALTRE lingue
@@ -656,9 +658,9 @@ function applyLang(){
   $("sortSel").innerHTML=`<option value="new">${t.sortNew}</option><option value="old">${t.sortOld}</option>`;
   $("sortSel").value=S.sort;
   $("typeRow").innerHTML=
-    `<button class="chip tchip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
-    `<button class="chip tchip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
-    `<button class="chip tchip wish ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
+    `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
+    `<button class="chip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
+    `<button class="chip wish ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
   $("ageRow").innerHTML=
     `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${t.allAges}</button>`+
     `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${t.kids}</button>`+
