@@ -274,7 +274,7 @@ const BOOKS = [
   {title:"Sapiens: A Brief History of Humankind",author:"Yuval Noah Harari",isbn:"9780099590088",lang:"English",kiez:"Friedrichshain",age:"adults",type:"offer",status:"ok",genre:"history",desc:"How Homo sapiens came to dominate the planet, from the Cognitive Revolution to today. The multi-million copy bestseller, Vintage 2015 edition.",cover:"#334155",added:"2026-10-28"},
   {title:"Io e te",author:"Niccolò Ammaniti",isbn:"9788806206802",lang:"Italiano",kiez:"Moabit",age:"adults",type:"offer",status:"ok",genre:"fiction",desc:"Lorenzo, quattordicenne solitario, si nasconde per una settimana nella cantina del proprio palazzo fingendo di essere in vacanza con gli amici. L’arrivo improvviso della sorellastra Olivia sconvolge il suo rifugio: un racconto breve e fulmineo sul più semplice dei misteri, come diventare grandi. Einaudi, Stile Libero.",cover:"#065f46",added:"2026-10-28"},
   {title:"Naso nasino",author:"Elisa Mazzoli, Cristina Petit",isbn:"9788836282814",lang:"Italiano",kiez:"Moabit",age:"0-3",type:"offer",status:"ok",genre:"fiction",desc:"Libro cartonato interattivo per i più piccoli (da 6 mesi): il gioco è quello del “naso nasino”, appoggiare il naso contro quello dei cuccioli del libro e sfregare ripetendo “naso nasino con…”. Alla fine ad aspettare c\u2019è un nasone… di chi mai sarà? Pulce edizioni.",cover:"#b45309",added:"2026-10-28"},
-  {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",cover:"#111827",added:"2026-10-28"}
+  {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",genre:"fiction",cover:"#111827",added:"2026-10-28"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
 const BOOKLANGS = ["Italiano","English","Français"]; // NO Deutsch: la lingua del luogo la coprono le biblioteche VBB — il concetto del sito sono i libri in ALTRE lingue
@@ -626,7 +626,8 @@ function applyLang(){
   $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
   $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join("");
   $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
-  $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
+  // dropdown DINAMICO: solo i generi presenti nel catalogo (ordine canonico di GENRES) — i filtri vuoti non si offrono; il gestore assegna SEMPRE uno dei GENRES fissi
+  $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.filter(g=>BOOKS.some(b=>b.genre===g)).map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
   $("sortSel").innerHTML=`<option value="new">${t.sortNew}</option><option value="old">${t.sortOld}</option>`;
   $("sortSel").value=S.sort;
   $("typeRow").innerHTML=
