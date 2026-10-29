@@ -280,6 +280,7 @@ const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Weddin
 const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
 const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
 const SITE_CONTACT = "6btksjfx@anonaddy.me"; // alias email pubblico del sito (addy.io → Gmail di lavoro)
+const SITE_INFO = "ladiffusa.fjkrx@passinbox.com"; // contatto gestore nel footer/Impressum (→ posta diretta di Andrea)
 
 // ============ UI STRINGS ============
 const T = {
@@ -326,7 +327,7 @@ const T = {
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Sorprendimi",
-    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone. Il catalogo va da 0 a 99 anni: ogni libro porta la sua etichetta di età. Scrivi al gestore: 6btksjfx@anonaddy.me",
+    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone. Il catalogo va da 0 a 99 anni: ogni libro porta la sua etichetta di età. Scrivi al gestore: ladiffusa.fjkrx@passinbox.com",
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nServizio comunitario in fase beta: facciamo del nostro meglio, ma prestiti e accordi avvengono direttamente tra le persone, che ne restano le uniche responsabili."
   },
   de:{
@@ -372,7 +373,7 @@ const T = {
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überrasch mich",
-    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt. Der Katalog reicht von 0 bis 99: Jedes Buch trägt eine Altersangabe. Schreib dem Betreiber: 6btksjfx@anonaddy.me",
+    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt. Der Katalog reicht von 0 bis 99: Jedes Buch trägt eine Altersangabe. Schreib dem Betreiber: ladiffusa.fjkrx@passinbox.com",
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nGemeinschaftsdienst in der Beta-Phase: Wir geben unser Bestes, aber Ausleihe und Absprachen erfolgen direkt zwischen den Personen, die dafür verantwortlich bleiben."
   },
   en:{
@@ -418,7 +419,7 @@ const T = {
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise me",
-    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly. The catalogue ranges from 0 to 99: every book carries an age label. Write to the keeper: 6btksjfx@anonaddy.me",
+    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly. The catalogue ranges from 0 to 99: every book carries an age label. Write to the keeper: ladiffusa.fjkrx@passinbox.com",
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nCommunity service in beta: we do our best, but lending and arrangements happen directly between people, who remain the only ones responsible."
   }
 };
@@ -644,7 +645,7 @@ $("legalLink").addEventListener("click",e=>{
     <h4>Impressum</h4>
     <p>Angaben gemäß § 5 DDG. Verantwortlich für den Inhalt dieser Website (nichtkommerzielles Gemeinschaftsprojekt):</p>
     <p>${impStr(IMP_NAME)}</p>
-    <p>E-Mail: ${SITE_CONTACT}</p>
+    <p>E-Mail: ${SITE_INFO}</p>
     <p>Verantwortlich nach § 18 Abs. 2 MStV: wie oben.</p>
     <h4>Datenschutzerklärung</h4>
     <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Im Browser werden nur die gewählten Einstellungen (Sprache, Thema, Sortierung, Ansicht) lokal gespeichert (localStorage) und nicht übertragen.</p>
