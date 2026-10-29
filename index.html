@@ -81,6 +81,7 @@
   .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer}
   .vswitch .vsort:focus{font-size:1rem}
   .agechips{display:flex;gap:.35rem;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-start}
+  .ageGroup{flex:1 1 100%;flex-wrap:wrap;border:1px solid var(--line);border-radius:.7rem;padding:.32rem .45rem;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.05)} /* gruppo ETÀ: pillole + sottofasce dentro UNA sola scatola, mai sparse */
   #typeRow{flex:1 1 100%;display:flex;border:1px solid var(--line);border-radius:.6rem;overflow:hidden;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.06)} /* segmented control Tutto/Offerte/Desideri: pezzo unico, famiglia "selettori" */
   #typeRow .chip{flex:1 1 0;border:none;border-radius:0;background:transparent;box-shadow:none;font-size:.78rem;padding:.42rem .25rem;text-align:center;color:var(--ink)}
   #typeRow .chip+.chip{border-left:1px solid var(--line)}
@@ -209,6 +210,7 @@
     .ctl{flex:1 1 10rem;min-width:8.5rem} /* select RIGIDE: mai schiacciabili a zero */
     .agechips{flex:0 1 auto}
     .agechips.sub{margin-left:.1rem}
+    :root.dark .ageGroup{box-shadow:none}
     .grid{grid-template-columns:repeat(auto-fill,minmax(9rem,1fr))} /* copertine più generose */
   }
 </style>
@@ -255,8 +257,7 @@
       <select id="genreSel" class="ctl"></select>
     </div>
     <div class="ctl agechips" id="typeRow"></div>
-    <div class="ctl agechips" id="ageRow"></div>
-    <div class="ctl agechips sub" id="ageRow2"></div>
+    <div class="ctl ageGroup"><div class="agechips" id="ageRow"></div><div class="agechips sub" id="ageRow2"></div></div>
   </div>
   <div class="qwrap"><input id="q" type="search" placeholder=""></div>
 </section>
