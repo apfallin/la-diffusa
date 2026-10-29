@@ -99,8 +99,8 @@
   .agechips.sub{display:none;gap:.25rem;align-items:center} /* fasce: niente box verde annidato, solo mini-pillole dentro la scatola età */
   .agechips.sub::before{content:"";width:1px;height:1.4rem;background:var(--greenline);margin-right:.3rem} /* sottile divisore dopo Bambini */
   .agechips.sub.show{display:inline-flex} /* fluisce inline dopo le chip età, nessuna riga dedicata */
-  .kidwrap{display:inline-flex;align-items:center;gap:.3rem;flex:0 0 auto} /* Bambini + fasce = pacchetto INDIVISIBILE: vanno a capo insieme, le fasce restano alla destra di Bambini */
-  #ageRow2 .chip,.agechips.sub .chip{font-size:.7rem;padding:.16rem .55rem}
+  .kidwrap{display:inline-flex;align-items:center;gap:.25rem;flex-wrap:wrap;max-width:100%} /* Bambini + fasce: preferibilmente uniti; se non entrano proprio, vanno a capo DENTRO la scatola, mai fuori */
+  #ageRow2 .chip,.agechips.sub .chip{font-size:.65rem;padding:.12rem .42rem}
   .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
   .chip:hover{border-color:var(--terra)}
   .chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
