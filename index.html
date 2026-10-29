@@ -277,7 +277,7 @@ const BOOKS = [
   {title:"Zorro, ma più moderno",author:"",kind:"similar",likes:"Zorro",lang:"Italiano",kiez:"Moabit",age:"adults",type:"wish",cover:"#111827",added:"2026-10-28"}
 ];
 const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Wedding","Schöneberg","Moabit"];
-const BOOKLANGS = ["Italiano","Deutsch","English","Français"];
+const BOOKLANGS = ["Italiano","English","Français"]; // NO Deutsch: la lingua del luogo la coprono le biblioteche VBB — il concetto del sito sono i libri in ALTRE lingue
 const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
 const SITE_CONTACT = "6btksjfx@anonaddy.me"; // alias email pubblico del sito (addy.io → Gmail di lavoro)
 const SITE_INFO = "ladiffusa.fjkrx@passinbox.com"; // contatto gestore nel footer/Impressum (→ posta diretta di Andrea)
@@ -435,7 +435,10 @@ const T = {
 
 // ============ STATE ============
 const store = (()=>{ try { return window.localStorage; } catch(e){ return {getItem:()=>null,setItem:()=>{}}; } })();
-const S = {lang:"it", blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"};
+// Lingua UI: se l'utente ha scelto una lingua manualmente → quella (salvata in locale);
+// altrimenti auto-rilevata dal browser (it/de), fallback inglese. Tema: chiaro standard per tutti.
+const autoLang = (()=>{ try { const l=(navigator.language||"en").slice(0,2).toLowerCase(); return l==="it"?"it":l==="de"?"de":"en"; } catch(e){ return "en"; } })();
+const S = {lang:store.getItem("bb-lang")||autoLang, blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"};
 const $ = id => document.getElementById(id);
 const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : {matches:false,addEventListener:()=>{}};
 
@@ -612,6 +615,7 @@ function renderAll(){
 function applyLang(){
   const t=T[S.lang];
   document.documentElement.lang=S.lang;
+  $("langSel").value=S.lang; // riflette lingua auto-rilevata o salvata
   $("tagline").textContent=t.tagline;
   $("howTitle").textContent=t.howTitle;
   $("howList").innerHTML=t.how.map(s=>`<li>${s}</li>`).join("");
@@ -706,7 +710,7 @@ let qTimer=null; // debounce ricerca (~150ms): niente re-render a ogni tasto
 $("q").addEventListener("input",e=>{clearTimeout(qTimer);const v=e.target.value;qTimer=setTimeout(()=>{S.q=v;renderAll();},150);});
 $("vList").addEventListener("click",()=>{S.view="list";renderAll();});
 $("vTable").addEventListener("click",()=>{S.view="grid";renderAll();});
-$("langSel").addEventListener("change",e=>{S.lang=e.target.value;applyLang();});
+$("langSel").addEventListener("change",e=>{S.lang=e.target.value;try{store.setItem("bb-lang",S.lang);}catch(err){} applyLang();});
 
 applyLang();
 </script>
