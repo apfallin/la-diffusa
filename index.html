@@ -440,6 +440,8 @@ const store = (()=>{ try { return window.localStorage; } catch(e){ return {getIt
 const autoLang = (()=>{ try { const l=(navigator.language||"en").slice(0,2).toLowerCase(); return l==="it"?"it":l==="de"?"de":"en"; } catch(e){ return "en"; } })();
 const S = {lang:store.getItem("bb-lang")||autoLang, blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"};
 const $ = id => document.getElementById(id);
+// Anti HTML-injection: i campi da form (titolo/autore/desc/note) sono testo NON fidato — sempre escappati al rendering
+const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : {matches:false,addEventListener:()=>{}};
 
 function applyTheme(){
@@ -473,7 +475,7 @@ function filtered(){
 
 function coverImg(b,size){
   const src=b.coverUrl||(b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg?default=false`:"");
-  return src?`<img src="${src}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="copertina: ${b.title.replace(/"/g,"&quot;")}" onload="var fb=this.parentNode.querySelector('.fb');if(fb)fb.style.display='none'" onerror="this.remove()">`:"";
+  return src?`<img src="${src}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="copertina: ${esc(b.title)}" onload="var fb=this.parentNode.querySelector('.fb');if(fb)fb.style.display='none'" onerror="this.remove()">`:"";
 }
 function cardRow(b){
   const t=T[S.lang];
@@ -489,11 +491,11 @@ function cardRow(b){
   const owner = b.type==="wish"
     ? t.wishOwner(b.kiez)
     : t.owner(b.kiez);
-  const note = b.note ? ` · <i>${b.note}</i>` : "";
+  const note = b.note ? ` · <i>${esc(b.note)}</i>` : "";
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
     <div class="cover" style="background:${b.cover}">${coverImg(b,"M")}<span class="fb">${b.type==="wish"?"✨":b.title.charAt(0)}</span></div>
     <div class="bbody">
-      <div class="bhead"><span class="btitle">${b.title}</span><span class="bauthor">${b.author!=="—"?b.author:""}</span></div>
+      <div class="bhead"><span class="btitle">${esc(b.title)}</span><span class="bauthor">${b.author!=="—"?esc(b.author):""}</span></div>
       <div class="bmeta">${pills}</div>
       <p class="bowner">${owner}${note}</p>
     </div>
@@ -517,7 +519,7 @@ function gridCells(list){
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
       </div>
       <div class="ginfo">
-        <div class="gtitle" title="${b.title} — ${b.author==="—"?"":b.author}">${b.title}</div>
+        <div class="gtitle" title="${esc(b.title+(b.author&&b.author!=="—"?" — "+b.author:""))}">${esc(b.title)}</div>
         <div class="gmeta">
           <div class="row1"><span class="l">${b.lang}</span><span class="k">${b.kiez}</span></div>
         </div>
@@ -547,14 +549,14 @@ function openSheet(b){
   $("sheet").innerHTML =
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${b.cover}">${coverImg(b,"L")}<div class="ncmsg fb"><b>${b.type==="wish"?"✨":b.title.charAt(0)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
-    `<div class="dtitle">${b.title}</div>`+
-    (b.author!=="—"&&b.author?`<div class="dauthor">${b.author}</div>`:"")+
+    `<div class="dtitle">${esc(b.title)}</div>`+
+    (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
     `<div class="downer">${owner}</div>`+
     (b.desc?`<div class="ddesc" id="ddesc">${b.desc.length>220
-      ? `${b.desc.slice(0,220)}… <span class="toggle" onclick="document.getElementById('ddesc').classList.add('open');this.style.display='none'">${t.more}</span><span class="more">${b.desc.slice(220)}</span>`
-      : b.desc}</div>`:"")+
-    (b.type!=="wish"?(b.status==="lent"?`<div class="dnote">${t.stateLent} <b>${b.note||"—"}</b></div>`:`<div class="dnote">${t.stateAvail}</div>`):"")+
+      ? `${esc(b.desc.slice(0,220))}… <span class="toggle" onclick="document.getElementById('ddesc').classList.add('open');this.style.display='none'">${t.more}</span><span class="more">${esc(b.desc.slice(220))}</span>`
+      : esc(b.desc)}</div>`:"")+
+    (b.type!=="wish"?(b.status==="lent"?`<div class="dnote">${t.stateLent} <b>${esc(b.note||"—")}</b></div>`:`<div class="dnote">${t.stateAvail}</div>`):"")+
     `<button class="contact ${b.type==="wish"?"wishc":"offer"}" onclick="contactSheet(BOOKS[${BOOKS.indexOf(b)}])">${b.type==="wish"?t.askWish:t.askOffer}</button>`+
     `<div class="dfoot">${t.contactNote}</div>`;
   $("overlay").style.display="flex";
@@ -564,7 +566,7 @@ function closeSheet(){ $("overlay").style.display="none"; }
 function contactSheet(b){
   const t=T[S.lang];
   CURB=b;
-  const msg=(b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez))+"\n"+(b.type==="wish"?t.dNoneW:t.dNone);
+  const msg=(b.type==="wish"?t.cMsgWish(esc(b.title),b.kiez):t.cMsgOffer(esc(b.title),esc(b.author||"—"),b.kiez))+"\n"+(b.type==="wish"?t.dNoneW:t.dNone);
   $("sheet").innerHTML=
     `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dtitle">${t.cTitle}</div>`+
@@ -582,7 +584,7 @@ function contactSheet(b){
 function updMsg(){
   const t=T[S.lang],b=CURB,sel=$("durSel");
   if(!b)return;
-  let msg=b.type==="wish"?t.cMsgWish(b.title,b.kiez):t.cMsgOffer(b.title,b.author||"—",b.kiez);
+  let msg=b.type==="wish"?t.cMsgWish(esc(b.title),b.kiez):t.cMsgOffer(esc(b.title),esc(b.author||"—"),b.kiez);
   if(sel&&sel.value!=="") msg+="\n"+(b.type==="wish"?t.dLineW(t.dOpts[sel.value]):t.dLine(t.dOpts[sel.value]));
   else msg+="\n"+(b.type==="wish"?t.dNoneW:t.dNone);
   msg+="\n\n"+t.mailFoot;
