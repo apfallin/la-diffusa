@@ -82,7 +82,15 @@
   .vswitch .vsort:focus{font-size:1rem}
   .agechips{display:flex;gap:.35rem;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-start}
   #typeRow{flex:1 1 100%} /* chip tipo: riga propria */
-  #typeRow .chip{background:var(--paper);border-radius:.55rem} /* famiglia "selettori", diverse dalle pillole età */
+  /* chip TIPO = famiglia "selettori" (come le select): opache, bordo pieno, ombra leggera — ben distinte dalle pillole età */
+  .tchip{background:var(--paper);border:1px solid var(--line);border-radius:.55rem;font-size:.8rem;padding:.38rem .8rem;box-shadow:0 1px 2px rgba(60,50,30,.07)}
+  .tchip.on{box-shadow:none;color:#fff}
+  .tchip.offer.on{background:var(--green);border-color:var(--green)}
+  .tchip.wish.on{background:var(--terra);border-color:var(--terra)}
+  :root.dark .tchip{background:var(--paper);border-color:var(--line);box-shadow:none}
+  :root.dark .tchip.on{color:#211d17}
+  :root.dark .tchip.offer.on{background:var(--green);border-color:var(--green)}
+  :root.dark .tchip.wish.on{background:var(--terra);border-color:var(--terra)}
   .agechips.sub{display:none;gap:.25rem;padding:.28rem .35rem;background:var(--greenbg);border:1px solid var(--greenline);border-radius:.7rem;align-items:center}
   .agechips.sub.show{display:inline-flex} /* fluisce inline dopo le chip età, nessuna riga dedicata */
   #ageRow2 .chip{font-size:.7rem;padding:.16rem .55rem}
@@ -646,9 +654,9 @@ function applyLang(){
   $("sortSel").innerHTML=`<option value="new">${t.sortNew}</option><option value="old">${t.sortOld}</option>`;
   $("sortSel").value=S.sort;
   $("typeRow").innerHTML=
-    `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
-    `<button class="chip kids ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
-    `<button class="chip teen ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
+    `<button class="chip tchip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
+    `<button class="chip tchip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
+    `<button class="chip tchip wish ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
   $("ageRow").innerHTML=
     `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${t.allAges}</button>`+
     `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${t.kids}</button>`+
