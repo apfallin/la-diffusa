@@ -657,7 +657,7 @@ function applyLang(){
   $("howNote").textContent=t.howNote;
   $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
   $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
-  $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join("");
+  $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.filter(k=>BOOKS.some(b=>b.kiez===k)).map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join(""); // dropdown DINAMICO: solo i Kiez con libri in catalogo (come lingue e generi)
   $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
   // dropdown DINAMICO: solo i generi presenti nel catalogo (ordine canonico di GENRES) — i filtri vuoti non si offrono; il gestore assegna SEMPRE uno dei GENRES fissi
   $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.filter(g=>BOOKS.some(b=>b.genre===g)).map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
