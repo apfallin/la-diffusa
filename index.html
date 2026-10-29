@@ -469,7 +469,7 @@ const store = (()=>{ try { return window.localStorage; } catch(e){ return {getIt
 // Lingua UI: se l'utente ha scelto una lingua manualmente → quella (salvata in locale);
 // altrimenti auto-rilevata dal browser (it/de), fallback inglese. Tema: chiaro standard per tutti.
 const autoLang = (()=>{ try { const l=(navigator.language||"en").slice(0,2).toLowerCase(); return l==="it"?"it":l==="de"?"de":"en"; } catch(e){ return "en"; } })();
-const S = {lang:store.getItem("bb-lang")||autoLang, blang:"", kiez:"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"};
+const S = {lang:store.getItem("bb-lang")||autoLang, blang:store.getItem("bb-blang")||"", kiez:store.getItem("bb-kiez")||"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"}; // kiez e lingua libri: ricordati alla visita successiva (localStorage)
 const $ = id => document.getElementById(id);
 // Anti HTML-injection: i campi da form (titolo/autore/desc/note) sono testo NON fidato — sempre escappati al rendering
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
@@ -657,6 +657,8 @@ function applyLang(){
   $("howNote").textContent=t.howNote;
   $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
   $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
+  if(S.kiez && !BOOKS.some(b=>b.kiez===S.kiez)) S.kiez=""; // kiez salvato ma sparito dal catalogo → reset, mai filtro fantasma
+  if(S.blang && !BOOKS.some(b=>b.lang===S.blang)) S.blang="";
   $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.filter(k=>BOOKS.some(b=>b.kiez===k)).map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join(""); // dropdown DINAMICO: solo i Kiez con libri in catalogo (come lingue e generi)
   $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
   // dropdown DINAMICO: solo i generi presenti nel catalogo (ordine canonico di GENRES) — i filtri vuoti non si offrono; il gestore assegna SEMPRE uno dei GENRES fissi
@@ -723,8 +725,8 @@ $("dice").addEventListener("click",()=>{
 $("totop").addEventListener("click",()=>{ try{window.scrollTo({top:0});}catch(e){window.scrollTo(0,0);} });
 window.addEventListener("scroll",()=>{ $("totop").classList.toggle("show",window.scrollY>400); },{passive:true});
 document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
-$("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;renderAll();});
-$("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;renderAll();});
+$("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;try{store.setItem("bb-kiez",S.kiez);}catch(err){} renderAll();});
+$("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;try{store.setItem("bb-blang",S.blang);}catch(err){} renderAll();});
 $("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
 $("sortSel").addEventListener("change",e=>{S.sort=e.target.value;try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll();});
 $("typeRow").addEventListener("click",e=>{
