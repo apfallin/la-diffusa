@@ -98,6 +98,7 @@
   :root.dark #typeRow .chip.wish.on{background:var(--terra);color:#211d17}
   .agechips.sub{display:none;gap:.25rem;padding:.28rem .35rem;background:var(--greenbg);border:1px solid var(--greenline);border-radius:.7rem;align-items:center}
   .agechips.sub.show{display:inline-flex} /* fluisce inline dopo le chip età, nessuna riga dedicata */
+  .kidwrap{display:inline-flex;align-items:center;gap:.3rem;flex:0 0 auto} /* Bambini + fasce = pacchetto INDIVISIBILE: vanno a capo insieme, le fasce restano alla destra di Bambini */
   #ageRow2 .chip,.agechips.sub .chip{font-size:.7rem;padding:.16rem .55rem}
   .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
   .chip:hover{border-color:var(--terra)}
@@ -669,8 +670,8 @@ function applyLang(){
     `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${plain(t.allAges)}</button>`+
     `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${plain(t.adults)}</button>`+
     `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${plain(t.teen)}</button>`+
-    `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${plain(t.kids)}</button>`+
-    (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("")+`</span>`:""); // fasce precise INLINE alla destra della chip Bambini, nessuna riga dedicata
+    `<span class="kidwrap"><button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${plain(t.kids)}</button>`+
+    (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("")+`</span>`:"")+`</span>`; // fasce precise alla destra di Bambini, pacchetto indivisibile: mai a capo da sole
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
   $("dice").textContent="🎲"; $("dice").title=t.dice;
