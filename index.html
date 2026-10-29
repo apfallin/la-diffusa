@@ -471,6 +471,7 @@ const S = {lang:store.getItem("bb-lang")||autoLang, blang:"", kiez:"", age:"all"
 const $ = id => document.getElementById(id);
 // Anti HTML-injection: i campi da form (titolo/autore/desc/note) sono testo NON fidato — sempre escappati al rendering
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
+const plain = s => String(s).replace(/^[^a-zA-Z0-9à-ÿÀ-ÿ]+/u,"").trim(); // toglie l'emoji iniziale: chip età compatte senza emoji (emoji restano in badge/pillole/sottofasce)
 const mq = window.matchMedia ? window.matchMedia("(prefers-color-scheme: dark)") : {matches:false,addEventListener:()=>{}};
 
 function applyTheme(){
@@ -665,10 +666,10 @@ function applyLang(){
     `<button class="chip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
     `<button class="chip wish ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
   $("ageRow").innerHTML=
-    `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${t.allAges}</button>`+
-    `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${t.adults}</button>`+
-    `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${t.teen}</button>`+
-    `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${t.kids}</button>`+
+    `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${plain(t.allAges)}</button>`+
+    `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${plain(t.adults)}</button>`+
+    `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${plain(t.teen)}</button>`+
+    `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${plain(t.kids)}</button>`+
     (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("")+`</span>`:""); // fasce precise INLINE alla destra della chip Bambini, nessuna riga dedicata
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
