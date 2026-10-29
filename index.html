@@ -96,7 +96,7 @@
   :root.dark #typeRow .chip.wish.on{background:var(--terra);color:#211d17}
   .agechips.sub{display:none;gap:.25rem;padding:.28rem .35rem;background:var(--greenbg);border:1px solid var(--greenline);border-radius:.7rem;align-items:center}
   .agechips.sub.show{display:inline-flex} /* fluisce inline dopo le chip età, nessuna riga dedicata */
-  #ageRow2 .chip{font-size:.7rem;padding:.16rem .55rem}
+  #ageRow2 .chip,.agechips.sub .chip{font-size:.7rem;padding:.16rem .55rem}
   .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
   .chip:hover{border-color:var(--terra)}
   .chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
@@ -257,7 +257,7 @@
       <select id="genreSel" class="ctl"></select>
     </div>
     <div class="ctl agechips" id="typeRow"></div>
-    <div class="ctl ageGroup"><div class="agechips" id="ageRow"></div><div class="agechips sub" id="ageRow2"></div></div>
+    <div class="ctl ageGroup agechips" id="ageRow"></div>
   </div>
   <div class="qwrap"><input id="q" type="search" placeholder=""></div>
 </section>
@@ -664,12 +664,10 @@ function applyLang(){
     `<button class="chip wish ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
   $("ageRow").innerHTML=
     `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${t.allAges}</button>`+
-    `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${t.kids}</button>`+
+    `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${t.adults}</button>`+
     `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${t.teen}</button>`+
-    `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${t.adults}</button>`;
-  $("ageRow2").innerHTML=
-    Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("");
-  $("ageRow2").classList.toggle("show",S.age==="kids");
+    `<button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${t.kids}</button>`+
+    (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${t.subAges[a]}</button>`).join("")+`</span>`:""); // fasce precise INLINE alla destra della chip Bambini, nessuna riga dedicata
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
   $("dice").textContent="🎲"; $("dice").title=t.dice;
@@ -731,11 +729,9 @@ $("typeRow").addEventListener("click",e=>{
 });
 $("ageRow").addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
-  S.age=c.dataset.v; S.subAge=""; applyLang();
-});
-$("ageRow2").addEventListener("click",e=>{
-  const c=e.target.closest(".chip"); if(!c)return;
-  S.subAge = S.subAge===c.dataset.v ? "" : c.dataset.v; applyLang();
+  if(c.closest(".sub")){ S.subAge = S.subAge===c.dataset.v ? "" : c.dataset.v; } // fascia precisa: toggle, l'età grande resta Bambini
+  else { S.age=c.dataset.v; S.subAge=""; }
+  applyLang();
 });
 let qTimer=null; // debounce ricerca (~150ms): niente re-render a ogni tasto
 $("q").addEventListener("input",e=>{clearTimeout(qTimer);const v=e.target.value;qTimer=setTimeout(()=>{S.q=v;renderAll();},150);});
