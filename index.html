@@ -161,6 +161,14 @@
   .gcell.wish{background:var(--terrabg);border-color:var(--terraline)}
   .gcell.lent{opacity:.65}
   .gcover{height:9.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:2rem;font-family:var(--font-head);text-shadow:0 1px 3px rgba(0,0,0,.3);position:relative;box-shadow:inset 5px 0 0 rgba(255,255,255,.22),inset -3px 0 0 rgba(0,0,0,.14)}
+  /* fallback senza foto: "rilegato classico" (luce di stoffa + cornice doppia, niente colore piatto) */
+  .fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)}
+  .fb::before{content:"";position:absolute;inset:.3rem;border:1px solid rgba(255,252,244,.55);border-radius:.2rem}
+  .fb::after{content:"";position:absolute;inset:.45rem;border:1px solid rgba(255,252,244,.22);border-radius:.14rem}
+  .gcell .fb::before{inset:.45rem}
+  .gcell .fb::after{inset:.6rem}
+  .sheet .dcover .fb{position:static;inset:auto;background:none}
+  .sheet .dcover .fb::before,.sheet .dcover .fb::after{display:none}
   .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:linear-gradient(135deg,#f7b8cb 0%,#fbd9a0 25%,#f5ef9a 50%,#aee6c5 75%,#b5d7f5 100%)!important}
   .book.wish .fb,.gcell.wish .fb{color:var(--terra);text-shadow:none}
   .sheet .dcover.wish{color:var(--terra);text-shadow:none}
