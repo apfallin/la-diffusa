@@ -167,6 +167,7 @@
   .fb::after{content:"";position:absolute;inset:.45rem;border:1px solid rgba(255,252,244,.22);border-radius:.14rem}
   .gcell .fb::before{inset:.45rem}
   .gcell .fb::after{inset:.6rem}
+  .gcell .fb .ft{font-family:var(--font-head);font-size:.72rem;font-weight:600;line-height:1.35;letter-spacing:.02em;text-align:center;max-width:86%;text-shadow:0 1px 2px rgba(0,0,0,.35)}
   .sheet .dcover .fb{position:static;inset:auto;background:none}
   .sheet .dcover .fb::before,.sheet .dcover .fb::after{display:none}
   .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:linear-gradient(135deg,#f7b8cb 0%,#fbd9a0 25%,#f5ef9a 50%,#aee6c5 75%,#b5d7f5 100%)!important}
@@ -515,6 +516,7 @@ function cardRow(b){
   </div>`;
 }
 
+function fbTit(s){const w=String(s).split(" ");let out=[];for(const x of w){if(out.length>=3||((out.join(" ")+" "+x).trim().length>18))break;out.push(x);}if(!out.length)out=[String(s).slice(0,12)];return out.join(" ")+"\u2026";}
 function gridCells(list){
   const t=T[S.lang];
   return `<div class="grid">` + list.map(b=>{
@@ -528,7 +530,7 @@ function gridCells(list){
       <div class="gcover" style="background:${b.cover}">
         ${coverImg(b,"M")}
         ${badge?`<span class="badge">${badge}</span>`:""}
-        <span class="fb">${b.type==="wish"?"✨":b.title.charAt(0)}</span>
+        <span class="fb">${b.type==="wish"?"\u2728":`<span class="ft">${esc(fbTit(b.title))}</span>`}</span>
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
       </div>
       <div class="ginfo">
