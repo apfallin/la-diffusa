@@ -139,6 +139,7 @@
   .sheet .dcover img{position:absolute;inset:.5rem;width:calc(100% - 1rem);height:calc(100% - 1rem);object-fit:contain;border-radius:.3rem}
   .sheet .dcover .ncmsg{display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1rem;text-align:center}
   .sheet .dcover .ncmsg span{font-size:.72rem;font-weight:600;opacity:.92}
+  .sheet .dcover .fb b{font-size:1.45rem;line-height:1.3;font-weight:600;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;max-width:88%;overflow-wrap:break-word}
   .sheet .dtitle{font-family:var(--font-head);font-size:1.15rem;font-weight:700;line-height:1.3}
   .sheet .dauthor{font-size:.85rem;color:var(--mut);font-style:italic;margin-top:.15rem}
   .sheet .dpills{display:flex;gap:.35rem;flex-wrap:wrap;margin-top:.6rem}
@@ -201,7 +202,7 @@
   .sheet .dcover .fb::before{inset:.55rem;border-radius:.3rem}
   .sheet .dcover .fb::after{inset:.75rem;border-radius:.2rem}
   .sheet .dcover .fb.fb-teen::before{inset:.55rem;border:1.5px solid rgba(255,252,244,.6);border-radius:.3rem}
-  .sheet .dcover .fb.fb-teen::after{content:"";position:absolute;top:50%;left:50%;width:4.6rem;height:4.6rem;margin:-2.3rem 0 0 -2.3rem;transform:rotate(45deg);border:2.5px solid rgba(255,252,244,.75);border-radius:.35rem}
+  .sheet .dcover .fb.fb-teen::after{content:"";position:absolute;top:50%;left:50%;width:5.2rem;height:5.2rem;margin:-2.6rem 0 0 -2.6rem;transform:rotate(45deg);border:2.5px solid rgba(255,252,244,.75);border-radius:.35rem}
   .sheet .dcover .fb.fb-kid{background:radial-gradient(rgba(255,252,244,.9) 55%,rgba(0,0,0,0) 60%) 80% 12% / .8rem .8rem no-repeat,radial-gradient(rgba(255,252,244,.9) 55%,rgba(0,0,0,0) 60%) 90% 22% / .65rem .65rem no-repeat,radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)}
   .sheet .dcover .fb.fb-kid::before{content:"";position:absolute;top:1.2rem;left:50%;width:2.6rem;height:2.6rem;margin-left:-1.3rem;border:none;border-radius:50%;background:rgba(255,252,244,.92)}
   .sheet .dcover .fb.fb-kid::after{content:"";position:absolute;bottom:0;left:0;right:0;height:3.4rem;border:none;border-radius:100% 100% 0 0;background:rgba(255,252,244,.38)}
@@ -370,7 +371,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Cerca titolo, autore…",
     count:(n)=>`${n} libri`,
-    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",wishCover:"qualcuno cerca questo libro",owner:"offerto da una persona del quartiere",
+    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina originale non disponibile — il libro c'è!",wishCover:"qualcuno cerca questo libro",owner:"offerto da una persona del quartiere",
     allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
     kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",wishK:{title:"📖 libro preciso",similar:"🫶 qualcosa di simile",theme:"💭 un tema"},
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
@@ -419,7 +420,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Titel, Autor suchen…",
     count:(n)=>`${n} Bücher`,
-    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"jemand sucht dieses Buch",owner:"angeboten von jemandem aus dem Kiez",
+    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Originalcover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"jemand sucht dieses Buch",owner:"angeboten von jemandem aus dem Kiez",
     allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
     kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",wishK:{title:"📖 bestimmtes Buch",similar:"🫶 etwas Ähnliches",theme:"💭 ein Thema"},
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
@@ -468,7 +469,7 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Search title, author…",
     count:(n)=>`${n} books`,
-    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",wishCover:"someone is looking for this book",owner:"offered by someone in the neighbourhood",
+    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Original cover not available — the book is real though!",wishCover:"someone is looking for this book",owner:"offered by someone in the neighbourhood",
     allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
     kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",wishK:{title:"📖 a specific book",similar:"🫶 something similar",theme:"💭 a theme"},
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
@@ -632,7 +633,7 @@ function openSheet(b){
   const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
     `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":b.title.charAt(0)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
+    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
     `<div class="dtitle">${esc(b.title)}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
