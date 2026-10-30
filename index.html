@@ -551,7 +551,7 @@ function cardRow(b){
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+esc(b.note):""}</span>` : ""
   ].join("");
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
-    <div class="cover" style="background:${b.cover}">${coverImg(b,"M")}<span class="fb">${b.type==="wish"?"✨":b.title.charAt(0)}</span></div>
+    <div class="cover" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"M")}<span class="fb">${b.type==="wish"?"✨":b.title.charAt(0)}</span></div>
     <div class="bbody">
       <div class="bhead"><span class="btitle">${esc(b.title)}</span><span class="bauthor">${b.author!=="—"?esc(b.author):""}</span></div>
       <div class="bmeta">${pills}</div>
@@ -561,6 +561,19 @@ function cardRow(b){
 
 function fbTit(s){const w=String(s).split(" ");let out=[];for(const x of w){if(out.length>=3||((out.join(" ")+" "+x).trim().length>18))break;out.push(x);}if(!out.length)out=[String(s).slice(0,12)];return out.join(" ")+"\u2026";}
 function gib(n){const s="leri tavo smindi queno malto riveso fando piltri smanco diveto larbo sumi crovel opende travison lismo fenuto gardo beltri omavi sundi pelcro tarve monti rilu spado gendi flimo varbo santro milve dospo crande luve tarbo smendi quilo prano velto brindi salto merove quisto pandi fluvire scendo rabolto tinvera mostri plendi cavalto ronvelo smito peltri vondo lanzuri fresco mantivo splendo rivelto crando borvelo tindi sampo vrelto mando squila trivento palombo vindre scolta mervida quarvi blondi spresso talvi".split(" ");let o=[];for(let k=0;k<n;k++){o.push(s[(k*7+3)%s.length]);if(k%7===3||k%11===5)o[o.length-1]+=".";}return o.join(" ");}
+function ageKey(b){return b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}
+function ageTint(hex,age){
+  // colore copertina rielaborato per fascia: bambini vivaci, ragazzi tonalita mature, adulti sobri
+  if(typeof hex!=="string"||!/^#[0-9a-f]{6}$/i.test(hex))return hex;
+  const n=parseInt(hex.slice(1),16),r=(n>>16&255)/255,g=(n>>8&255)/255,bl=(n&255)/255;
+  const mx=Math.max(r,g,bl),mn=Math.min(r,g,bl),l=(mx+mn)/2,d=mx-mn;let h=0,s=0;
+  if(d){s=l>.5?d/(2-mx-mn):d/(mx+mn);
+    if(mx===r)h=(g-bl)/d+(g<bl?6:0);else if(mx===g)h=(bl-r)/d+2;else h=(r-g)/d+4;h*=60}
+  const k=age==="kid"?{sf:1.7,sa:.12,ls:.56}:age==="teen"?{sf:1.05,sa:.03,ls:.44}:{sf:.45,sa:.02,ls:.33};
+  s=Math.min(.95,Math.max(0,s*k.sf+k.sa));
+  const L=Math.min(.8,Math.max(.18,k.ls+(l-.5)*.5));
+  return "hsl("+Math.round(h)+" "+Math.round(s*100)+"% "+Math.round(L*100)+"%)";
+}
 function fbPage(b){
   if(b.type==="wish")return "\u2728";
   if(b.age==="adults")return "";
@@ -576,7 +589,7 @@ function gridCells(list){
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
     const cov = coverImg(b,"M");
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
-      <div class="gcover" style="background:${b.cover}">
+      <div class="gcover" style="background:${ageTint(b.cover,ageKey(b))}">
         ${cov}
         ${badge?`<span class="badge ${badgeCls}">${badge}</span>`:""}
         <span class="fb ${b.type==="wish"?"":`fb-${b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}`}">${fbPage(b)}</span>
@@ -610,7 +623,7 @@ function openSheet(b){
   const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
     `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${b.cover}">${coverImg(b,"L")}<div class="ncmsg fb"><b>${b.type==="wish"?"✨":b.title.charAt(0)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
+    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb"><b>${b.type==="wish"?"✨":b.title.charAt(0)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
     `<div class="dtitle">${esc(b.title)}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
