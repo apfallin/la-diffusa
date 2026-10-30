@@ -385,6 +385,7 @@ const T = {
       "In futuro il progetto cresce: account, database e automazioni ancora più diffuse."],
     howFaq:"Hai altri dubbi? Guarda le domande frequenti, in fondo alla pagina ↓",
     mailSent:"Se hai inviato l’e-mail preimpostata, il sistema ti manderà conferma entro 24 ore.",
+    formSent:"Se hai inviato il form, il tuo libro arriva in catalogo in genere entro un giorno: lo troverai qui.",
     faqTitle:"Domande frequenti",
     faq:[["È gratis?","Sì, è tutto gratuito: uno scambio tra vicini, nessun costo, nessuna registrazione."],
       ["Serve un account?","No: si usa direttamente dal telefono e il sistema mette in contatto le persone."],
@@ -442,6 +443,7 @@ const T = {
       "In Zukunft wächst das Projekt: Account, Datenbank und noch mehr Automatisierung."],
     howFaq:"Noch Fragen? Schau in die häufigen Fragen, unten auf der Seite ↓",
     mailSent:"Wenn du die vorausgefüllte E-Mail gesendet hast, sendet dir das System innerhalb von 24 Stunden eine Bestätigung.",
+    formSent:"Wenn du das Formular gesendet hast, steht dein Buch in der Regel innerhalb eines Tages im Katalog.",
     faqTitle:"Häufige Fragen",
     faq:[["Ist es kostenlos?","Ja, alles kostenlos: ein Austausch zwischen Nachbarn, ohne Kosten, ohne Registrierung."],
       ["Brauche ich ein Konto?","Nein: alles läuft direkt vom Handy, das System stellt den Kontakt her."],
@@ -499,6 +501,7 @@ const T = {
       "In the future the project grows: accounts, database and even more automation."],
     howFaq:"More questions? See the FAQ at the bottom of the page ↓",
     mailSent:"If you sent the prefilled email, the system will send you confirmation within 24 hours.",
+    formSent:"If you submitted the form, your book usually lands in the catalog within a day — you'll find it here.",
     faqTitle:"Frequently asked questions",
     faq:[["Is it free?","Yes, everything is free: an exchange between neighbours, no costs, no sign-up."],
       ["Do I need an account?","No: everything runs straight from your phone, and the system puts people in touch."],
@@ -711,11 +714,13 @@ function contactSheet(b){
   const mb=$("mailBtn");
   if(mb) mb.addEventListener("click",()=>{ MAILTS=Date.now(); toast(T[S.lang].mailSent,20000); });
 }
-let MAILTS=0;
+let MAILTS=0, FORMTS=0;
+["btnOffer","btnWish"].forEach(id=>{ const el=$(id); if(el) el.addEventListener("click",()=>{ FORMTS=Date.now(); toast(T[S.lang].formSent,20000); }); });
 document.addEventListener("visibilitychange",()=>{
-  if(document.visibilityState==="visible"&&MAILTS&&Date.now()-MAILTS<18e5){
-    MAILTS=0; toast(T[S.lang].mailSent,15000);
-  }
+  if(document.visibilityState!=="visible")return;
+  const t=T[S.lang];
+  if(MAILTS&&Date.now()-MAILTS<18e5){ MAILTS=0; toast(t.mailSent,15000); }
+  if(FORMTS&&Date.now()-FORMTS<18e5){ FORMTS=0; toast(t.formSent,15000); }
 });
 function updMsg(){
   const t=T[S.lang],b=CURB,sel=$("durSel");
