@@ -384,6 +384,7 @@ const T = {
       "Ogni prestito viene registrato e promemoria automatici ricordano la restituzione — nessun libro perso. In prestito fino a 3 libri per gruppo d’età; se più vicini chiedono lo stesso libro, la coda è equa: passa prima chi ha meno libri in prestito.",
       "In futuro il progetto cresce: account, database e automazioni ancora più diffuse."],
     howFaq:"Hai altri dubbi? Guarda le domande frequenti, in fondo alla pagina ↓",
+    mailSent:"Se hai inviato l’e-mail preimpostata, il sistema ti manderà conferma entro 24 ore.",
     faqTitle:"Domande frequenti",
     faq:[["È gratis?","Sì, è tutto gratuito: uno scambio tra vicini, nessun costo, nessuna registrazione."],
       ["Serve un account?","No: si usa direttamente dal telefono e il sistema mette in contatto le persone."],
@@ -440,6 +441,7 @@ const T = {
       "Jede Ausleihe wird vermerkt und automatische Erinnerungen bitten um Rückgabe — kein Buch geht verloren. Ausleihe: bis zu 3 Bücher pro Altersgruppe; wenn mehrere Nachbarn dasselbe Buch wollen, ist die Warteschlange fair — wer weniger Bücher ausgeliehen hat, kommt zuerst.",
       "In Zukunft wächst das Projekt: Account, Datenbank und noch mehr Automatisierung."],
     howFaq:"Noch Fragen? Schau in die häufigen Fragen, unten auf der Seite ↓",
+    mailSent:"Wenn du die vorausgefüllte E-Mail gesendet hast, sendet dir das System innerhalb von 24 Stunden eine Bestätigung.",
     faqTitle:"Häufige Fragen",
     faq:[["Ist es kostenlos?","Ja, alles kostenlos: ein Austausch zwischen Nachbarn, ohne Kosten, ohne Registrierung."],
       ["Brauche ich ein Konto?","Nein: alles läuft direkt vom Handy, das System stellt den Kontakt her."],
@@ -496,6 +498,7 @@ const T = {
       "Every loan is recorded and automatic reminders ask for its return — no book gets lost. Borrow up to 3 books per age group; if several neighbours want the same book, the queue is fair — whoever has fewer books out gets it first.",
       "In the future the project grows: accounts, database and even more automation."],
     howFaq:"More questions? See the FAQ at the bottom of the page ↓",
+    mailSent:"If you sent the prefilled email, the system will send you confirmation within 24 hours.",
     faqTitle:"Frequently asked questions",
     faq:[["Is it free?","Yes, everything is free: an exchange between neighbours, no costs, no sign-up."],
       ["Do I need an account?","No: everything runs straight from your phone, and the system puts people in touch."],
@@ -705,7 +708,15 @@ function contactSheet(b){
     `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${t.cPriv}</div>`;
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
+  const mb=$("mailBtn");
+  if(mb) mb.addEventListener("click",()=>{ MAILTS=Date.now(); toast(T[S.lang].mailSent,20000); });
 }
+let MAILTS=0;
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState==="visible"&&MAILTS&&Date.now()-MAILTS<18e5){
+    MAILTS=0; toast(T[S.lang].mailSent,15000);
+  }
+});
 function updMsg(){
   const t=T[S.lang],b=CURB,sel=$("durSel");
   if(!b)return;
@@ -831,13 +842,13 @@ $("howFaq").addEventListener("click",()=>{
   const f=$("faq"); f.open=true;
   try { f.scrollIntoView({behavior:"smooth",block:"start"}); } catch(e){}
 });
-function toast(html){
+function toast(html,dur){
   let c=document.getElementById("toasts");
   if(!c){c=document.createElement("div");c.id="toasts";c.className="toasts";document.body.appendChild(c);}
   const d=document.createElement("div");d.className="toast";d.innerHTML=html;
   d.addEventListener("click",()=>d.remove());
   c.appendChild(d);
-  setTimeout(()=>{if(d.parentNode)d.remove()},5000);
+  setTimeout(()=>{if(d.parentNode)d.remove()},dur||5000);
 }
 $("dice").addEventListener("click",()=>{
   const list=filtered(); if(!list.length)return;
