@@ -82,7 +82,7 @@
   .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer;position:relative}
   .vswitch .vsort:focus{font-size:1rem}
   .vswitch{position:relative;overflow:visible}
-  .sortpop{display:none;position:absolute;top:110%;right:0;background:var(--card);border:1px solid var(--line);border-radius:.6rem;box-shadow:var(--shadow);z-index:60;min-width:11rem;padding:.3rem;text-align:left}
+  .sortpop{display:none;background:var(--card);border:1px solid var(--mut);border-radius:.6rem;box-shadow:0 6px 24px rgba(0,0,0,.22);min-width:11rem;padding:.3rem;text-align:left}
   .sortpop.open{display:block}
   .sortpop button{display:block;width:100%;border:none;background:transparent;text-align:left;font-size:.85rem;padding:.45rem .6rem;border-radius:.45rem;cursor:pointer;color:var(--ink);font-family:system-ui,sans-serif}
   .sortpop button.on{background:var(--greenbg);color:var(--greendk);font-weight:600}
@@ -742,9 +742,19 @@ $("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;try{store.setIt
 $("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;try{store.setItem("bb-blang",S.blang);}catch(err){} renderAll();});
 $("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
 function setSort(v){ S.sort=v; try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll(); applyLang(); }
-$("sortBtn").addEventListener("click",e=>{ e.stopPropagation(); const p=$("sortPop"); p.style.display = p.style.display==="block" ? "none" : "block"; p.classList.toggle("open", p.style.display==="block"); });
+function toggleSortPop(){
+  const p=$("sortPop"),b=$("sortBtn");
+  if(p.style.display==="block"){ p.style.display="none"; return; }
+  const r=b.getBoundingClientRect();
+  p.style.position="fixed";
+  p.style.top=Math.min(r.bottom+6,window.innerHeight-220)+"px";
+  p.style.right=Math.max(8,window.innerWidth-r.right)+"px";
+  p.style.zIndex="9999";
+  p.style.display="block";
+}
+$("sortBtn").addEventListener("click",e=>{ e.stopPropagation(); toggleSortPop(); });
 $("sortPop").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; setSort(b.dataset.s); $("sortPop").style.display="none"; });
-document.addEventListener("click",e=>{ if(!e.target.closest(".vswitch")){ const p=$("sortPop"); p.style.display="none"; } });
+document.addEventListener("click",e=>{ if(!e.target.closest(".vswitch")){ $("sortPop").style.display="none"; } });
 $("typeRow").addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
   S.type = S.type===c.dataset.v ? "all" : c.dataset.v;
