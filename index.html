@@ -719,8 +719,8 @@ let MAILTS=0, FORMTS=0;
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState!=="visible")return;
   const t=T[S.lang];
-  if(MAILTS&&Date.now()-MAILTS<18e5){ MAILTS=0; toast(t.mailSent,15000); }
-  if(FORMTS&&Date.now()-FORMTS<18e5){ FORMTS=0; toast(t.formSent,15000); }
+  if(MAILTS&&Date.now()-MAILTS<18e5){ if(Date.now()-MAILTS>25000) toast(t.mailSent,15000); MAILTS=0; }
+  if(FORMTS&&Date.now()-FORMTS<18e5){ if(Date.now()-FORMTS>25000) toast(t.formSent,15000); FORMTS=0; }
 });
 function updMsg(){
   const t=T[S.lang],b=CURB,sel=$("durSel");
