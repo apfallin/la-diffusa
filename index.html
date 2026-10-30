@@ -134,11 +134,11 @@
   .vbtn.on{background:var(--ink);color:var(--paper)}
   .dice{border:1px solid var(--terraline);border-radius:999px;background:var(--terrabg);color:var(--terra);font-size:.78rem;padding:.3rem .8rem;cursor:pointer;font-weight:600}
   .dice:active{transform:scale(.95)}
-  .toasts{position:fixed;top:1rem;left:50%;transform:translateX(-50%);z-index:80;display:flex;flex-direction:column;gap:.5rem;width:min(92vw,24rem)}
-  .toast{background:var(--card);border:1px solid var(--terraline);border-left:4px solid var(--terra);border-radius:var(--radius);box-shadow:0 12px 34px rgba(40,30,20,.28);padding:.75rem .95rem;font-size:.9rem;line-height:1.4;cursor:pointer;animation:toastin .35s ease}
+  .toasts{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:120;display:flex;flex-direction:column;gap:.5rem;width:min(92vw,26rem)}
+  .toast{background:var(--card);border:1.5px solid var(--terra);border-radius:var(--radius);box-shadow:0 14px 44px rgba(40,30,20,.4);padding:1rem 1.2rem;font-size:.95rem;line-height:1.45;cursor:pointer;animation:toastin .35s ease;text-align:center}
   .toast b{font-family:var(--font-head);color:var(--terra)}
-  .toast .thint{font-size:.72rem;color:var(--mut);margin-top:.2rem}
-  @keyframes toastin{from{opacity:0;transform:translateY(-.6rem)}to{opacity:1;transform:none}}
+  .toast .thint{font-size:.75rem;color:var(--mut);margin-top:.2rem}
+  @keyframes toastin{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:none}}
   .gcell.flash{animation:bbflash 2s ease}
   @keyframes bbflash{0%,60%{outline:3px solid var(--terra);outline-offset:2px;box-shadow:0 0 0 6px rgba(196,102,74,.25)}100%{outline:0 solid transparent;box-shadow:var(--shadow)}}
   .totop{position:fixed;bottom:1.1rem;right:1.1rem;z-index:50;border:1px solid var(--greenline);border-radius:999px;background:var(--green);color:#fff;font-size:1rem;padding:.5rem .7rem;cursor:pointer;box-shadow:var(--shadow);opacity:0;pointer-events:none;transition:opacity .25s,transform .15s}
