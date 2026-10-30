@@ -190,19 +190,17 @@
   .gcell .fb::after{inset:.6rem}
   .gcell .fb .ft{font-family:var(--font-head);font-size:.72rem;font-weight:600;line-height:1.35;letter-spacing:.02em;text-align:center;max-width:86%;text-shadow:0 1px 2px rgba(0,0,0,.35)}
   /* copertine senza immagine: prima pagina interna del libro, per fascia d'età */
-  .gcell .fb.fb-adult,.gcell .fb.fb-teen,.gcell .fb.fb-kid{inset:.4rem;border:none;border-radius:.3rem;background:linear-gradient(90deg,rgba(64,52,40,0) 0,rgba(64,52,40,.07) 46%,rgba(64,52,40,.22) 50%,rgba(64,52,40,.07) 54%,rgba(64,52,40,0) 100%) #fffcf4;box-shadow:inset 0 0 0 1px rgba(120,100,70,.15);overflow:hidden}
+  .gcell .fb.fb-adult,.gcell .fb.fb-teen,.gcell .fb.fb-kid{inset:.4rem;border:none;border-radius:.3rem;background:#fffcf4;box-shadow:inset 0 0 0 1px rgba(120,100,70,.15);overflow:hidden}
   .gcell .fb.fb-adult::before,.gcell .fb.fb-adult::after,.gcell .fb.fb-teen::before,.gcell .fb.fb-teen::after,.gcell .fb.fb-kid::before,.gcell .fb.fb-kid::after{content:"";border:none;background:none;border-radius:0}
-  .gcell .fb.fb-adult{display:block;padding:.85rem .6rem 1rem}
-  .gcell .fb.fb-teen{display:block;padding:1.1rem .85rem 1.15rem}
+  .gcell .fb.fb-adult{display:block;padding:.85rem .65rem .75rem}
+  .gcell .fb.fb-teen{display:block;padding:1.1rem .9rem 1rem}
   .gcell .fb.fb-kid{display:block;padding:0}
   .gcell .fb .ptx{display:block;color:rgba(64,52,40,.62)}
-  .gcell .fb.fb-adult .ptx{text-align:justify;font-size:.37rem;line-height:.47rem;height:100%;column-count:2;column-gap:.7rem;column-rule:1px solid rgba(64,52,40,.12)}
-  .gcell .fb.fb-teen .ptx{text-align:left;font-size:.44rem;line-height:.64rem;height:100%;column-count:2;column-gap:.7rem;column-rule:1px solid rgba(64,52,40,.12);margin-bottom:.5rem}
+  .gcell .fb.fb-adult .ptx{text-align:justify;font-size:.37rem;line-height:.47rem}
+  .gcell .fb.fb-teen .ptx{text-align:left;font-size:.44rem;line-height:.64rem;margin-bottom:.5rem}
   .gcell .fb .ptx b{float:left;font-family:var(--font-head);font-size:1.5rem;line-height:.72;margin:.08rem .3rem 0 0;color:rgba(64,52,40,.78)}
   .gcell .fb.fb-kid svg{position:absolute;inset:0;width:100%;height:100%}
   .gcell .fb.fb-kid .pk{position:absolute;top:56%;left:.55rem;right:.55rem;text-align:center;font-size:.46rem;line-height:.68rem;color:rgba(64,52,40,.68)}
-  .gcell .fb.fb-adult::before,.gcell .fb.fb-teen::before{content:"";position:absolute;bottom:.1rem;left:.35rem;right:.35rem;height:.4rem;border:none;border-radius:0;background:repeating-linear-gradient(180deg,rgba(64,52,40,.2) 0 1px,transparent 1px 3px)}
-  .gcell .fb.fb-kid::after{content:"";position:absolute;top:0;bottom:0;left:50%;width:.4rem;margin-left:-.2rem;border:none;border-radius:0;background:linear-gradient(90deg,transparent,rgba(64,52,40,.25),transparent)}
   .sheet .dcover .fb{position:static;inset:auto;background:none}
   .sheet .dcover .fb::before,.sheet .dcover .fb::after{display:none}
   .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:var(--terrabg)!important;border:2px dashed var(--terra)}
