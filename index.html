@@ -513,7 +513,7 @@ function filtered(){
 
 function coverImg(b,size){
   const src=b.coverUrl||(b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg?default=false`:"");
-  return src?`<img src="${src}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="copertina: ${esc(b.title)}" onload="var fb=this.parentNode.querySelector('.fb');if(fb)fb.style.display='none'" onerror="this.remove()">`:"";
+  return src?`<img src="${src}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="" onload="var fb=this.parentNode.querySelector('.fb');if(fb)fb.style.display='none'" onerror="this.remove()">`:"";
 }
 function cardRow(b){
   const t=T[S.lang];
