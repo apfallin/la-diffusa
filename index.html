@@ -181,7 +181,7 @@
   .gcell:hover{box-shadow:0 6px 20px rgba(60,50,30,.18);transform:translateY(-3px)}
   .gcell.wish{background:var(--terrabg);border-color:var(--terraline)}
   .gcell.lent{opacity:.65}
-  .gcover{height:9.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:2rem;font-family:var(--font-head);text-shadow:0 1px 3px rgba(0,0,0,.3);position:relative;box-shadow:inset 5px 0 0 rgba(255,255,255,.22),inset -3px 0 0 rgba(0,0,0,.14)}
+  .gcover{height:9.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:2rem;font-family:var(--font-head);text-shadow:0 1px 3px rgba(0,0,0,.3);position:relative;overflow:hidden;box-shadow:inset 5px 0 0 rgba(255,255,255,.22),inset -3px 0 0 rgba(0,0,0,.14)}
   /* fallback senza foto: "rilegato classico" (luce di stoffa + cornice doppia, niente colore piatto) */
   .fb{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)}
   .fb::before{content:"";position:absolute;inset:.3rem;border:1px solid rgba(255,252,244,.55);border-radius:.2rem}
@@ -204,7 +204,7 @@
   :root.dark .gcover .badge.b-teen{background:var(--gold);border-color:var(--gold);color:#211d17}
   :root.dark .gcover .badge.b-adult{background:var(--terra);border-color:var(--terra);color:#211d17}
   :root.dark .gcover .badge.b-wish{background:rgba(33,29,23,.85);border-color:var(--terra);color:var(--terra)}
-  .gcover .lentb{position:absolute;bottom:.45rem;right:.45rem;font-size:.68rem;font-family:var(--font-head);font-weight:700;white-space:nowrap;max-width:calc(100% - 1.44rem);overflow:hidden;text-overflow:ellipsis;background:#8f4d68;color:#fff;border-radius:.45rem;padding:.15rem .5rem;box-shadow:0 1px 3px rgba(0,0,0,.22);z-index:2}
+  .gcover .lentb{position:absolute;top:1.05rem;right:-3.1rem;width:11rem;transform:rotate(45deg);text-align:center;font-size:.64rem;font-family:var(--font-head);font-weight:700;background:#8f4d68;color:#fff;padding:.22rem 0;box-shadow:0 1px 3px rgba(0,0,0,.28);z-index:3}
   :root.dark .gcover .lentb{background:#d496b6;color:#211d17}
   .gcover img{position:absolute;inset:.25rem;width:calc(100% - .5rem);height:calc(100% - .5rem);object-fit:contain;border-radius:.25rem}
   .ginfo{padding:.45rem .55rem .55rem}
