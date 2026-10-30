@@ -210,7 +210,7 @@
   .ginfo{padding:.45rem .55rem .55rem}
   .gtitle{font-size:.76rem;font-weight:600;font-family:var(--font-head);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.9rem}
   .gtitle.wphrase{font-style:italic;color:var(--terra);font-weight:500}
-  .wkind{font-size:.62rem;color:var(--mut);font-style:italic;font-family:var(--font-head);line-height:1.2;margin-top:.1rem}
+  .wkind{font-size:.68rem;color:var(--mut);font-style:italic;font-family:var(--font-head);line-height:1.2;margin-top:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .gmeta{font-size:.68rem;margin-top:.25rem;display:flex;flex-direction:column;gap:.08rem}
   .gmeta .row1{display:flex;justify-content:space-between;gap:.3rem}
   .gmeta .l{color:var(--terra);font-style:italic}
@@ -354,7 +354,7 @@ const T = {
     count:(n)=>`${n} libri`,
     lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",wishCover:"qualcuno cerca questo libro",owner:"offerto da una persona del quartiere",
     allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
-    kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",
+    kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",wishK:{title:"📖 libro preciso",similar:"🫶 qualcosa di simile",theme:"💭 un tema"},
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
     wishOwner:"desiderato da una persona del quartiere",
     empty:"Nessun libro corrisponde ai filtri.",
@@ -403,7 +403,7 @@ const T = {
     count:(n)=>`${n} Bücher`,
     lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"jemand sucht dieses Buch",owner:"angeboten von jemandem aus dem Kiez",
     allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
-    kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",
+    kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",wishK:{title:"📖 bestimmtes Buch",similar:"🫶 etwas Ähnliches",theme:"💭 ein Thema"},
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
     wishOwner:"gesucht von jemandem aus dem Kiez",
     empty:"Keine Bücher entsprechen den Filtern.",
@@ -452,7 +452,7 @@ const T = {
     count:(n)=>`${n} books`,
     lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",wishCover:"someone is looking for this book",owner:"offered by someone in the neighbourhood",
     allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
-    kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",
+    kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",wishK:{title:"📖 a specific book",similar:"🫶 something similar",theme:"💭 a theme"},
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
     wishOwner:"wanted by someone in the neighbourhood",
     empty:"No books match the filters.",
@@ -567,7 +567,7 @@ function gridCells(list){
       </div>
       <div class="ginfo">
         <div class="gtitle${b.type==="wish"?" wphrase":""}" title="${esc(b.title+(b.author&&b.author!=="—"?" — "+b.author:""))}">${esc(b.title)}</div>
-        ${b.type==="wish"?`<div class="wkind">${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.kindTitle}</div>`:""}
+        ${b.type==="wish"?`<div class="wkind">${t.wishK[b.kind]||t.kindTitle}</div>`:""}
         <div class="gmeta">
           <div class="row1"><span class="l">${b.lang}</span><span class="k">${b.kiez}</span></div>
         </div>
