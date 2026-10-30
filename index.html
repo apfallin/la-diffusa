@@ -71,6 +71,8 @@
   .how ol{padding-left:1.2rem;font-size:.85rem}
   .how ol li{margin-bottom:.25rem}
   .how ol li::marker{color:var(--terra);font-weight:700}
+  .how ol li.soon{color:var(--mut);font-style:italic;margin-top:.45rem}
+  .how ol li.soon::marker{content:"→";color:var(--mut);font-weight:400;font-style:normal}
   /* ---------- controls ---------- */
   .controls{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.7rem;position:sticky;top:.5rem;z-index:5;box-shadow:var(--shadow)}
   .ctlgrid{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
@@ -361,11 +363,11 @@ const T = {
   it:{
     tagline:"La Diffusa — la biblioteca diffusa e internazionale di Berlino. I titoli che le biblioteche non hanno, prestati tra vicini: il Kiez è un orientamento, non un confine.",
     howTitle:"Come funziona",
-    how:["Hai libri in altre lingue che prendono polvere sullo scaffale? Mettili a disposizione del tuo Kiez: un breve form dal telefono, con l’ISBN letto col QR o copiato dal retro del libro.",
+    how:["Hai libri in altre lingue che dormono sullo scaffale? Mettili a disposizione del tuo Kiez: un breve form dal telefono, con l’ISBN letto col QR o copiato dal retro del libro.",
       "Cerchi un libro in una lingua particolare? Pubblica il tuo desiderio.",
       "Il sistema mette in contatto chi presta e chi riceve — nessuna email o dato privato resta visibile — e insieme decidono come e quando incontrarsi: il libro arriva sullo scaffale in genere entro un giorno.",
       "Ogni prestito viene registrato e promemoria automatici ricordano la restituzione — nessun libro perso. In prestito fino a 3 libri per gruppo d’età; se più vicini chiedono lo stesso libro, la coda è equa: passa prima chi ha meno libri in prestito.",
-      "Il progetto è appena nato: presto account, database e automazioni."],
+      "In futuro il progetto cresce: account, database e automazioni ancora più diffuse."],
     lblOffer:"Offri un libro",subOffer:"un breve form dal telefono",
     lblWish:"Cerco un libro",subWish:"pubblica il tuo desiderio",
     allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi",sortOld:"Datati",sortBy:"Ordina per",sortFullNew:"Ordina per: ultimi arrivati",sortFullOld:"Ordina per: prima i più datati",
@@ -410,11 +412,11 @@ const T = {
   de:{
     tagline:"La Diffusa — die verteilte, internationale Bibliothek Berlins. Die Titel, die die Bibliotheken nicht haben, geliehen unter Nachbarn: der Kiez ist eine Orientierung, keine Grenze.",
     howTitle:"So funktioniert's",
-    how:["Bücher in anderen Sprachen, die bei dir zu Hause Staub ansetzen? Stell sie deinem Kiez zur Verfügung: ein kurzes Formular vom Handy, die ISBN per QR-Scanner oder von der Buchrückseite abgeschrieben.",
+    how:["Du hast Bücher in anderen Sprachen im Regal stehen? Stell sie deinem Kiez zur Verfügung: ein kurzes Formular vom Handy, die ISBN per QR-Scanner oder von der Buchrückseite abgeschrieben.",
       "Du suchst ein Buch in einer bestimmten Sprache? Veröffentliche deinen Wunsch.",
       "Das System bringt Geber und Nehmer in Kontakt — keine E-Mail und keine privaten Daten bleiben sichtbar — und sie vereinbaren, wie und wo sie sich treffen: das Buch steht in der Regel innerhalb eines Tages im Regal.",
       "Jede Ausleihe wird vermerkt und automatische Erinnerungen bitten um Rückgabe — kein Buch geht verloren. Ausleihe: bis zu 3 Bücher pro Altersgruppe; wenn mehrere Nachbarn dasselbe Buch wollen, ist die Warteschlange fair — wer weniger Bücher ausgeliehen hat, kommt zuerst.",
-      "Das Projekt ist frisch: bald Account, Datenbank und Automatisierungen."],
+      "In Zukunft wächst das Projekt: Account, Datenbank und noch mehr Automatisierung."],
     lblOffer:"Buch anbieten",subOffer:"kurzes Formular vom Handy",
     lblWish:"Buch gesucht",subWish:"Veröffentliche deinen Wunsch",
     allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neueste",sortOld:"\u00c4lteste",sortBy:"Sortieren nach",sortFullNew:"Sortieren nach: Neu zuerst",sortFullOld:"Sortieren nach: \u00c4ltere zuerst",
@@ -463,7 +465,7 @@ const T = {
       "Looking for a book in a particular language? Post your wish.",
       "The system puts lender and borrower in touch — no email or private data stays visible — and they arrange how and where to meet: the book lands on the shelf, usually within a day.",
       "Every loan is recorded and automatic reminders ask for its return — no book gets lost. Borrow up to 3 books per age group; if several neighbours want the same book, the queue is fair — whoever has fewer books out gets it first.",
-      "The project is brand new: accounts, database and automation coming soon."],
+      "In the future the project grows: accounts, database and even more automation."],
     lblOffer:"Offer a book",subOffer:"a short form from your phone",
     lblWish:"Looking for a book",subWish:"post your wish",
     allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest",sortOld:"Oldest",sortBy:"Sort by",sortFullNew:"Sort by: newest first",sortFullOld:"Sort by: oldest first",
@@ -725,7 +727,7 @@ function applyLang(){
   $("langSel").value=S.lang; // riflette lingua auto-rilevata o salvata
   $("tagline").textContent=t.tagline;
   $("howTitle").textContent=t.howTitle;
-  $("howList").innerHTML=t.how.map(s=>`<li>${s}</li>`).join("");
+  $("howList").innerHTML=t.how.map((s,i)=>`<li class="${i===t.how.length-1?"soon":""}">${s}</li>`).join("");
 
   $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
   $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
