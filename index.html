@@ -73,6 +73,14 @@
   .how ol li::marker{color:var(--terra);font-weight:700}
   .how ol li.soon{color:var(--mut);font-style:italic;margin-top:.45rem}
   .how ol li.soon::marker{content:"→";color:var(--mut);font-weight:400;font-style:normal}
+  /* ---------- faq ---------- */
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+  details.faq summary{cursor:pointer;font-size:.95rem;font-weight:600;font-family:var(--font-head);list-style:none;color:var(--greendk)}
+  details.faq summary::-webkit-details-marker{display:none}
+  details.faq[open] summary{margin-bottom:.35rem}
+  .faq .fitem{margin:.55rem 0}
+  .faq .fq{font-weight:600;font-family:var(--font-head);font-size:.85rem}
+  .faq .fa{font-size:.8rem;color:var(--mut);margin-top:.1rem}
   /* ---------- controls ---------- */
   .controls{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.7rem;position:sticky;top:.5rem;z-index:5;box-shadow:var(--shadow)}
   .ctlgrid{display:flex;gap:.55rem;align-items:center;flex-wrap:wrap}
@@ -292,6 +300,11 @@
 
 </details>
 
+<details class="faq" id="faq">
+  <summary id="faqTitle"></summary>
+  <div id="faqList"></div>
+</details>
+
 <section class="controls">
   <div class="ctlgrid">
     <div class="ctl">
@@ -368,6 +381,12 @@ const T = {
       "Il sistema mette in contatto chi presta e chi riceve — nessuna email o dato privato resta visibile — e insieme decidono come e quando incontrarsi: il libro arriva sullo scaffale in genere entro un giorno.",
       "Ogni prestito viene registrato e promemoria automatici ricordano la restituzione — nessun libro perso. In prestito fino a 3 libri per gruppo d’età; se più vicini chiedono lo stesso libro, la coda è equa: passa prima chi ha meno libri in prestito.",
       "In futuro il progetto cresce: account, database e automazioni ancora più diffuse."],
+    faqTitle:"Domande frequenti",
+    faq:[["È gratis?","Sì, è tutto gratuito: uno scambio tra vicini, nessun costo, nessuna registrazione."],
+      ["Serve un account?","No: si usa direttamente dal telefono e il sistema mette in contatto le persone."],
+      ["Quanto posso tenere un libro?","I tempi sono concordati tra le persone: promemoria gentili ricordano la restituzione e, se qualcun altro lo chiede, la coda è equa."],
+      ["E se perdo o danneggio un libro?","Parlane con chi te l’ha prestato: è la persona giusta, nessun poliziotto."],
+      ["Chi vede il mio contatto?","La richiesta passa dal sistema: chi presta riceve un modo per risponderti, ma nessun dato resta visibile sul sito."]],
     lblOffer:"Offri un libro",subOffer:"un breve form dal telefono",
     lblWish:"Cerco un libro",subWish:"pubblica il tuo desiderio",
     allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi",sortOld:"Datati",sortBy:"Ordina per",sortFullNew:"Ordina per: ultimi arrivati",sortFullOld:"Ordina per: prima i più datati",
@@ -417,6 +436,12 @@ const T = {
       "Das System bringt Geber und Nehmer in Kontakt — keine E-Mail und keine privaten Daten bleiben sichtbar — und sie vereinbaren, wie und wo sie sich treffen: das Buch steht in der Regel innerhalb eines Tages im Regal.",
       "Jede Ausleihe wird vermerkt und automatische Erinnerungen bitten um Rückgabe — kein Buch geht verloren. Ausleihe: bis zu 3 Bücher pro Altersgruppe; wenn mehrere Nachbarn dasselbe Buch wollen, ist die Warteschlange fair — wer weniger Bücher ausgeliehen hat, kommt zuerst.",
       "In Zukunft wächst das Projekt: Account, Datenbank und noch mehr Automatisierung."],
+    faqTitle:"Häufige Fragen",
+    faq:[["Ist es kostenlos?","Ja, alles kostenlos: ein Austausch zwischen Nachbarn, ohne Kosten, ohne Registrierung."],
+      ["Brauche ich ein Konto?","Nein: alles läuft direkt vom Handy, das System stellt den Kontakt her."],
+      ["Wie lange darf ich ein Buch behalten?","Die Dauer vereinbart ihr miteinander: freundliche Erinnerungen bitten um Rückgabe, und wenn jemand anders das Buch möchte, ist die Warteschlange fair."],
+      ["Und wenn ich ein Buch verliere oder beschädige?","Sprich mit der Person, die es dir geliehen hat: sie ist der richtige Ansprechpartner, niemand muss Polizist spielen."],
+      ["Wer sieht meine Kontaktdaten?","Die Anfrage läuft über das System: wer verleiht, erhält eine Möglichkeit zu antworten, aber keine Daten bleiben auf der Seite sichtbar."]],
     lblOffer:"Buch anbieten",subOffer:"kurzes Formular vom Handy",
     lblWish:"Buch gesucht",subWish:"Veröffentliche deinen Wunsch",
     allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neueste",sortOld:"\u00c4lteste",sortBy:"Sortieren nach",sortFullNew:"Sortieren nach: Neu zuerst",sortFullOld:"Sortieren nach: \u00c4ltere zuerst",
@@ -466,6 +491,12 @@ const T = {
       "The system puts lender and borrower in touch — no email or private data stays visible — and they arrange how and where to meet: the book lands on the shelf, usually within a day.",
       "Every loan is recorded and automatic reminders ask for its return — no book gets lost. Borrow up to 3 books per age group; if several neighbours want the same book, the queue is fair — whoever has fewer books out gets it first.",
       "In the future the project grows: accounts, database and even more automation."],
+    faqTitle:"Frequently asked questions",
+    faq:[["Is it free?","Yes, everything is free: an exchange between neighbours, no costs, no sign-up."],
+      ["Do I need an account?","No: everything runs straight from your phone, and the system puts people in touch."],
+      ["How long can I keep a book?","The time is agreed between the two of you: gentle reminders ask for its return, and if someone else wants the book, the queue is fair."],
+      ["What if I lose or damage a book?","Talk to the person who lent it to you: they’re the right person to ask, nobody has to play detective."],
+      ["Who sees my contact details?","The request goes through the system: the lender gets a way to reply, but no data stays visible on the site."]],
     lblOffer:"Offer a book",subOffer:"a short form from your phone",
     lblWish:"Looking for a book",subWish:"post your wish",
     allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest",sortOld:"Oldest",sortBy:"Sort by",sortFullNew:"Sort by: newest first",sortFullOld:"Sort by: oldest first",
@@ -727,6 +758,8 @@ function applyLang(){
   $("tagline").textContent=t.tagline;
   $("howTitle").textContent=t.howTitle;
   $("howList").innerHTML=t.how.map((s,i)=>`<li class="${i===t.how.length-1?"soon":""}">${s}</li>`).join("");
+  $("faqTitle").textContent=t.faqTitle;
+  $("faqList").innerHTML=t.faq.map(p=>`<div class="fitem"><div class="fq">${p[0]}</div><div class="fa">${p[1]}</div></div>`).join("");
 
   $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
   $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
