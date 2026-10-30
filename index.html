@@ -207,6 +207,8 @@
   footer{margin-top:2.5rem;font-size:.75rem;color:var(--mut);border-top:2px solid var(--line);padding-top:1rem;text-align:center;font-style:italic;font-family:var(--font-head)}
   #legalLink{font-style:italic;font-family:var(--font-head);color:var(--mut);text-decoration:none;cursor:pointer}
   #legalLink:hover{text-decoration:underline}
+  #footTxt p{margin:.55rem 0}
+  #footTxt .fproto{color:var(--ink);font-style:normal;font-weight:600}
   #legal{display:none;margin-top:1rem;text-align:left;font-style:normal;font-family:system-ui,sans-serif;font-size:.72rem;line-height:1.55;color:var(--mut);max-width:46rem;margin-left:auto;margin-right:auto}
   #legal.open{display:block}
   #legal h4{margin:.7rem 0 .2rem;color:var(--ink);font-size:.78rem}
@@ -290,7 +292,7 @@
 </div>
 <div id="table" style="display:none"></div>
 
-<footer id="foot"><span id="footTxt"></span><br><a href="#" id="legalLink">Impressum &amp; Datenschutz</a><div id="legal"></div></footer>
+<footer id="foot"><div id="footTxt"></div><a href="#" id="legalLink">Impressum &amp; Datenschutz</a><div id="legal"></div></footer>
 </div>
 
 <script>
@@ -368,7 +370,7 @@ const T = {
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Sorprendimi",
-    foot:"La Diffusa — libri in prestito tra i Kiez di Berlino. Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone. Il catalogo va da 0 a 99 anni: ogni libro porta la sua etichetta di età. Scrivi al gestore: ladiffusa.fjkrx@passinbox.com",
+    foot:["La Diffusa — libri in prestito tra i Kiez di Berlino.","Prototipo: nessuna registrazione richiesta, i contatti avvengono direttamente tra le persone.","Il catalogo va da 0 a 99 anni: ogni libro porta la sua etichetta di età.","Scrivi al gestore: ladiffusa.fjkrx@passinbox.com"],
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nServizio comunitario in fase beta: facciamo del nostro meglio, ma prestiti e accordi avvengono direttamente tra le persone, che ne restano le uniche responsabili."
   },
   de:{
@@ -417,7 +419,7 @@ const T = {
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überrasch mich",
-    foot:"La Diffusa — Bücher leihen zwischen den Kiezen Berlins. Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt. Der Katalog reicht von 0 bis 99: Jedes Buch trägt eine Altersangabe. Schreib dem Betreiber: ladiffusa.fjkrx@passinbox.com",
+    foot:["La Diffusa — Bücher leihen zwischen den Kiezen Berlins.","Prototyp: keine Registrierung nötig, die Menschen treten direkt in Kontakt.","Der Katalog reicht von 0 bis 99: Jedes Buch trägt eine Altersangabe.","Schreib dem Betreiber: ladiffusa.fjkrx@passinbox.com"],
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nGemeinschaftsdienst in der Beta-Phase: Wir geben unser Bestes, aber Ausleihe und Absprachen erfolgen direkt zwischen den Personen, die dafür verantwortlich bleiben."
   },
   en:{
@@ -466,7 +468,7 @@ const T = {
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise me",
-    foot:"La Diffusa — lending books across Berlin's Kieze. Prototype: no sign-up needed, people get in touch directly. The catalogue ranges from 0 to 99: every book carries an age label. Write to the keeper: ladiffusa.fjkrx@passinbox.com",
+    foot:["La Diffusa — lending books across Berlin's Kieze.","Prototype: no sign-up needed, people get in touch directly.","The catalogue ranges from 0 to 99: every book carries an age label.","Write to the keeper: ladiffusa.fjkrx@passinbox.com"],
     mailFoot:"—\nLa Diffusa · https://apfallin.github.io/la-diffusa/\nCommunity service in beta: we do our best, but lending and arrangements happen directly between people, who remain the only ones responsible."
   }
 };
@@ -692,7 +694,7 @@ function applyLang(){
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
   $("dice").textContent="🎲"; $("dice").title=t.dice;
-  $("footTxt").textContent=t.foot;
+  $("footTxt").innerHTML=t.foot.map((s,i)=>`<p class="${i===1?"fproto":""}">${s}</p>`).join("");
   renderAll();
 }
 
