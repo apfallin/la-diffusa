@@ -189,6 +189,15 @@
   .gcell .fb::before{inset:.45rem}
   .gcell .fb::after{inset:.6rem}
   .gcell .fb .ft{font-family:var(--font-head);font-size:.72rem;font-weight:600;line-height:1.35;letter-spacing:.02em;text-align:center;max-width:86%;text-shadow:0 1px 2px rgba(0,0,0,.35)}
+  /* copertine senza immagine: pattern per fascia d'età, niente doppio titolo */
+  .gcell .fb.fb-adult{background:repeating-linear-gradient(180deg,rgba(255,252,244,.82) 0 .14rem,transparent .14rem .36rem);background-origin:content-box;padding:.95rem .8rem 1rem}
+  .gcell .fb.fb-adult::before,.gcell .fb.fb-adult::after{content:"";border:none;background:none;border-radius:0}
+  .gcell .fb.fb-teen{background:repeating-linear-gradient(180deg,rgba(255,252,244,.58) 0 .13rem,transparent .13rem .55rem);background-origin:content-box;padding:3.1rem .9rem 1.1rem}
+  .gcell .fb.fb-teen::before{content:"";position:absolute;top:1.15rem;left:20%;right:20%;height:.52rem;border:none;border-radius:.26rem;background:rgba(255,252,244,.92)}
+  .gcell .fb.fb-teen::after{content:"";position:absolute;top:2.05rem;left:24%;right:24%;height:.3rem;border:none;border-radius:.15rem;background:rgba(255,252,244,.7)}
+  .gcell .fb.fb-kid{background:linear-gradient(rgba(255,252,244,.85),rgba(255,252,244,.85)) 22% 58% / 2.9rem .3rem no-repeat,linear-gradient(rgba(255,252,244,.85),rgba(255,252,244,.85)) 22% 66% / 1.9rem .3rem no-repeat}
+  .gcell .fb.fb-kid::before{content:"";position:absolute;top:1.25rem;left:50%;width:2rem;height:2rem;margin-left:-1rem;border:none;border-radius:50%;background:rgba(255,252,244,.95)}
+  .gcell .fb.fb-kid::after{content:"";position:absolute;bottom:0;left:0;right:0;height:2.3rem;border:none;border-radius:100% 100% 0 0;background:rgba(255,252,244,.4)}
   .sheet .dcover .fb{position:static;inset:auto;background:none}
   .sheet .dcover .fb::before,.sheet .dcover .fb::after{display:none}
   .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:var(--terrabg)!important;border:2px dashed var(--terra)}
@@ -558,11 +567,12 @@ function gridCells(list){
       b.age==="12+" ? t.teen : (b.age==="adults" ? t.adults : t.subAges[b.age]||"");
     const badgeCls = b.type==="wish" ? "b-wish" : (b.age==="adults" ? "b-adult" : (b.age==="12+" ? "b-teen" : "b-kid"));
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
+    const cov = coverImg(b,"M");
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
       <div class="gcover" style="background:${b.cover}">
-        ${coverImg(b,"M")}
+        ${cov}
         ${badge?`<span class="badge ${badgeCls}">${badge}</span>`:""}
-        <span class="fb">${b.type==="wish"?"\u2728":`<span class="ft">${esc(fbTit(b.title))}</span>`}</span>
+        ${cov?"":`<span class="fb ${b.type==="wish"?"":`fb-${b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}`}">${b.type==="wish"?"\u2728":""}</span>`}
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
       </div>
       <div class="ginfo">
