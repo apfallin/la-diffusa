@@ -127,6 +127,7 @@
   .overlay{position:fixed;inset:0;background:rgba(40,32,20,.5);z-index:100;display:flex;align-items:flex-end;justify-content:center}
   .sheet{background:var(--card);width:100%;max-width:26rem;border-radius:1.1rem 1.1rem 0 0;padding:1rem 1rem 1.3rem;box-shadow:0 -8px 30px rgba(0,0,0,.3);max-height:85vh;overflow:auto}
   .sheet .closeRow{display:flex;justify-content:flex-end;margin-bottom:-.5rem}
+  .sheet .grab{width:2.4rem;height:.3rem;border-radius:999px;background:var(--mut);opacity:.45;margin:-.45rem auto .55rem}
   .sheet .close{border:1px solid var(--line);background:var(--paper);border-radius:999px;width:1.7rem;height:1.7rem;cursor:pointer;font-size:.9rem;color:var(--mut)}
   .sheet .dcover{height:13rem;border-radius:.5rem;display:flex;flex-direction:column;gap:.45rem;align-items:center;justify-content:center;color:#fff;font-size:3rem;font-weight:700;font-family:var(--font-head);text-shadow:0 1px 4px rgba(0,0,0,.4);position:relative;overflow:hidden;margin-bottom:.7rem;box-shadow:var(--shadow)}
   .sheet .dcover img{position:absolute;inset:.5rem;width:calc(100% - 1rem);height:calc(100% - 1rem);object-fit:contain;border-radius:.3rem}
@@ -580,7 +581,7 @@ function openSheet(b){
     ? t.wishOwner(b.kiez)
     : t.owner(b.kiez);
   $("sheet").innerHTML =
-    `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${b.cover}">${coverImg(b,"L")}<div class="ncmsg fb"><b>${b.type==="wish"?"✨":b.title.charAt(0)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
     `<div class="dtitle">${esc(b.title)}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
@@ -601,7 +602,7 @@ function contactSheet(b){
   CURB=b;
   const msg=(b.type==="wish"?t.cMsgWish(esc(b.title),b.kiez):t.cMsgOffer(esc(b.title),esc(b.author||"—"),b.kiez))+"\n"+(b.type==="wish"?t.dNoneW:t.dNone);
   $("sheet").innerHTML=
-    `<div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dtitle">${t.cTitle}</div>`+
     `<div class="downer">${t.cIntro}</div>`+
     `<textarea class="cmsg" id="cmsg" rows="4" readonly>${msg}</textarea>`+
@@ -634,6 +635,23 @@ function copyMsg(){
   }else{ try{document.execCommand("copy");}catch(e){} done(); }
 }
 $("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
+(function(){
+  var sh=$("sheet"),sy=0,dy=0,drag=false;
+  sh.addEventListener("touchstart",function(e){ if(e.touches.length!==1)return; sy=e.touches[0].clientY; dy=0; drag=true; sh.style.transition="none"; },{passive:true});
+  sh.addEventListener("touchmove",function(e){
+    if(!drag)return;
+    dy=e.touches[0].clientY-sy;
+    if(dy>0&&sh.scrollTop<=0){ sh.style.transform="translateY("+Math.min(dy,240)+"px)"; e.preventDefault(); }
+    else if(dy<=0){ sh.style.transform=""; }
+  },{passive:false});
+  sh.addEventListener("touchend",function(){
+    if(!drag)return; drag=false;
+    sh.style.transition="transform .18s ease-out";
+    if(dy>90&&sh.scrollTop<=0){ sh.style.transform="translateY(110%)"; setTimeout(closeSheet,160); }
+    else{ sh.style.transform=""; }
+    setTimeout(function(){ sh.style.transition=""; sh.style.transform=""; },200);
+  });
+})();
 
 function sortedList(list){ return [...list].sort((a,b)=>{ if(S.sort==="new") return String(b.added||"").localeCompare(String(a.added||"")); return String(a.added||"").localeCompare(String(b.added||"")); }); }
 function renderAll(){
