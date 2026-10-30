@@ -632,8 +632,7 @@ function openSheet(b){
     b.age==="adults" ? `<span class="pill age">${t.adults}</span>` :
     `<span class="pill age">${t.subAges[b.age]||b.age}</span>`,
     b.genre ? `<span class="pill">${t.genres[b.genre]}</span>` : "",
-    b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.wishLabel}</span>` : "",
-    b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
+    b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.wishLabel}</span>` : ""
   ].join("");
   const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
