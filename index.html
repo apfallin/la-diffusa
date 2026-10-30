@@ -110,8 +110,8 @@
   .qwrap::before{content:"🔍";position:absolute;left:.65rem;top:50%;transform:translateY(-50%);font-size:.8rem;opacity:.6}
   .qwrap input:focus{border-color:var(--terra);background:var(--card)}
   /* ---------- view bar ---------- */
-  .viewbar{display:flex;justify-content:space-between;align-items:center;margin:.1rem .1rem .5rem}
-  #count{font-size:.78rem;color:var(--mut);font-style:italic;font-family:var(--font-head)}
+  .viewbar{display:flex;justify-content:space-between;align-items:center;gap:.4rem;flex-wrap:wrap;margin:.1rem .1rem .5rem}
+  #count{font-size:.78rem;color:var(--mut);font-style:italic;font-family:var(--font-head);white-space:nowrap;flex:0 0 auto}
   .vswitch{display:flex;border:1px solid var(--line);border-radius:.55rem;overflow:hidden;background:var(--card)}
   .vbtn{border:none;background:transparent;padding:.25rem .7rem;font-size:.78rem;cursor:pointer;color:var(--mut)}
   .vbtn.on{background:var(--ink);color:var(--paper)}
@@ -323,7 +323,7 @@ const T = {
     howNote:"\ud83d\udcf1 Nel form l\u2019ISBN si legge col lettore QR o si scrive dal retro del libro, senza saltare cifre. Il libro arriva sullo scaffale in genere entro un giorno. In prestito: fino a 3 libri per gruppo d\u2019et\u00e0; se pi\u00f9 vicini chiedono lo stesso libro, la coda \u00e8 equa. Prossimo passo: account, database e promemoria automatici.",
     lblOffer:"Offri un libro",subOffer:"un breve form dal telefono",
     lblWish:"Cerco un libro",subWish:"pubblica il tuo desiderio",
-    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi arrivati",sortOld:"Prima i più datati",
+    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi",sortOld:"Datati",
     genres:{fiction:"Narrativa",mystery:"Giallo / Thriller",sff:"Fantascienza / Fantasy",comics:"Fumetti",poetry:"Poesia e teatro",nonfiction:"Saggistica",history:"Storia / Biografie"},
     kids:"🧒 Bambini",teen:"🌟 Ragazzi (12+)",adults:"👤 Adulti",allAges:"Tutte le età",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -372,7 +372,7 @@ const T = {
     howNote:"\ud83d\udcf1 Im Formular den Barcode mit dem QR-Scanner lesen oder von der Buchr\u00fcckseite abschreiben \u2014 keine Ziffer auslassen. Das Buch steht in der Regel innerhalb eines Tages im Regal. Ausleihe: bis zu 3 B\u00fccher pro Altersgruppe; wenn mehrere Nachbarn dasselbe Buch wollen, ist die Warteschlange fair. N\u00e4chster Schritt: Account, Datenbank und automatische Erinnerungen.",
     lblOffer:"Buch anbieten",subOffer:"kurzes Formular vom Handy",
     lblWish:"Buch gesucht",subWish:"Veröffentliche deinen Wunsch",
-    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neu zuerst",sortOld:"Ältere zuerst",
+    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neueste",sortOld:"\u00c4lteste",
     genres:{fiction:"Belletristik",mystery:"Krimi / Thriller",sff:"Science-Fiction / Fantasy",comics:"Comics",poetry:"Lyrik und Theater",nonfiction:"Sachbücher",history:"Geschichte / Biografien"},
     kids:"🧒 Kinder",teen:"🌟 Jugendliche (12+)",adults:"👤 Erwachsene",allAges:"Alle Altersgruppen",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -421,7 +421,7 @@ const T = {
     howNote:"\ud83d\udcf1 In the form, scan the barcode with your QR reader or copy it from the back of the book \u2014 don\u2019t skip a digit. Your book lands on the shelf, usually within a day. Borrowing: up to 3 books per age group; if several neighbours want the same book, the queue is fair. Next step: accounts, database and automatic reminders.",
     lblOffer:"Offer a book",subOffer:"a short form from your phone",
     lblWish:"Looking for a book",subWish:"post your wish",
-    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest first",sortOld:"Oldest first",
+    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest",sortOld:"Oldest",
     genres:{fiction:"Fiction",mystery:"Crime / Thriller",sff:"Sci-fi / Fantasy",comics:"Comics",poetry:"Poetry & plays",nonfiction:"Non-fiction",history:"History / Biography"},
     kids:"🧒 Kids",teen:"🌟 Teens (12+)",adults:"👤 Adults",allAges:"All ages",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -667,7 +667,8 @@ function applyLang(){
   $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
   // dropdown DINAMICO: solo i generi presenti nel catalogo (ordine canonico di GENRES) — i filtri vuoti non si offrono; il gestore assegna SEMPRE uno dei GENRES fissi
   $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.filter(g=>BOOKS.some(b=>b.genre===g)).map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
-  $("sortSel").innerHTML=`<option value="new">${t.sortNew}</option><option value="old">${t.sortOld}</option>`;
+  $("sortSel").innerHTML=`<option value="new" title="${t.sortNew}">${t.sortNew}</option><option value="old" title="${t.sortOld}">${t.sortOld}</option>`;
+  $("sortSel").title=t.sortNew+" / "+t.sortOld;
   $("sortSel").value=S.sort;
   $("typeRow").innerHTML=
     `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
