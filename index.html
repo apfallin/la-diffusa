@@ -168,8 +168,6 @@
   .pill.age{background:#f7f0fa;color:#6b21a8;border-color:#e5d5f0}
   .pill.wish{background:var(--terrabg);color:var(--terra);border-color:var(--terraline)}
   .pill.lentp{background:var(--paper);color:var(--mut);border-color:var(--line)}
-  .bowner{font-size:.74rem;color:var(--mut);margin-top:.3rem}
-  .bowner b{color:var(--ink);font-weight:500}
   /* ---------- grid view ---------- */
   .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(7.5rem,1fr));gap:.8rem}
   .gcell{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:box-shadow .15s,transform .15s;box-shadow:var(--shadow)}
@@ -199,7 +197,6 @@
   .gmeta .row1{display:flex;justify-content:space-between;gap:.3rem}
   .gmeta .l{color:var(--terra);font-style:italic}
   .gmeta .k{color:var(--green)}
-  .gowner2{font-size:.66rem;color:var(--mut);margin-top:.3rem;border-top:1px solid var(--line);padding-top:.25rem}
   .empty{font-size:.85rem;color:var(--mut);text-align:center;padding:2rem 0;font-style:italic;font-family:var(--font-head)}
   footer{margin-top:2.5rem;font-size:.75rem;color:var(--mut);border-top:2px solid var(--line);padding-top:1rem;text-align:center;font-style:italic;font-family:var(--font-head)}
   #legalLink{font-style:normal;font-family:system-ui,sans-serif;text-decoration:underline;cursor:pointer}
@@ -332,11 +329,11 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Cerca titolo, autore…",
     count:(n)=>`${n} libri`,
-    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",wishCover:"qualcuno cerca questo libro",owner:(k)=>`offerto da un vicino di <b>${k}</b>`,
+    lent:"In prestito",wishLabel:"Desiderio",avail:"Disponibile",noCover:"Copertina non disponibile — il libro c'è!",wishCover:"qualcuno cerca questo libro",owner:"offerto dalla community",
     allType:"Tutto",offers:"📚 Offerte",wishes:"✨ Desideri",
     kindTitle:"📖 Cerco un libro preciso",kindSimilar:"🫶 Cerco qualcosa di simile",kindTheme:"💭 Cerco un tema",
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
-    wishOwner:(k)=>`desiderio di un vicino di <b>${k}</b>`,
+    wishOwner:"desiderio della community",
     empty:"Nessun libro corrisponde ai filtri.",
     askOffer:"📨 Scrivi a chi lo offre",
     askWish:"💬 Rispondi a questo desiderio",
@@ -381,11 +378,11 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Titel, Autor suchen…",
     count:(n)=>`${n} Bücher`,
-    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"jemand sucht dieses Buch",owner:(k)=>`angeboten von einem Nachbarn aus <b>${k}</b>`,
+    lent:"Ausgeliehen",wishLabel:"Wunsch",avail:"Verfügbar",noCover:"Cover nicht verfügbar — das Buch gibt es trotzdem!",wishCover:"jemand sucht dieses Buch",owner:"angeboten von der Community",
     allType:"Alles",offers:"📚 Angebote",wishes:"✨ Wünsche",
     kindTitle:"📖 Ich suche ein bestimmtes Buch",kindSimilar:"🫶 Ich suche etwas Ähnliches",kindTheme:"💭 Ich suche ein Thema",
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
-    wishOwner:(k)=>`Wunsch von einem Nachbarn aus <b>${k}</b>`,
+    wishOwner:"Wunsch der Community",
     empty:"Keine Bücher entsprechen den Filtern.",
     askOffer:"📨 Schreib dem Anbieter",
     askWish:"💬 Antworte auf diesen Wunsch",
@@ -430,11 +427,11 @@ const T = {
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
     search:"Search title, author…",
     count:(n)=>`${n} books`,
-    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",wishCover:"someone is looking for this book",owner:(k)=>`offered by a neighbour in <b>${k}</b>`,
+    lent:"On loan",wishLabel:"Wish",avail:"Available",noCover:"Cover not available — the book is real though!",wishCover:"someone is looking for this book",owner:"offered by the community",
     allType:"All",offers:"📚 Offers",wishes:"✨ Wishes",
     kindTitle:"📖 I'm looking for a specific book",kindSimilar:"🫶 I'm looking for something similar",kindTheme:"💭 I'm looking for a theme",
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
-    wishOwner:(k)=>`wish by a neighbour in <b>${k}</b>`,
+    wishOwner:"wish by the community",
     empty:"No books match the filters.",
     askOffer:"📨 Message the lender",
     askWish:"💬 Reply to this wish",
@@ -519,18 +516,13 @@ function cardRow(b){
     b.age==="adults" ? `<span class="pill age">${t.adults}</span>` :
     `<span class="pill age">${t.subAges[b.age]||b.age}</span>`,
     b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.wishLabel}</span>` : "",
-    b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}</span>` : ""
+    b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+esc(b.note):""}</span>` : ""
   ].join("");
-  const owner = b.type==="wish"
-    ? t.wishOwner(b.kiez)
-    : t.owner(b.kiez);
-  const note = b.note ? ` · <i>${esc(b.note)}</i>` : "";
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
     <div class="cover" style="background:${b.cover}">${coverImg(b,"M")}<span class="fb">${b.type==="wish"?"✨":b.title.charAt(0)}</span></div>
     <div class="bbody">
       <div class="bhead"><span class="btitle">${esc(b.title)}</span><span class="bauthor">${b.author!=="—"?esc(b.author):""}</span></div>
       <div class="bmeta">${pills}</div>
-      <p class="bowner">${owner}${note}</p>
     </div>
   </div>`;
 }
@@ -542,9 +534,6 @@ function gridCells(list){
     const badge = b.type==="wish" ? (b.kind==="similar" ? t.kindSimilar : b.kind==="theme" ? t.kindTheme : `✨ ${t.wishLabel}`) :
       b.age==="12+" ? t.teen : (b.age==="adults" ? t.adults : t.subAges[b.age]||"");
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
-    const owner = (b.type==="wish"
-      ? t.wishOwner(b.kiez)
-      : t.owner(b.kiez)).replace(/<\/?b>/g,"");
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
       <div class="gcover" style="background:${b.cover}">
         ${coverImg(b,"M")}
@@ -557,7 +546,6 @@ function gridCells(list){
         <div class="gmeta">
           <div class="row1"><span class="l">${b.lang}</span><span class="k">${b.kiez}</span></div>
         </div>
-        <div class="gowner2">${owner}</div>
       </div>
     </div>`;
   }).join("") + `</div>`;
@@ -577,9 +565,7 @@ function openSheet(b){
     b.type==="wish" ? `<span class="pill wish">✨ ${b.kind==="similar"?t.kindSimilar:b.kind==="theme"?t.kindTheme:t.wishLabel}</span>` : "",
     b.status==="lent" ? `<span class="pill lentp">⏳ ${t.lent}${b.note?" · "+b.note:""}</span>` : ""
   ].join("");
-  const owner = b.type==="wish"
-    ? t.wishOwner(b.kiez)
-    : t.owner(b.kiez);
+  const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
     `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${b.cover}">${coverImg(b,"L")}<div class="ncmsg fb"><b>${b.type==="wish"?"✨":b.title.charAt(0)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
