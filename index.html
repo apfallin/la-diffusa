@@ -712,7 +712,7 @@ function contactSheet(b){
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
   const mb=$("mailBtn");
-  if(mb) mb.addEventListener("click",()=>{ MAILTS=Date.now(); toast(T[S.lang].mailSent,20000); });
+  if(mb) mb.addEventListener("click",()=>{ MAILTS=Date.now(); setTimeout(()=>toast(T[S.lang].mailSent,20000),2500); });
 }
 let MAILTS=0, FORMTS=0;
 ["btnOffer","btnWish"].forEach(id=>{ const el=$(id); if(el) el.addEventListener("click",()=>{ FORMTS=Date.now(); toast(T[S.lang].formSent,20000); }); });
