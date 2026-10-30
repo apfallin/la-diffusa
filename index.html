@@ -742,9 +742,9 @@ $("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;try{store.setIt
 $("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;try{store.setItem("bb-blang",S.blang);}catch(err){} renderAll();});
 $("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
 function setSort(v){ S.sort=v; try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll(); applyLang(); }
-$("sortBtn").addEventListener("click",e=>{ e.stopPropagation(); $("sortPop").classList.toggle("open"); });
-$("sortPop").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; setSort(b.dataset.s); $("sortPop").classList.remove("open"); });
-document.addEventListener("click",e=>{ if(!e.target.closest(".vswitch")) $("sortPop").classList.remove("open"); });
+$("sortBtn").addEventListener("click",e=>{ e.stopPropagation(); const p=$("sortPop"); p.style.display = p.style.display==="block" ? "none" : "block"; p.classList.toggle("open", p.style.display==="block"); });
+$("sortPop").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; setSort(b.dataset.s); $("sortPop").style.display="none"; });
+document.addEventListener("click",e=>{ if(!e.target.closest(".vswitch")){ const p=$("sortPop"); p.style.display="none"; } });
 $("typeRow").addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
   S.type = S.type===c.dataset.v ? "all" : c.dataset.v;
