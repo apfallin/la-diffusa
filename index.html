@@ -195,8 +195,16 @@
   .book.wish .fb,.gcell.wish .fb{color:var(--terra);text-shadow:none}
   .sheet .dcover.wish{color:var(--terra);text-shadow:none}
   .sheet .dcover.wish .ncmsg span{font-family:system-ui,sans-serif;font-size:.95rem;font-weight:400;color:var(--mut)}
-  .gcover .badge{position:absolute;top:.4rem;left:.4rem;font-size:.62rem;background:rgba(255,252,244,.92);border-radius:.4rem;padding:.08rem .4rem;color:var(--ink);font-weight:600}
-  .gcover .lentb{position:absolute;bottom:.4rem;right:.4rem;font-size:.62rem;background:rgba(0,0,0,.6);color:#fff;border-radius:.4rem;padding:.1rem .4rem}
+  .gcover .badge{position:absolute;top:.45rem;left:.45rem;font-size:.72rem;background:var(--card);border:1px solid var(--line);border-radius:.5rem;padding:.16rem .5rem;color:var(--ink);font-weight:700;box-shadow:0 1px 3px rgba(0,0,0,.18);line-height:1.2}
+  .gcover .badge.b-kid{background:var(--green);border-color:var(--green);color:#fff}
+  .gcover .badge.b-teen{background:var(--gold);border-color:var(--gold);color:#fff}
+  .gcover .badge.b-adult{background:var(--terra);border-color:var(--terra);color:#fff}
+  .gcover .badge.b-wish{background:var(--card);border-color:var(--terra);color:var(--terra)}
+  :root.dark .gcover .badge.b-kid{background:var(--greendk);border-color:var(--greendk);color:#211d17}
+  :root.dark .gcover .badge.b-teen{background:var(--gold);border-color:var(--gold);color:#211d17}
+  :root.dark .gcover .badge.b-adult{background:var(--terra);border-color:var(--terra);color:#211d17}
+  :root.dark .gcover .badge.b-wish{background:rgba(33,29,23,.85);border-color:var(--terra);color:var(--terra)}
+  .gcover .lentb{position:absolute;bottom:.45rem;right:.45rem;font-size:.72rem;background:rgba(0,0,0,.65);color:#fff;border-radius:.5rem;padding:.16rem .5rem;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,.18)}
   .gcover img{position:absolute;inset:.25rem;width:calc(100% - .5rem);height:calc(100% - .5rem);object-fit:contain;border-radius:.25rem}
   .ginfo{padding:.45rem .55rem .55rem}
   .gtitle{font-size:.76rem;font-weight:600;font-family:var(--font-head);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.9rem}
@@ -545,11 +553,12 @@ function gridCells(list){
   return `<div class="grid">` + list.map(b=>{
     const badge = b.type==="wish" ? (b.kind==="similar" ? t.kindSimilar : b.kind==="theme" ? t.kindTheme : `✨ ${t.wishLabel}`) :
       b.age==="12+" ? t.teen : (b.age==="adults" ? t.adults : t.subAges[b.age]||"");
+    const badgeCls = b.type==="wish" ? "b-wish" : (b.age==="adults" ? "b-adult" : (b.age==="12+" ? "b-teen" : "b-kid"));
     const lentb = b.status==="lent" ? `⏳ ${t.lent}` : "";
     return `<div class="gcell ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
       <div class="gcover" style="background:${b.cover}">
         ${coverImg(b,"M")}
-        ${badge?`<span class="badge">${badge}</span>`:""}
+        ${badge?`<span class="badge ${badgeCls}">${badge}</span>`:""}
         <span class="fb">${b.type==="wish"?"\u2728":`<span class="ft">${esc(fbTit(b.title))}</span>`}</span>
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
       </div>
