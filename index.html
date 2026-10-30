@@ -74,10 +74,12 @@
   .how ol li.soon{color:var(--mut);font-style:italic;margin-top:.45rem}
   .how ol li.soon::marker{content:"→";color:var(--mut);font-weight:400;font-style:normal}
   /* ---------- faq ---------- */
-  details.faq{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:1rem;box-shadow:var(--shadow)}
+  details.faq{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin:2.4rem 0 1rem;box-shadow:var(--shadow)}
   details.faq summary{cursor:pointer;font-size:.95rem;font-weight:600;font-family:var(--font-head);list-style:none;color:var(--greendk)}
   details.faq summary::-webkit-details-marker{display:none}
   details.faq[open] summary{margin-bottom:.35rem}
+  .how .tofaq{font-size:.75rem;color:var(--terra);font-weight:600;cursor:pointer;margin-top:.6rem}
+  .how .tofaq:hover{text-decoration:underline}
   .faq .fitem{margin:.55rem 0}
   .faq .fq{font-weight:600;font-family:var(--font-head);font-size:.85rem}
   .faq .fa{font-size:.8rem;color:var(--mut);margin-top:.1rem}
@@ -297,6 +299,7 @@
 <details class="how" id="how">
   <summary id="howTitle"></summary>
   <ol id="howList"></ol>
+  <p class="tofaq" id="howFaq"></p>
 
 </details>
 
@@ -380,6 +383,7 @@ const T = {
       "Il sistema mette in contatto chi presta e chi riceve — nessuna email o dato privato resta visibile — e insieme decidono come e quando incontrarsi: il libro arriva sullo scaffale in genere entro un giorno.",
       "Ogni prestito viene registrato e promemoria automatici ricordano la restituzione — nessun libro perso. In prestito fino a 3 libri per gruppo d’età; se più vicini chiedono lo stesso libro, la coda è equa: passa prima chi ha meno libri in prestito.",
       "In futuro il progetto cresce: account, database e automazioni ancora più diffuse."],
+    howFaq:"Hai altri dubbi? Guarda le domande frequenti, in fondo alla pagina ↓",
     faqTitle:"Domande frequenti",
     faq:[["È gratis?","Sì, è tutto gratuito: uno scambio tra vicini, nessun costo, nessuna registrazione."],
       ["Serve un account?","No: si usa direttamente dal telefono e il sistema mette in contatto le persone."],
@@ -435,6 +439,7 @@ const T = {
       "Das System bringt Geber und Nehmer in Kontakt — keine E-Mail und keine privaten Daten bleiben sichtbar — und sie vereinbaren, wie und wo sie sich treffen: das Buch steht in der Regel innerhalb eines Tages im Regal.",
       "Jede Ausleihe wird vermerkt und automatische Erinnerungen bitten um Rückgabe — kein Buch geht verloren. Ausleihe: bis zu 3 Bücher pro Altersgruppe; wenn mehrere Nachbarn dasselbe Buch wollen, ist die Warteschlange fair — wer weniger Bücher ausgeliehen hat, kommt zuerst.",
       "In Zukunft wächst das Projekt: Account, Datenbank und noch mehr Automatisierung."],
+    howFaq:"Noch Fragen? Schau in die häufigen Fragen, unten auf der Seite ↓",
     faqTitle:"Häufige Fragen",
     faq:[["Ist es kostenlos?","Ja, alles kostenlos: ein Austausch zwischen Nachbarn, ohne Kosten, ohne Registrierung."],
       ["Brauche ich ein Konto?","Nein: alles läuft direkt vom Handy, das System stellt den Kontakt her."],
@@ -490,6 +495,7 @@ const T = {
       "The system puts lender and borrower in touch — no email or private data stays visible — and they arrange how and where to meet: the book lands on the shelf, usually within a day.",
       "Every loan is recorded and automatic reminders ask for its return — no book gets lost. Borrow up to 3 books per age group; if several neighbours want the same book, the queue is fair — whoever has fewer books out gets it first.",
       "In the future the project grows: accounts, database and even more automation."],
+    howFaq:"More questions? See the FAQ at the bottom of the page ↓",
     faqTitle:"Frequently asked questions",
     faq:[["Is it free?","Yes, everything is free: an exchange between neighbours, no costs, no sign-up."],
       ["Do I need an account?","No: everything runs straight from your phone, and the system puts people in touch."],
@@ -759,6 +765,7 @@ function applyLang(){
   $("howList").innerHTML=t.how.map((s,i)=>`<li class="${i===t.how.length-1?"soon":""}">${s}</li>`).join("");
   $("faqTitle").textContent=t.faqTitle;
   $("faqList").innerHTML=t.faq.map(p=>`<div class="fitem"><div class="fq">${p[0]}</div><div class="fa">${p[1]}</div></div>`).join("");
+  $("howFaq").textContent=t.howFaq;
 
   $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
   $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
@@ -819,6 +826,10 @@ $("legalLink").addEventListener("click",e=>{
   }
   L.classList.toggle("open");
   if(L.classList.contains("open"))L.scrollIntoView({behavior:"smooth"});
+});
+$("howFaq").addEventListener("click",()=>{
+  const f=$("faq"); f.open=true;
+  try { f.scrollIntoView({behavior:"smooth",block:"start"}); } catch(e){}
 });
 function toast(html){
   let c=document.getElementById("toasts");
