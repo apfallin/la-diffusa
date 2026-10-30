@@ -1,4 +1,5 @@
 
+
 <!doctype html>
 <html lang="it">
 <head>
@@ -78,8 +79,13 @@
   .ctl label{font-size:.72rem;color:var(--mut);white-space:nowrap}
   select.ctl{border:1px solid var(--line);border-radius:.55rem;padding:.4rem .5rem;font-size:.85rem;background:var(--paper);color:var(--ink);flex:1}
   select.ctl:focus{font-size:1rem} /* iOS: no auto-zoom al focus */
-  .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer}
+  .vswitch .vsort{border:none;background:transparent;padding:.25rem .5rem;font-size:.78rem;color:var(--mut);border-left:1px solid var(--line);max-width:7.5rem;cursor:pointer;position:relative}
   .vswitch .vsort:focus{font-size:1rem}
+  .vswitch{position:relative}
+  .sortpop{display:none;position:absolute;top:110%;right:0;background:var(--card);border:1px solid var(--line);border-radius:.6rem;box-shadow:var(--shadow);z-index:60;min-width:11rem;padding:.3rem;text-align:left}
+  .sortpop.open{display:block}
+  .sortpop button{display:block;width:100%;border:none;background:transparent;text-align:left;font-size:.85rem;padding:.45rem .6rem;border-radius:.45rem;cursor:pointer;color:var(--ink);font-family:system-ui,sans-serif}
+  .sortpop button.on{background:var(--greenbg);color:var(--greendk);font-weight:600}
   .agechips{display:flex;gap:.35rem;flex:0 1 auto;flex-wrap:wrap;justify-content:flex-start}
   .ageGroup{flex:1 1 100%;flex-wrap:wrap;border:1px solid var(--line);border-radius:.7rem;padding:.22rem .3rem;background:var(--paper);box-shadow:0 1px 2px rgba(60,50,30,.05)} /* gruppo ETÀ: pillole + sottofasce dentro UNA sola scatola, mai sparse */
   #ageRow{gap:.25rem}
@@ -271,7 +277,8 @@
     <div class="vswitch">
     <button class="vbtn" id="vList"></button>
     <button class="vbtn on" id="vTable"></button>
-    <select id="sortSel" class="vsort" aria-label="Ordina"></select>
+    <button id="sortBtn" class="vsort" aria-haspopup="menu" aria-label="Ordina"></button>
+    <div class="sortpop" id="sortPop"></div>
   </div>
   </div>
 </div>
@@ -324,7 +331,7 @@ const T = {
     howNote:"\ud83d\udcf1 Nel form l\u2019ISBN si legge col lettore QR o si scrive dal retro del libro, senza saltare cifre. Il libro arriva sullo scaffale in genere entro un giorno. In prestito: fino a 3 libri per gruppo d\u2019et\u00e0; se pi\u00f9 vicini chiedono lo stesso libro, la coda \u00e8 equa. Prossimo passo: account, database e promemoria automatici.",
     lblOffer:"Offri un libro",subOffer:"un breve form dal telefono",
     lblWish:"Cerco un libro",subWish:"pubblica il tuo desiderio",
-    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi",sortOld:"Datati",
+    allKiez:"Tutti i Kiez",allLang:"Tutte le lingue",allGenre:"Tutti i generi",sortNew:"Ultimi",sortOld:"Datati",sortBy:"Ordina per",sortFullNew:"Ordina per: ultimi arrivati",sortFullOld:"Ordina per: prima i più datati",
     genres:{fiction:"Narrativa",mystery:"Giallo / Thriller",sff:"Fantascienza / Fantasy",comics:"Fumetti",poetry:"Poesia e teatro",nonfiction:"Saggistica",history:"Storia / Biografie"},
     kids:"🧒 Bambini",teen:"🌟 Ragazzi (12+)",adults:"👤 Adulti",allAges:"Tutte le età",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -373,7 +380,7 @@ const T = {
     howNote:"\ud83d\udcf1 Im Formular den Barcode mit dem QR-Scanner lesen oder von der Buchr\u00fcckseite abschreiben \u2014 keine Ziffer auslassen. Das Buch steht in der Regel innerhalb eines Tages im Regal. Ausleihe: bis zu 3 B\u00fccher pro Altersgruppe; wenn mehrere Nachbarn dasselbe Buch wollen, ist die Warteschlange fair. N\u00e4chster Schritt: Account, Datenbank und automatische Erinnerungen.",
     lblOffer:"Buch anbieten",subOffer:"kurzes Formular vom Handy",
     lblWish:"Buch gesucht",subWish:"Veröffentliche deinen Wunsch",
-    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neueste",sortOld:"\u00c4lteste",
+    allKiez:"Alle Kieze",allLang:"Alle Sprachen",allGenre:"Alle Genres",sortNew:"Neueste",sortOld:"\u00c4lteste",sortBy:"Sortieren nach",sortFullNew:"Sortieren nach: Neu zuerst",sortFullOld:"Sortieren nach: \u00c4ltere zuerst",
     genres:{fiction:"Belletristik",mystery:"Krimi / Thriller",sff:"Science-Fiction / Fantasy",comics:"Comics",poetry:"Lyrik und Theater",nonfiction:"Sachbücher",history:"Geschichte / Biografien"},
     kids:"🧒 Kinder",teen:"🌟 Jugendliche (12+)",adults:"👤 Erwachsene",allAges:"Alle Altersgruppen",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -422,7 +429,7 @@ const T = {
     howNote:"\ud83d\udcf1 In the form, scan the barcode with your QR reader or copy it from the back of the book \u2014 don\u2019t skip a digit. Your book lands on the shelf, usually within a day. Borrowing: up to 3 books per age group; if several neighbours want the same book, the queue is fair. Next step: accounts, database and automatic reminders.",
     lblOffer:"Offer a book",subOffer:"a short form from your phone",
     lblWish:"Looking for a book",subWish:"post your wish",
-    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest",sortOld:"Oldest",
+    allKiez:"All Kieze",allLang:"All languages",allGenre:"All genres",sortNew:"Newest",sortOld:"Oldest",sortBy:"Sort by",sortFullNew:"Sort by: newest first",sortFullOld:"Sort by: oldest first",
     genres:{fiction:"Fiction",mystery:"Crime / Thriller",sff:"Sci-fi / Fantasy",comics:"Comics",poetry:"Poetry & plays",nonfiction:"Non-fiction",history:"History / Biography"},
     kids:"🧒 Kids",teen:"🌟 Teens (12+)",adults:"👤 Adults",allAges:"All ages",
     subAges:{"0-3":"🐣 0-3","3-6":"🧒 3-6","6-9":"📖 6-9","9-12":"📚 9-12"},
@@ -668,9 +675,9 @@ function applyLang(){
   $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
   // dropdown DINAMICO: solo i generi presenti nel catalogo (ordine canonico di GENRES) — i filtri vuoti non si offrono; il gestore assegna SEMPRE uno dei GENRES fissi
   $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.filter(g=>BOOKS.some(b=>b.genre===g)).map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
-  $("sortSel").innerHTML=`<option value="new" title="${t.sortNew}">${t.sortNew}</option><option value="old" title="${t.sortOld}">${t.sortOld}</option>`;
-  $("sortSel").title=t.sortNew+" / "+t.sortOld;
-  $("sortSel").value=S.sort;
+  $("sortBtn").textContent="\u2195 "+(S.sort==="old"?t.sortOld:t.sortNew);
+  $("sortBtn").title=t.sortBy;
+  $("sortPop").innerHTML=`<button class="${S.sort==="new"?"on":""}" data-s="new">${t.sortFullNew}</button><button class="${S.sort==="old"?"on":""}" data-s="old">${t.sortFullOld}</button>`;
   $("typeRow").innerHTML=
     `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
     `<button class="chip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
@@ -734,7 +741,10 @@ document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
 $("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;try{store.setItem("bb-kiez",S.kiez);}catch(err){} renderAll();});
 $("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;try{store.setItem("bb-blang",S.blang);}catch(err){} renderAll();});
 $("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
-$("sortSel").addEventListener("change",e=>{S.sort=e.target.value;try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll();});
+function setSort(v){ S.sort=v; try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll(); applyLang(); }
+$("sortBtn").addEventListener("click",e=>{ e.stopPropagation(); $("sortPop").classList.toggle("open"); });
+$("sortPop").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; setSort(b.dataset.s); $("sortPop").classList.remove("open"); });
+document.addEventListener("click",e=>{ if(!e.target.closest(".vswitch")) $("sortPop").classList.remove("open"); });
 $("typeRow").addEventListener("click",e=>{
   const c=e.target.closest(".chip"); if(!c)return;
   S.type = S.type===c.dataset.v ? "all" : c.dataset.v;
