@@ -190,14 +190,17 @@
   .gcell .fb::after{inset:.6rem}
   .gcell .fb .ft{font-family:var(--font-head);font-size:.72rem;font-weight:600;line-height:1.35;letter-spacing:.02em;text-align:center;max-width:86%;text-shadow:0 1px 2px rgba(0,0,0,.35)}
   /* copertine senza immagine: prima pagina interna del libro, per fascia d'età */
-  .gcell .fb.fb-adult,.gcell .fb.fb-teen,.gcell .fb.fb-kid{inset:.4rem;border:none;border-radius:.3rem;background:#fffcf4;box-shadow:inset 0 0 0 1px rgba(120,100,70,.15)}
-  .gcell .fb.fb-adult::before{content:"";border:none;background:none;border-radius:0}
-  .gcell .fb.fb-adult::after{content:"leri tavo smindi queno malto riveso fando piltr e smanco diveto larbo sumenti crovel opende travi lismo fenuto gardo beltri omavi sundi pelcro tarve monti rilu spado gende flimo varbo santro milve dospo crande luve tarbo smendi quilo prano velto";position:absolute;top:1.1rem;left:.6rem;right:.6rem;bottom:.55rem;border:none;border-radius:0;background:none;text-align:justify;font-size:.38rem;line-height:.5rem;color:rgba(64,52,40,.62);overflow:hidden}
-  .gcell .fb.fb-teen::before{content:"";border:none;background:none;border-radius:0}
-  .gcell .fb.fb-teen::after{content:"tavi lomendo sirbo\A quanelto mi dreve\A spo lantri comeda";position:absolute;top:1.3rem;left:.85rem;right:.85rem;bottom:auto;border:none;border-radius:0;background:none;white-space:pre-line;text-align:left;font-size:.5rem;line-height:.85rem;color:rgba(64,52,40,.68)}
-  .gcell .fb.fb-kid{background:radial-gradient(var(--gold) 58%,rgba(0,0,0,0) 64%) 50% 1.05rem / 2.2rem 2.2rem no-repeat #fffcf4}
-  .gcell .fb.fb-kid::before{content:"tili rombo savi\A mendo lupa tris";position:absolute;top:3.55rem;left:0;right:0;bottom:auto;border:none;border-radius:0;background:none;white-space:pre-line;text-align:center;font-size:.5rem;line-height:.7rem;color:rgba(64,52,40,.65)}
-  .gcell .fb.fb-kid::after{content:"";position:absolute;bottom:0;left:0;right:0;top:auto;height:2.6rem;border:none;border-radius:100% 100% 0 0;background:radial-gradient(var(--terra) 55%,rgba(0,0,0,0) 60%) 20% 85% / .55rem .55rem no-repeat,radial-gradient(#d4959b 55%,rgba(0,0,0,0) 60%) 50% 90% / .45rem .45rem no-repeat,radial-gradient(var(--gold) 55%,rgba(0,0,0,0) 60%) 75% 82% / .5rem .5rem no-repeat,var(--green)}
+  .gcell .fb.fb-adult,.gcell .fb.fb-teen,.gcell .fb.fb-kid{inset:.4rem;border:none;border-radius:.3rem;background:#fffcf4;box-shadow:inset 0 0 0 1px rgba(120,100,70,.15);overflow:hidden}
+  .gcell .fb.fb-adult::before,.gcell .fb.fb-adult::after,.gcell .fb.fb-teen::before,.gcell .fb.fb-teen::after,.gcell .fb.fb-kid::before,.gcell .fb.fb-kid::after{content:"";border:none;background:none;border-radius:0}
+  .gcell .fb.fb-adult{display:block;padding:.85rem .65rem .75rem}
+  .gcell .fb.fb-teen{display:block;padding:1.1rem .9rem 1rem}
+  .gcell .fb.fb-kid{display:block;padding:0}
+  .gcell .fb .ptx{display:block;color:rgba(64,52,40,.62)}
+  .gcell .fb.fb-adult .ptx{text-align:justify;font-size:.37rem;line-height:.47rem}
+  .gcell .fb.fb-teen .ptx{text-align:left;font-size:.44rem;line-height:.64rem;margin-bottom:.5rem}
+  .gcell .fb .ptx b{float:left;font-family:var(--font-head);font-size:1.5rem;line-height:.72;margin:.08rem .3rem 0 0;color:rgba(64,52,40,.78)}
+  .gcell .fb.fb-kid svg{position:absolute;inset:0;width:100%;height:100%}
+  .gcell .fb.fb-kid .pk{position:absolute;top:56%;left:.55rem;right:.55rem;text-align:center;font-size:.46rem;line-height:.68rem;color:rgba(64,52,40,.68)}
   .sheet .dcover .fb{position:static;inset:auto;background:none}
   .sheet .dcover .fb::before,.sheet .dcover .fb::after{display:none}
   .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:var(--terrabg)!important;border:2px dashed var(--terra)}
@@ -562,6 +565,13 @@ function cardRow(b){
 }
 
 function fbTit(s){const w=String(s).split(" ");let out=[];for(const x of w){if(out.length>=3||((out.join(" ")+" "+x).trim().length>18))break;out.push(x);}if(!out.length)out=[String(s).slice(0,12)];return out.join(" ")+"\u2026";}
+function gib(n){const s="leri tavo smindi queno malto riveso fando piltri smanco diveto larbo sumi crovel opende travison lismo fenuto gardo beltri omavi sundi pelcro tarve monti rilu spado gendi flimo varbo santro milve dospo crande luve tarbo smendi quilo prano velto brindi salto merove quisto pandi fluvire scendo rabolto tinvera mostri plendi cavalto ronvelo smito peltri vondo lanzuri fresco mantivo splendo rivelto crando borvelo tindi sampo vrelto mando squila trivento palombo vindre scolta mervida quarvi blondi spresso talvi".split(" ");let o=[];for(let k=0;k<n;k++){o.push(s[(k*7+3)%s.length]);if(k%7===3||k%11===5)o[o.length-1]+=".";}return o.join(" ");}
+function fbPage(b){
+  if(b.type==="wish")return "\u2728";
+  if(b.age==="adults")return `<span class="ptx">${gib(130)}</span>`;
+  if(b.age==="12+")return `<span class="ptx"><b>Q</b>${gib(9)}</span><span class="ptx"><b>N</b>${gib(12)}</span><span class="ptx"><b>S</b>${gib(10)}</span>`;
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="none"><circle cx="50" cy="17" r="9" fill="#b98a2f"/><g stroke="#b98a2f" stroke-width="1.6" stroke-linecap="round" fill="none"><path d="M50 4v3M50 27v3M37 17h-3M63 17h3M40 7l2 2M60 7l-2 2M40 27l2-2M60 27l-2 2"/></g><ellipse cx="24" cy="34" rx="9" ry="3.6" fill="#fff" stroke="rgba(64,52,40,.12)"/><ellipse cx="31" cy="35.5" rx="7" ry="3" fill="#fff" stroke="rgba(64,52,40,.12)"/><g><circle cx="20" cy="47" r="6" fill="#c4664a"/><circle cx="25" cy="42" r="4" fill="#c4664a"/><path d="M28.6 42l4 1.2-4 1.4z" fill="#b98a2f"/><circle cx="26" cy="41" r="1" fill="#fff"/><path d="M15 46q-4 2-6 0" stroke="#a04a30" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M17.5 49q4 4 8-1l-7-2z" fill="#a04a30"/></g><path d="M0 74Q50 52 100 74L100 100 0 100Z" fill="#8fc4a5"/><circle cx="24" cy="86" r="2.6" fill="#c4664a"/><circle cx="55" cy="92" r="2.2" fill="#e0a3b8"/><circle cx="80" cy="84" r="2.4" fill="#b98a2f"/><g><path d="M58 78q0 5 7 5h8" stroke="#c4664a" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="73" cy="72" r="5" fill="#d4959b" stroke="#a86a79" stroke-width="1"/><path d="M73 72a2.5 2.5 0 1 1 2.5 2.5" fill="none" stroke="#a86a79" stroke-width="1.2"/></g></svg><span class="ptx pk">${gib(9)}</span>`;
+}
 function gridCells(list){
   const t=T[S.lang];
   return `<div class="grid">` + list.map(b=>{
@@ -574,7 +584,7 @@ function gridCells(list){
       <div class="gcover" style="background:${b.cover}">
         ${cov}
         ${badge?`<span class="badge ${badgeCls}">${badge}</span>`:""}
-        <span class="fb ${b.type==="wish"?"":`fb-${b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}`}">${b.type==="wish"?"\u2728":""}</span>
+        <span class="fb ${b.type==="wish"?"":`fb-${b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}`}">${fbPage(b)}</span>
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
       </div>
       <div class="ginfo">
