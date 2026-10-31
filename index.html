@@ -181,11 +181,7 @@
   .sheet .dnote.lentn b{color:#fff}
   :root.dark .sheet .dnote.lentn{background:#e57ba3;color:#211d17;border-color:#e57ba3}
   :root.dark .sheet .dnote.lentn b{color:#211d17}
-  .sheet .ddesc{margin-top:.6rem;font-size:.78rem;line-height:1.45;color:var(--ink)}
-  .sheet .ddesc .more{display:none}
-  .sheet .ddesc.open .more{display:inline}
-  .sheet .ddesc.open .ell{display:none}
-  .sheet .ddesc .toggle{color:var(--terra);cursor:pointer;font-weight:600;white-space:nowrap}
+  .sheet .ddesc{margin-top:.6rem;font-size:.78rem;line-height:1.45;color:var(--ink);height:calc(1.45em * 3);overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch;word-break:break-word} /* desc SEMPRE 3 righe: scheda identica per tutti i libri, testo lungo scrolla dentro la stessa altezza */
   .sheet .contact{display:block;text-align:center;text-decoration:none;margin-top:.9rem;border-radius:.65rem;padding:.7rem;font-weight:700;font-family:var(--font-head);border:none;cursor:pointer;width:100%;font-size:.95rem}
   .sheet .contact.offer{background:var(--green);color:#fff}
   .sheet .contact.wishc{background:var(--terra);color:#fff}
@@ -704,9 +700,7 @@ function openSheet(b){
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
     `<div class="downer">${owner}</div>`+
-    (b.desc?`<div class="ddesc" id="ddesc">${b.desc.length>220
-      ? `${esc(b.desc.slice(0,220))}<span class="ell">…</span> <span class="toggle" onclick="document.getElementById('ddesc').classList.add('open');this.style.display='none'">${t.more}</span><span class="more">${esc(b.desc.slice(220))}</span>`
-      : esc(b.desc)}</div>`:"")+
+    (b.desc?`<div class="ddesc">${esc(b.desc)}</div>`:"")+
     (b.type!=="wish"?(b.status==="lent"?`<div class="dnote lentn">${t.stateLent} <b>${esc(b.note||"—")}</b></div>`:`<div class="dnote">${t.stateAvail}</div>`):"")+
     `<button class="contact ${b.type==="wish"?"wishc":"offer"}" onclick="contactSheet(BOOKS[${BOOKS.indexOf(b)}])">${b.type==="wish"?t.askWish:t.askOffer}</button>`+
     `<div class="dfoot">${t.contactNote}</div>`;
