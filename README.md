@@ -1,6 +1,6 @@
 # La Diffusa
 
-**lo scaffale diffuso / das verteilte Bücherregal / the distributed bookshelf**
+**la «biblioteca» diffusa / das verteilte Bücherregal / the distributed bookshelf**
 
 A distributed neighborhood bookshelf for Berlin: books in foreign languages, lent between neighbors, Kiez by Kiez.
 
