@@ -694,3 +694,238 @@ function openSheet(b){
   $("sheet").innerHTML =
     `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
+    `<div class="dtitle">${esc(b.title)}</div>`+
+    (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
+    `<div class="dpills">${pills}</div>`+
+    `<div class="downer">${owner}</div>`+
+    (b.desc?`<div class="ddesc" id="ddesc">${b.desc.length>220
+      ? `${esc(b.desc.slice(0,220))}<span class="ell">…</span> <span class="toggle" onclick="document.getElementById('ddesc').classList.add('open');this.style.display='none'">${t.more}</span><span class="more">${esc(b.desc.slice(220))}</span>`
+      : esc(b.desc)}</div>`:"")+
+    (b.type!=="wish"?(b.status==="lent"?`<div class="dnote">${t.stateLent} <b>${esc(b.note||"—")}</b></div>`:`<div class="dnote">${t.stateAvail}</div>`):"")+
+    `<button class="contact ${b.type==="wish"?"wishc":"offer"}" onclick="contactSheet(BOOKS[${BOOKS.indexOf(b)}])">${b.type==="wish"?t.askWish:t.askOffer}</button>`+
+    `<div class="dfoot">${t.contactNote}</div>`;
+  $("overlay").style.display="flex";
+  $("sheetClose").addEventListener("click",closeSheet);
+}
+function closeSheet(){ $("overlay").style.display="none"; }
+function contactSheet(b){
+  const t=T[S.lang];
+  CURB=b;
+  const msg=(b.type==="wish"?t.cMsgWish(esc(b.title),b.kiez):t.cMsgOffer(esc(b.title),esc(b.author||"—"),b.kiez))+"\n"+(b.type==="wish"?t.dNoneW:t.dNone);
+  $("sheet").innerHTML=
+    `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="dtitle">${t.cTitle}</div>`+
+    `<div class="downer">${t.cIntro}</div>`+
+    `<textarea class="cmsg" id="cmsg" rows="4" readonly>${msg}</textarea>`+
+    `<label class="durLbl" for="durSel">${b.type==="wish"?t.dLabelW:t.dLabel}</label>`+
+    `<select id="durSel" class="ctl" onchange="updMsg()"><option value="">${t.dDef}</option>${t.dOpts.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}</select>`+
+    (SITE_CONTACT?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
+    `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
+    `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
+    `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${t.cPriv}</div>`;
+  $("overlay").style.display="flex";
+  $("sheetClose").addEventListener("click",closeSheet);
+  const mb=$("mailBtn");
+  if(mb) mb.addEventListener("click",()=>{ MAILTS=Date.now(); setTimeout(()=>toast(T[S.lang].mailSent,20000),2500); });
+}
+let MAILTS=0, FORMTS=0;
+["btnOffer","btnWish"].forEach(id=>{ const el=$(id); if(el) el.addEventListener("click",()=>{ FORMTS=Date.now(); toast(T[S.lang].formSent,20000); }); });
+document.addEventListener("visibilitychange",()=>{
+  if(document.visibilityState!=="visible")return;
+  const t=T[S.lang];
+  if(MAILTS&&Date.now()-MAILTS<18e5){ if(Date.now()-MAILTS>25000) toast(t.mailSent,15000); MAILTS=0; }
+  if(FORMTS&&Date.now()-FORMTS<18e5){ if(Date.now()-FORMTS>25000) toast(t.formSent,15000); FORMTS=0; }
+});
+function updMsg(){
+  const t=T[S.lang],b=CURB,sel=$("durSel");
+  if(!b)return;
+  let msg=b.type==="wish"?t.cMsgWish(esc(b.title),b.kiez):t.cMsgOffer(esc(b.title),esc(b.author||"—"),b.kiez);
+  if(sel&&sel.value!=="") msg+="\n"+(b.type==="wish"?t.dLineW(t.dOpts[sel.value]):t.dLine(t.dOpts[sel.value]));
+  else msg+="\n"+(b.type==="wish"?t.dNoneW:t.dNone);
+  msg+="\n\n"+t.mailFoot;
+  $("cmsg").value=msg;
+  const mb=$("mailBtn");
+  if(mb&&SITE_CONTACT) mb.href=`mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}`;
+}
+function copyMsg(){
+  const ta=$("cmsg"),btn=$("copyBtn");
+  ta.focus();ta.select();ta.setSelectionRange&&ta.setSelectionRange(0,ta.value.length);
+  const done=()=>{ btn.textContent=T[S.lang].cCopied; };
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(done,()=>{ try{document.execCommand("copy");}catch(e){} done(); });
+  }else{ try{document.execCommand("copy");}catch(e){} done(); }
+}
+$("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeSheet(); });
+(function(){
+  var sh=$("sheet"),sy=0,dy=0,drag=false;
+  sh.addEventListener("touchstart",function(e){ if(e.touches.length!==1)return; sy=e.touches[0].clientY; dy=0; drag=true; sh.style.transition="none"; },{passive:true});
+  sh.addEventListener("touchmove",function(e){
+    if(!drag)return;
+    dy=e.touches[0].clientY-sy;
+    if(dy>0&&sh.scrollTop<=0){ sh.style.transform="translateY("+Math.min(dy,240)+"px)"; e.preventDefault(); }
+    else if(dy<=0){ sh.style.transform=""; }
+  },{passive:false});
+  sh.addEventListener("touchend",function(){
+    if(!drag)return; drag=false;
+    sh.style.transition="transform .18s ease-out";
+    if(dy>90&&sh.scrollTop<=0){ sh.style.transform="translateY(110%)"; setTimeout(closeSheet,160); }
+    else{ sh.style.transform=""; }
+    setTimeout(function(){ sh.style.transition=""; sh.style.transform=""; },200);
+  });
+})();
+
+function sortedList(list){ return [...list].sort((a,b)=>{ if(S.sort==="new") return String(b.added||"").localeCompare(String(a.added||"")); return String(a.added||"").localeCompare(String(b.added||"")); }); }
+function renderAll(){
+  const t=T[S.lang], list=sortedList(filtered());
+  $("list").innerHTML = list.length ? list.map(cardRow).join("") : `<p class="empty">${t.empty}</p>`;
+  $("table").innerHTML = list.length ? gridCells(list) : `<p class="empty">${t.empty}</p>`;
+  $("count").textContent = t.count(list.length);
+  $("list").style.display = S.view==="list"?"":"none";
+  $("table").style.display = S.view!=="list"?"":"none";
+  $("vList").classList.toggle("on",S.view==="list");
+  $("vTable").classList.toggle("on",S.view!=="list");
+}
+
+function applyLang(){
+  const t=T[S.lang];
+  document.documentElement.lang=S.lang;
+  $("langSel").value=S.lang; // riflette lingua auto-rilevata o salvata
+  $("tagline").textContent=t.tagline;
+  $("howTitle").textContent=t.howTitle;
+  $("howList").innerHTML=t.how.map((s,i)=>`<li class="${i===t.how.length-1?"soon":""}">${s}</li>`).join("");
+  $("faqTitle").textContent=t.faqTitle;
+  $("faqList").innerHTML=t.faq.map(p=>`<div class="fitem"><div class="fq">${p[0]}</div><div class="fa">${p[1]}</div></div>`).join("");
+  $("howFaq").textContent=t.howFaq;
+
+  $("lblOffer").textContent=t.lblOffer; $("subOffer").textContent=t.subOffer;
+  $("lblWish").textContent=t.lblWish; $("subWish").textContent=t.subWish;
+  if(S.kiez && !BOOKS.some(b=>b.kiez===S.kiez)) S.kiez=""; // kiez salvato ma sparito dal catalogo → reset, mai filtro fantasma
+  if(S.blang && !BOOKS.some(b=>b.lang===S.blang)) S.blang="";
+  $("kiezSel").innerHTML=`<option value="">${t.allKiez}</option>`+KIEZE.filter(k=>BOOKS.some(b=>b.kiez===k)).map(k=>`<option ${k===S.kiez?"selected":""}>${k}</option>`).join(""); // dropdown DINAMICO: solo i Kiez con libri in catalogo (come lingue e generi)
+  $("langBookSel").innerHTML=`<option value="">${t.allLang}</option>`+BOOKLANGS.map(l=>`<option ${l===S.blang?"selected":""}>${l}</option>`).join("");
+  // dropdown DINAMICO: solo i generi presenti nel catalogo (ordine canonico di GENRES) — i filtri vuoti non si offrono; il gestore assegna SEMPRE uno dei GENRES fissi
+  $("genreSel").innerHTML=`<option value="">${t.allGenre}</option>`+GENRES.filter(g=>BOOKS.some(b=>b.genre===g)).map(g=>`<option value="${g}" ${g===S.genre?"selected":""}>${t.genres[g]}</option>`).join("");
+  $("sortBtn").textContent="\u2195 "+(S.sort==="old"?t.sortOld:t.sortNew);
+  $("sortBtn").title=t.sortBy;
+  $("sortPop").innerHTML=`<button class="${S.sort==="new"?"on":""}" data-s="new">${t.sortFullNew}</button><button class="${S.sort==="old"?"on":""}" data-s="old">${t.sortFullOld}</button>`;
+  $("typeRow").innerHTML=
+    `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
+    `<button class="chip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
+    `<button class="chip wish ${S.type==="wish"?"on":""}" data-v="wish">${t.wishes}</button>`;
+  $("ageRow").innerHTML=
+    `<button class="chip ${S.age==="all"?"on":""}" data-v="all">${plain(t.allAges)}</button>`+
+    `<button class="chip ${S.age==="adults"?"on":""}" data-v="adults">${plain(t.adults)}</button>`+
+    `<button class="chip teen ${S.age==="teen"?"on":""}" data-v="teen">${plain(t.teen)}</button>`+
+    `<span class="kidwrap"><button class="chip kids ${S.age==="kids"?"on":""}" data-v="kids">${plain(t.kids)}</button>`+
+    (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${plain(t.subAges[a])}</button>`).join("")+`</span>`:"")+`</span>`; // fasce alla destra di Bambini, SENZA emoji (plain): il pacchetto entra su una riga anche su schermi stretti
+  $("q").placeholder=t.search;
+  $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
+  $("dice").textContent=t.dice; $("dice").title=t.dice;
+  $("footTxt").innerHTML=t.foot.map((s,i)=>`<p class="${i===1?"fproto":""}">${s}</p>`).join("");
+  renderAll();
+}
+
+// ============ EVENTS ============
+// Impressum: dati personali OFFUSCATI (char-code, anti-spam — MAI in HTML statico)
+const IMP_NAME=[65,110,100,114,101,97,32,80,105,114,97,115,60,98,114,62,90,119,105,110,103,108,105,115,116,114,97,223,101,32,50,54,60,98,114,62,49,48,53,53,53,32,66,101,114,108,105,110,60,98,114,62,68,101,117,116,115,99,104,108,97,110,100];
+const impStr=a=>a.map(c=>String.fromCharCode(c)).join("");
+$("legalLink").addEventListener("click",e=>{
+  e.preventDefault();
+  const L=$("legal");
+  if(!L.dataset.filled){
+    L.innerHTML=`
+    <h4>Impressum</h4>
+    <p>Angaben gemäß § 5 DDG. Verantwortlich für den Inhalt dieser Website (nichtkommerzielles Gemeinschaftsprojekt):</p>
+    <p>${impStr(IMP_NAME)}</p>
+    <p>E-Mail: ${SITE_INFO}</p>
+    <p>Verantwortlich nach § 18 Abs. 2 MStV: wie oben.</p>
+    <h4>Datenschutzerklärung</h4>
+    <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Im Browser werden nur die gewählten Einstellungen (Sprache, Thema, Sortierung, Ansicht, Kiez und Buchsprache) lokal gespeichert (localStorage) und nicht übertragen.</p>
+    <p>Buchcover werden von externen Anbietern (u.a. Open Library) geladen; dabei werden technisch notwendige Daten (u.a. die IP-Adresse) an den jeweiligen Anbieter übermittelt (Hinweis nach § 27 MDStV / § 5 DDG). Ohne Verbindung oder ohne Cover wird ein farbiger Platzhalter angezeigt.</p>
+    <p>Angebote und Wünsche werden über ein Google-Formular eingesammelt und vor der Veröffentlichung vom Betreiber geprüft; dabei gelten die Datenschutzhinweise von Google. Kontaktdaten werden niemals auf dieser Website veröffentlicht.</p>
+    <p>Kontaktangaben (z. B. Name, E-Mail-Adresse), die über das Formular oder per E-Mail eingehen, werden vom Betreiber ausschließlich zur Vermittlung von Ausleihen und für Rückfragen gespeichert und verarbeitet (Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse am Betrieb der Plattform). Sie werden nicht auf dieser Website veröffentlicht, nicht an Dritte weitergegeben (außer soweit für die Vermittlung erforderlich) und so lange gespeichert, wie die zugehörigen Angebote oder Wünsche im Katalog geführt werden. Auf Wunsch werden die Kontaktdaten gelöscht — in diesem Fall werden auch die zugehörigen Einträge aus dem Katalog entfernt. Die Bearbeitung erfolgt teilweise automatisiert als unterstützendes Werkzeug des Betreibers; es gibt keine vollautomatisierten Entscheidungen mit rechtlicher Wirkung, und alle Vorgänge bleiben beim Betreiber einsehbar.</p>
+    <p>Hosting: GitHub Pages (github.com); es gilt die Datenschutzerklärung von GitHub.</p>
+    <h4>Betroffenenrechte</h4>
+    <p>Sie haben das Recht auf Auskunft, Berichtigung, Löschung, Einschränkung der Verarbeitung und Widerspruch gegen die Verarbeitung Ihrer personenbezogenen Daten sowie das Recht, sich bei einer Datenschutz-Aufsichtsbehörde zu beschweren. Anfragen richten Sie bitte per E-Mail an die oben genannte Adresse.</p>
+    <h4>Hinweis zum Einsatz von KI</h4>
+    <p>Diese Website und ihr Betrieb werden mit Unterstützung von KI-Werkzeugen entwickelt und gepflegt (u. a. Texterstellung und -bearbeitung, technische Wartung, Unterstützung bei der Vermittlungs-Korrespondenz). Nutzer interagieren dabei nicht direkt mit KI-Systemen; die KI-Werkzeuge handeln als unterstützende Werkzeuge des Betreibers und unter dessen Verantwortung.</p>
+    <h4>Nutzungshinweise &amp; Haftungsausschluss</h4>
+    <p>La Diffusa ist ein nichtkommerzielles Gemeinschaftsprojekt, das Menschen für private Buchausleihen in Kontakt bringt. Ausleihen, Treffen, Fristen und Zustand der Bücher sind Vereinbarungen ausschließlich zwischen den beteiligten Personen; der Betreiber ist daran nicht beteiligt und übernimmt keine Verantwortung oder Haftung für Inhalte, Treffen, Schäden oder das Verhalten Dritter.</p>
+    <p>Die Community-Regeln (z. B. bis zu 3 Bücher pro Altersgruppe, faire Warteschlange) sind Gepflogenheiten der Gemeinschaft, keine vertraglichen Pflichten des Betreibers. Eine Garantie für Verfügbarkeit oder Richtigkeit der Inhalte besteht nicht. Die Haftung des Betreibers ist — soweit gesetzlich zulässig — auf Vorsatz und grobe Fahrlässigkeit beschränkt.</p>`;
+    L.dataset.filled="1";
+  }
+  L.classList.toggle("open");
+  if(L.classList.contains("open"))L.scrollIntoView({behavior:"smooth"});
+});
+$("howFaq").addEventListener("click",()=>{
+  const f=$("faq"); f.open=true;
+  try { f.scrollIntoView({behavior:"smooth",block:"start"}); } catch(e){}
+});
+function toast(html,dur){
+  let c=document.getElementById("toasts");
+  if(!c){c=document.createElement("div");c.id="toasts";c.className="toasts";document.body.appendChild(c);}
+  const d=document.createElement("div");d.className="toast";d.innerHTML=html;
+  d.addEventListener("click",()=>d.remove());
+  c.appendChild(d);
+  setTimeout(()=>{if(d.parentNode)d.remove()},dur||5000);
+}
+$("dice").addEventListener("click",()=>{
+  const list=filtered(); if(!list.length)return;
+  const b=list[Math.floor(Math.random()*list.length)];
+  const idx=BOOKS.indexOf(b);
+  const all=document.querySelectorAll(`[data-idx="${idx}"]`);
+  const el=[...all].find(el=>el.offsetParent!==null) || all[0];
+  if(!el)return;
+  el.classList.remove("flash");
+  void el.offsetWidth; // riavvia l'animazione
+  el.classList.add("flash");
+  try { el.scrollIntoView({block:"center"}); } catch(e){}
+  const t=T[S.lang];
+  toast("<b>🎲 "+t.diceMsg+":</b><br>«"+b.title+"»"+(b.author?" — "+b.author:"")+"<div class=\"thint\">"+t.diceHint+"</div>");
+  try {
+    const y=el.getBoundingClientRect().top + window.scrollY - (window.innerHeight/2) + (el.offsetHeight/2);
+    if (Math.abs(window.scrollY-y)>4) window.scrollTo(0,Math.max(0,y));
+  } catch(e){}
+});
+$("totop").addEventListener("click",()=>{ try{window.scrollTo({top:0});}catch(e){window.scrollTo(0,0);} });
+window.addEventListener("scroll",()=>{ $("totop").classList.toggle("show",window.scrollY>400); },{passive:true});
+document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+$("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;try{store.setItem("bb-kiez",S.kiez);}catch(err){} renderAll();});
+$("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;try{store.setItem("bb-blang",S.blang);}catch(err){} renderAll();});
+$("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
+function setSort(v){ S.sort=v; try{store.setItem("bb-sort",S.sort);}catch(err){} renderAll(); applyLang(); }
+function toggleSortPop(){
+  const p=$("sortPop"),b=$("sortBtn");
+  if(p.style.display==="block"){ p.style.display="none"; return; }
+  const r=b.getBoundingClientRect();
+  p.style.position="fixed";
+  p.style.top=Math.min(r.bottom+6,window.innerHeight-220)+"px";
+  p.style.right=Math.max(8,window.innerWidth-r.right)+"px";
+  p.style.zIndex="9999";
+  p.style.display="block";
+}
+$("sortBtn").addEventListener("click",e=>{ e.stopPropagation(); toggleSortPop(); });
+$("sortPop").addEventListener("click",e=>{ const b=e.target.closest("button"); if(!b)return; setSort(b.dataset.s); $("sortPop").style.display="none"; });
+document.addEventListener("click",e=>{ if(!e.target.closest(".vswitch")){ $("sortPop").style.display="none"; } });
+$("typeRow").addEventListener("click",e=>{
+  const c=e.target.closest(".chip"); if(!c)return;
+  S.type = S.type===c.dataset.v ? "all" : c.dataset.v;
+  applyLang();
+});
+$("ageRow").addEventListener("click",e=>{
+  const c=e.target.closest(".chip"); if(!c)return;
+  if(c.closest(".sub")){ S.subAge = S.subAge===c.dataset.v ? "" : c.dataset.v; } // fascia precisa: toggle, l'età grande resta Bambini
+  else { S.age=c.dataset.v; S.subAge=""; }
+  applyLang();
+});
+let qTimer=null; // debounce ricerca (~150ms): niente re-render a ogni tasto
+$("q").addEventListener("input",e=>{clearTimeout(qTimer);const v=e.target.value;qTimer=setTimeout(()=>{S.q=v;renderAll();},150);});
+$("vList").addEventListener("click",()=>{S.view="list";renderAll();});
+$("vTable").addEventListener("click",()=>{S.view="grid";renderAll();});
+$("langSel").addEventListener("change",e=>{S.lang=e.target.value;try{store.setItem("bb-lang",S.lang);}catch(err){} applyLang();});
+
+applyLang();
+</script>
+</body>
+</html>
+
