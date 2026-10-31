@@ -632,7 +632,7 @@ function cardRow(b){
   </div>`;
 }
 
-function fbTit(s){const w=String(s).split(" ");let out=[];for(const x of w){if(out.length>=3||((out.join(" ")+" "+x).trim().length>18))break;out.push(x);}if(!out.length)out=[String(s).slice(0,12)];return out.join(" ")+"\u2026";}
+function fbTit(s){const w=String(s).split(" ");let out=[],tr=false;for(const x of w){if(out.length>=3){tr=true;break;}if(((out.join(" ")+" "+x).trim().length)>18){tr=true;break;}out.push(x);}if(!out.length){out=[String(s).slice(0,12)];tr=true;}return out.join(" ")+(tr?"\u2026":"");}
 function gib(n){const s="leri tavo smindi queno malto riveso fando piltri smanco diveto larbo sumi crovel opende travison lismo fenuto gardo beltri omavi sundi pelcro tarve monti rilu spado gendi flimo varbo santro milve dospo crande luve tarbo smendi quilo prano velto brindi salto merove quisto pandi fluvire scendo rabolto tinvera mostri plendi cavalto ronvelo smito peltri vondo lanzuri fresco mantivo splendo rivelto crando borvelo tindi sampo vrelto mando squila trivento palombo vindre scolta mervida quarvi blondi spresso talvi".split(" ");let o=[];for(let k=0;k<n;k++){o.push(s[(k*7+3)%s.length]);if(k%7===3||k%11===5)o[o.length-1]+=".";}return o.join(" ");}
 function ageKey(b){return b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}
 function ageTint(hex,age){
