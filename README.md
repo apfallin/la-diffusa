@@ -1,8 +1,8 @@
 # La Diffusa
 
-**la biblioteca diffusa / die verteilte Bibliothek / the distributed library**
+**lo scaffale diffuso / das verteilte Bücherregal / the distributed bookshelf**
 
-A distributed neighborhood library for Berlin: books in foreign languages, lent between neighbors, Kiez by Kiez.
+A distributed neighborhood bookshelf for Berlin: books in foreign languages, lent between neighbors, Kiez by Kiez.
 
 👉 **Live site:** <https://apfallin.github.io/la-diffusa/>
 
@@ -30,7 +30,7 @@ Berlin's public libraries are excellent, but they carry very few international t
 - New books arrive through a short Google Form; a small automated keeper reads the responses, verifies ISBNs and updates the catalog (a human curator reviews anything unusual).
 - Loans are coordinated via the project's email alias: requests are matched to lenders, contacts shared only after the lender's go-ahead.
 - Book covers come from the [Open Library](https://openlibrary.org) API by ISBN, with a graceful illustrated fallback when no cover exists.
-- Trilingual interface: Italiano / Deutsch / English, with dark mode ("night library"), FAQ and an Impressum & Datenschutz section.
+- Trilingual interface: Italiano / Deutsch / English, with dark mode ("night shelf"), FAQ and an Impressum & Datenschutz section.
 
 ## Roadmap
 
