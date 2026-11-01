@@ -142,8 +142,9 @@
   :root.dark .fav{background:rgba(15,15,15,.65);color:#8a8a8a}
   :root.dark .fav.on{color:#e57ba3}
   .fav.dsfav{position:absolute;bottom:.55rem;right:.55rem;z-index:6;font-size:1.2rem}
-  .fav.inl{position:static;background:transparent;font-size:1.3rem;width:auto;height:auto;align-self:center;flex:0 0 auto;line-height:1}
-  .favwrap{margin-left:.15rem;align-self:center}
+  .fav.inl{position:absolute;top:50%;right:1.05rem;transform:translateY(-50%);background:transparent;font-size:1.3rem;line-height:1;padding:0}
+  .fav.inl:hover{transform:translateY(-50%) scale(1.15)}
+  .favwrap{display:contents}
   .favchip{font-size:.74rem;padding:.22rem .55rem;min-height:1.7rem;display:inline-flex;align-items:center}
   .chip.kids.on{background:var(--green);border-color:var(--green);color:#fff}
   .qwrap{position:relative;margin-top:.55rem}
@@ -200,7 +201,7 @@
   .sheet select.ctl{width:100%;margin:.3rem 0 .1rem}
   .sheet .contact.ghost{background:transparent;border:1px solid var(--line);color:var(--ink);margin-top:.5rem}
   /* ---------- list view ---------- */
-  .book{display:flex;gap:.7rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.55rem;box-shadow:var(--shadow);border-left:4px solid var(--green);transition:transform .12s;cursor:pointer}
+  .book{display:flex;gap:.7rem;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.7rem .8rem;margin-bottom:.55rem;box-shadow:var(--shadow);border-left:4px solid var(--green);transition:transform .12s;cursor:pointer;position:relative}
   .book:hover{transform:translateY(-1px)}
   .book.wish{border-left-color:var(--terra);background:var(--terrabg)}
   .book.lent{border-left-color:var(--mut);opacity:.65}
