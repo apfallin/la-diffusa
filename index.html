@@ -439,7 +439,7 @@ const T = {
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
     wishOwner:"desiderato da una persona del quartiere",
     empty:"Nessun libro corrisponde ai filtri.",
-    favLbl:"❤ Preferiti",favAdd:"Aggiungi ai preferiti",favRem:"Togli dai preferiti",favEmpty:"Nessun preferito ancora: tocca il ♥ su un libro per ritrovarlo qui.",
+    favLbl:"❤ Preferiti",favAdd:"Aggiungi ai preferiti",favRem:"Togli dai preferiti",favEmpty:"Nessun preferito ancora: tocca il ♥ su un libro per ritrovarlo qui.",favOn:"❤ Solo i tuoi preferiti",favOff:"Tutti i libri del catalogo",
     askOffer:"📨 Scrivi a chi lo offre",
     askWish:"💬 Rispondi a questo desiderio",
     contactNote:"Nessun contatto viene pubblicato sul sito: il tuo messaggio passa dal gestore, che lo inoltra alla persona giusta.",
@@ -499,7 +499,7 @@ const T = {
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
     wishOwner:"gesucht von jemandem aus dem Kiez",
     empty:"Keine Bücher entsprechen den Filtern.",
-    favLbl:"❤ Favoriten",favAdd:"Zu Favoriten hinzufügen",favRem:"Aus Favoriten entfernen",favEmpty:"Noch keine Favoriten: tippe das ♥ eines Buches an, um es hier wiederzufinden.",
+    favLbl:"❤ Favoriten",favAdd:"Zu Favoriten hinzufügen",favRem:"Aus Favoriten entfernen",favEmpty:"Noch keine Favoriten: tippe das ♥ eines Buches an, um es hier wiederzufinden.",favOn:"❤ Nur deine Favoriten",favOff:"Alle Bücher im Katalog",
     askOffer:"📨 Schreib dem Anbieter",
     askWish:"💬 Antworte auf diesen Wunsch",
     contactNote:"Keine Kontaktdaten werden auf der Website veröffentlicht: Deine Nachricht läuft über den Betreiber, der sie an die richtige Person weiterleitet.",
@@ -559,7 +559,7 @@ const T = {
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
     wishOwner:"wanted by someone in the neighbourhood",
     empty:"No books match the filters.",
-    favLbl:"❤ Favourites",favAdd:"Add to favourites",favRem:"Remove from favourites",favEmpty:"No favourites yet: tap a book's ♥ to find it again here.",
+    favLbl:"❤ Favourites",favAdd:"Add to favourites",favRem:"Remove from favourites",favEmpty:"No favourites yet: tap a book's ♥ to find it again here.",favOn:"❤ Only your favourites",favOff:"All the books in the catalogue",
     askOffer:"📨 Message the lender",
     askWish:"💬 Reply to this wish",
     contactNote:"No contact details are ever published on the site: your message goes through the keeper, who forwards it to the right person.",
@@ -956,7 +956,7 @@ let qTimer=null; // debounce ricerca (~150ms): niente re-render a ogni tasto
 $("q").addEventListener("input",e=>{clearTimeout(qTimer);const v=e.target.value;qTimer=setTimeout(()=>{S.q=v;renderAll();},150);});
 $("vList").addEventListener("click",()=>{S.view="list";renderAll();});
 $("vTable").addEventListener("click",()=>{S.view="grid";renderAll();});
-$("favChip").addEventListener("click",()=>{ S.fav=!S.fav; $("favChip").classList.toggle("on",S.fav); renderAll(); });
+$("favChip").addEventListener("click",()=>{ S.fav=!S.fav; $("favChip").classList.toggle("on",S.fav); renderAll(); toast(T[S.lang][S.fav?"favOn":"favOff"],2600); });
 $("langSel").addEventListener("change",e=>{S.lang=e.target.value;try{store.setItem("bb-lang",S.lang);}catch(err){} applyLang();});
 
 applyLang();
