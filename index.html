@@ -136,6 +136,15 @@
   .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
   .chip:hover{border-color:var(--terra)}
   .chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
+  .fav{position:absolute;top:.45rem;right:.45rem;z-index:6;width:1.7rem;height:1.7rem;border:none;border-radius:50%;background:rgba(255,255,255,.85);color:#9a9a9a;font-size:1.05rem;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,color .12s}
+  .fav:hover{transform:scale(1.15)}
+  .fav.on{color:#ae2a56;background:rgba(255,255,255,.94)}
+  :root.dark .fav{background:rgba(15,15,15,.65);color:#8a8a8a}
+  :root.dark .fav.on{color:#e57ba3}
+  .fav.sheetfav{position:static;background:transparent;font-size:1.35rem;width:auto;height:auto}
+  .fav.inl{position:static;background:transparent;font-size:.95rem;width:auto;height:auto;margin-left:auto;align-self:center;flex:0 0 auto}
+  .favwrap{margin-left:auto;align-self:center}
+  .favchip{font-size:.74rem;padding:.22rem .55rem;min-height:1.7rem;display:inline-flex;align-items:center}
   .chip.kids.on{background:var(--green);border-color:var(--green);color:#fff}
   .qwrap{position:relative;margin-top:.55rem}
   .qwrap input{width:100%;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:.45rem 1rem .45rem 2.1rem;font-size:1rem;color:var(--ink);outline:none;transition:border-color .12s}
@@ -338,6 +347,7 @@
 <div class="viewbar">
   <span id="count"></span>
   <div style="display:flex;gap:.5rem;align-items:center">
+    <button class="chip favchip" id="favChip" aria-label="Preferiti"></button>
     <button class="dice" id="dice" title=""></button>
     <div class="vswitch">
     <button class="vbtn" id="vList"></button>
@@ -422,6 +432,7 @@ const T = {
     similarNote:(n)=>`piace <b>${n}</b>, cerca qualcosa di simile`,
     wishOwner:"desiderato da una persona del quartiere",
     empty:"Nessun libro corrisponde ai filtri.",
+    favLbl:"❤ Preferiti",favAdd:"Aggiungi ai preferiti",favRem:"Togli dai preferiti",favEmpty:"Nessun preferito ancora: tocca il ♥ su un libro per ritrovarlo qui.",
     askOffer:"📨 Scrivi a chi lo offre",
     askWish:"💬 Rispondi a questo desiderio",
     contactNote:"Nessun contatto viene pubblicato sul sito: il tuo messaggio passa dal gestore, che lo inoltra alla persona giusta.",
@@ -480,6 +491,7 @@ const T = {
     similarNote:(n)=>`mag <b>${n}</b>, sucht etwas Ähnliches`,
     wishOwner:"gesucht von jemandem aus dem Kiez",
     empty:"Keine Bücher entsprechen den Filtern.",
+    favLbl:"❤ Favoriten",favAdd:"Zu Favoriten hinzufügen",favRem:"Aus Favoriten entfernen",favEmpty:"Noch keine Favoriten: tippe das ♥ eines Buches an, um es hier wiederzufinden.",
     askOffer:"📨 Schreib dem Anbieter",
     askWish:"💬 Antworte auf diesen Wunsch",
     contactNote:"Keine Kontaktdaten werden auf der Website veröffentlicht: Deine Nachricht läuft über den Betreiber, der sie an die richtige Person weiterleitet.",
@@ -538,6 +550,7 @@ const T = {
     similarNote:(n)=>`likes <b>${n}</b>, looking for something similar`,
     wishOwner:"wanted by someone in the neighbourhood",
     empty:"No books match the filters.",
+    favLbl:"❤ Favourites",favAdd:"Add to favourites",favRem:"Remove from favourites",favEmpty:"No favourites yet: tap a book's ♥ to find it again here.",
     askOffer:"📨 Message the lender",
     askWish:"💬 Reply to this wish",
     contactNote:"No contact details are ever published on the site: your message goes through the keeper, who forwards it to the right person.",
@@ -572,8 +585,15 @@ const store = (()=>{ try { return window.localStorage; } catch(e){ return {getIt
 // Lingua UI: se l'utente ha scelto una lingua manualmente → quella (salvata in locale);
 // altrimenti auto-rilevata dal browser (it/de), fallback inglese. Tema: chiaro standard per tutti.
 const autoLang = (()=>{ try { const l=(navigator.language||"en").slice(0,2).toLowerCase(); return l==="it"?"it":l==="de"?"de":"en"; } catch(e){ return "en"; } })();
-const S = {lang:store.getItem("bb-lang")||autoLang, blang:store.getItem("bb-blang")||"", kiez:store.getItem("bb-kiez")||"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light"}; // kiez e lingua libri: ricordati alla visita successiva (localStorage)
+const S = {lang:store.getItem("bb-lang")||autoLang, blang:store.getItem("bb-blang")||"", kiez:store.getItem("bb-kiez")||"", age:"all", subAge:"", type:"all", genre:"", q:"", view:"grid", sort:store.getItem("bb-sort")||"new", theme:store.getItem("bb-theme")||"light", fav:false}; // kiez e lingua libri: ricordati alla visita successiva (localStorage); preferiti salvati in bb-favs, il filtro ❤ no
 const $ = id => document.getElementById(id);
+// ============ PREFERITI (localStorage, per dispositivo come Berlin Events) ============
+function favKey(b){ return b.isbn ? "isbn:"+b.isbn : (b.type==="wish"?"w:":"b:")+b.title+"|"+(b.author||""); } // chiave stabile: ISBN se c'è, altrimenti titolo|autore
+let FAVS=[]; try{ FAVS=JSON.parse(store.getItem("bb-favs")||"[]")||[]; }catch(e){ FAVS=[]; }
+function isFav(b){ return FAVS.includes(favKey(b)); }
+function paintFavs(k){ document.querySelectorAll("[data-fk]").forEach(el=>{ if(k&&el.dataset.fk!==k)return; const on=FAVS.includes(el.dataset.fk); el.classList.toggle("on",on); el.textContent=on?"♥":"♡"; el.title=on?T[S.lang].favRem:T[S.lang].favAdd; }); }
+function toggleFav(b,ev){ if(ev){ev.stopPropagation();ev.preventDefault();} const k=favKey(b); const i=FAVS.indexOf(k); if(i<0)FAVS.push(k);else FAVS.splice(i,1); try{ store.setItem("bb-favs",JSON.stringify(FAVS)); }catch(e){} paintFavs(k); if(S.fav) renderAll(); }
+function heartBtn(b,cls){ const on=isFav(b); const lb=on?T[S.lang].favRem:T[S.lang].favAdd; return `<button class="fav${cls?" "+cls:""}${on?" on":""}" data-fk="${esc(favKey(b))}" title="${lb}" aria-label="${lb}" onclick="event.stopPropagation();toggleFav(BOOKS[${BOOKS.indexOf(b)}],event)">${on?"♥":"♡"}</button>`; }
 // Anti HTML-injection: i campi da form (titolo/autore/desc/note) sono testo NON fidato — sempre escappati al rendering
 const esc = s => String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#39;");
 const plain = s => String(s).replace(/^[^a-zA-Z0-9à-ÿÀ-ÿ]+/u,"").trim(); // toglie l'emoji iniziale: chip età compatte senza emoji (emoji restano in badge/pillole/sottofasce)
@@ -603,6 +623,7 @@ function filtered(){
       S.age==="teen" ? b.age==="12+" : b.age==="adults")) &&
     (!S.subAge || b.age===S.subAge) &&
     (S.type==="all"||b.type===S.type) &&
+    (!S.fav || isFav(b)) &&
     (!S.genre||b.genre===S.genre) &&
     (!q || (b.title+" "+b.author+" "+b.lang).toLowerCase().includes(q))
   );
@@ -626,7 +647,7 @@ function cardRow(b){
   return `<div class="book ${b.type==="wish"?"wish":""} ${b.status==="lent"?"lent":""}" data-idx="${BOOKS.indexOf(b)}" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">
     <div class="cover" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"M")}<span class="fb">${b.type==="wish"?"✨":b.title.charAt(0)}</span></div>
     <div class="bbody">
-      <div class="bhead"><span class="btitle">${esc(b.title)}</span><span class="bauthor">${b.author!=="—"?esc(b.author):""}</span></div>
+      <div class="bhead"><span class="btitle">${esc(b.title)}</span><span class="bauthor">${b.author!=="—"?esc(b.author):""}</span><span class="favwrap">${heartBtn(b,"inl")}</span></div>
       <div class="bmeta">${pills}</div>
     </div>
   </div>`;
@@ -667,6 +688,7 @@ function gridCells(list){
         ${badge?`<span class="badge ${badgeCls}">${badge}</span>`:""}
         <span class="fb ${b.type==="wish"?"":`fb-${b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}`}">${fbPage(b)}</span>
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
+        ${heartBtn(b)}
       </div>
       <div class="ginfo">
         <div class="gtitle${b.type==="wish"?" wphrase":""}" title="${esc(b.title+(b.author&&b.author!=="—"?" — "+b.author:""))}">${esc(b.title)}</div>
@@ -694,7 +716,7 @@ function openSheet(b){
   ].join("");
   const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
-    `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="grab"></div><div class="closeRow"><button class="fav sheetfav${isFav(b)?" on":""}" data-fk="${esc(favKey(b))}" title="${isFav(b)?t.favRem:t.favAdd}" aria-label="${isFav(b)?t.favRem:t.favAdd}" onclick="event.stopPropagation();toggleFav(BOOKS[${BOOKS.indexOf(b)}],event)">${isFav(b)?"♥":"♡"}</button><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
     `<div class="dtitle">${esc(b.title)}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
@@ -777,9 +799,9 @@ $("overlay").addEventListener("click",e=>{ if(e.target.id==="overlay") closeShee
 
 function sortedList(list){ return [...list].sort((a,b)=>{ if(S.sort==="new") return String(b.added||"").localeCompare(String(a.added||"")); return String(a.added||"").localeCompare(String(b.added||"")); }); }
 function renderAll(){
-  const t=T[S.lang], list=sortedList(filtered());
-  $("list").innerHTML = list.length ? list.map(cardRow).join("") : `<p class="empty">${t.empty}</p>`;
-  $("table").innerHTML = list.length ? gridCells(list) : `<p class="empty">${t.empty}</p>`;
+  const t=T[S.lang], list=sortedList(filtered()), em=(S.fav&&list.length===0)?t.favEmpty:t.empty;
+  $("list").innerHTML = list.length ? list.map(cardRow).join("") : `<p class="empty">${em}</p>`;
+  $("table").innerHTML = list.length ? gridCells(list) : `<p class="empty">${em}</p>`;
   $("count").textContent = t.count(list.length);
   $("list").style.display = S.view==="list"?"":"none";
   $("table").style.display = S.view!=="list"?"":"none";
@@ -809,6 +831,8 @@ function applyLang(){
   $("sortBtn").textContent="\u2195 "+(S.sort==="old"?t.sortOld:t.sortNew);
   $("sortBtn").title=t.sortBy;
   $("sortPop").innerHTML=`<button class="${S.sort==="new"?"on":""}" data-s="new">${t.sortFullNew}</button><button class="${S.sort==="old"?"on":""}" data-s="old">${t.sortFullOld}</button>`;
+  $("favChip").textContent=t.favLbl;
+  $("favChip").classList.toggle("on",S.fav);
   $("typeRow").innerHTML=
     `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
     `<button class="chip offer ${S.type==="offer"?"on":""}" data-v="offer">${t.offers}</button>`+
@@ -923,6 +947,7 @@ let qTimer=null; // debounce ricerca (~150ms): niente re-render a ogni tasto
 $("q").addEventListener("input",e=>{clearTimeout(qTimer);const v=e.target.value;qTimer=setTimeout(()=>{S.q=v;renderAll();},150);});
 $("vList").addEventListener("click",()=>{S.view="list";renderAll();});
 $("vTable").addEventListener("click",()=>{S.view="grid";renderAll();});
+$("favChip").addEventListener("click",()=>{ S.fav=!S.fav; $("favChip").classList.toggle("on",S.fav); renderAll(); });
 $("langSel").addEventListener("change",e=>{S.lang=e.target.value;try{store.setItem("bb-lang",S.lang);}catch(err){} applyLang();});
 
 applyLang();
