@@ -145,7 +145,11 @@
   .fav.inl{position:absolute;top:50%;right:1.05rem;transform:translateY(-50%);background:transparent;font-size:1.3rem;line-height:1;padding:0}
   .fav.inl:hover{transform:translateY(-50%) scale(1.15)}
   .favwrap{display:contents}
-  .favchip{font-size:.74rem;padding:.22rem .55rem;min-height:1.7rem;display:inline-flex;align-items:center}
+  .favchip{border:1px solid var(--terraline);border-radius:999px;background:var(--terrabg);color:var(--terra);font-size:1rem;line-height:1;width:1.95rem;height:1.95rem;padding:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;transition:all .12s}
+  .favchip:hover{transform:scale(1.08)}
+  .favchip.on{background:#ae2a56;border-color:#ae2a56;color:#fff}
+  :root.dark .favchip{background:#32261f;border-color:#4d3a2e;color:#e0937a}
+  :root.dark .favchip.on{background:#e57ba3;border-color:#e57ba3;color:#211d17}
   .chip.kids.on{background:var(--green);border-color:var(--green);color:#fff}
   .qwrap{position:relative;margin-top:.55rem}
   .qwrap input{width:100%;border:1px solid var(--line);border-radius:999px;background:var(--paper);padding:.45rem 1rem .45rem 2.1rem;font-size:1rem;color:var(--ink);outline:none;transition:border-color .12s}
@@ -157,7 +161,7 @@
   .vswitch{display:flex;border:1px solid var(--line);border-radius:.55rem;overflow:visible;background:var(--card)}
   .vbtn{border:none;background:transparent;padding:.25rem .7rem;font-size:.78rem;cursor:pointer;color:var(--mut)}
   .vbtn.on{background:var(--ink);color:var(--paper)}
-  .dice{border:1px solid var(--terraline);border-radius:999px;background:var(--terrabg);color:var(--terra);font-size:.78rem;padding:.3rem .8rem;cursor:pointer;font-weight:600}
+  .dice{border:1px solid var(--terraline);border-radius:999px;background:var(--terrabg);color:var(--terra);font-size:1rem;line-height:1;width:1.95rem;height:1.95rem;padding:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;flex:0 0 auto;font-weight:600}
   .dice:active{transform:scale(.95)}
   .toasts{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:120;display:flex;flex-direction:column;gap:.5rem;width:min(92vw,26rem)}
   .toast{background:var(--card);border:1.5px solid var(--terra);border-radius:var(--radius);box-shadow:0 14px 44px rgba(40,30,20,.4);padding:1rem 1.2rem;font-size:.95rem;line-height:1.45;cursor:pointer;animation:toastin .35s ease;text-align:center}
@@ -836,7 +840,7 @@ function applyLang(){
   $("sortBtn").textContent="\u2195 "+(S.sort==="old"?t.sortOld:t.sortNew);
   $("sortBtn").title=t.sortBy;
   $("sortPop").innerHTML=`<button class="${S.sort==="new"?"on":""}" data-s="new">${t.sortFullNew}</button><button class="${S.sort==="old"?"on":""}" data-s="old">${t.sortFullOld}</button>`;
-  $("favChip").textContent=t.favLbl;
+  $("favChip").textContent="♥"; $("favChip").title=t.favLbl; $("favChip").setAttribute("aria-label",t.favLbl);
   $("favChip").classList.toggle("on",S.fav);
   $("typeRow").innerHTML=
     `<button class="chip ${S.type==="all"?"on":""}" data-v="all">${t.allType}</button>`+
@@ -850,7 +854,7 @@ function applyLang(){
     (S.age==="kids"?`<span class="agechips sub show">`+Object.keys(t.subAges).map(a=>`<button class="chip kids ${S.subAge===a?"on":""}" data-v="${a}">${plain(t.subAges[a])}</button>`).join("")+`</span>`:"")+`</span>`; // fasce alla destra di Bambini, SENZA emoji (plain): il pacchetto entra su una riga anche su schermi stretti
   $("q").placeholder=t.search;
   $("vList").textContent=t.vList; $("vTable").textContent=t.vTable;
-  $("dice").textContent=t.dice; $("dice").title=t.dice;
+  $("dice").textContent="🎲"; $("dice").title=t.dice; $("dice").setAttribute("aria-label",t.dice);
   $("footTxt").innerHTML=t.foot.map((s,i)=>`<p class="${i===1?"fproto":""}">${s}</p>`).join("");
   renderAll();
 }
