@@ -11,6 +11,7 @@
 <meta property="og:description" content="Libri in altre lingue, prestati tra vicini. I titoli che le biblioteche non hanno, Kiez per Kiez.">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://apfallin.github.io/la-diffusa/">
+<link rel="canonical" href="https://apfallin.github.io/la-diffusa/">
 <meta property="og:image" content="https://apfallin.github.io/la-diffusa/og-image.png">
 <meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
@@ -81,7 +82,6 @@
   details.how{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:.8rem 1rem;margin-bottom:1rem;box-shadow:var(--shadow)}
   details.how summary{cursor:pointer;font-size:.95rem;font-weight:600;font-family:var(--font-head);list-style:none;color:var(--greendk)}
   details.how summary::-webkit-details-marker{display:none}
-  details.how summary::before{content:"ℹ️ "}
   details.how[open] summary{margin-bottom:.35rem}
   .how ol{padding-left:1.2rem;font-size:.85rem}
   .how ol li{margin-bottom:.25rem}
@@ -349,7 +349,7 @@
 </div>
 <div id="list"></div>
 <button class="totop" id="totop" aria-label="Torna su">↑</button>
-<div class="overlay" id="overlay" style="display:none">
+<div class="overlay" id="overlay" role="dialog" aria-modal="true" style="display:none">
   <div class="sheet" id="sheet"></div>
 </div>
 <div id="table" style="display:none"></div>
