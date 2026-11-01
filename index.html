@@ -136,12 +136,12 @@
   .chip{flex:0 0 auto;border:1px solid var(--line);border-radius:999px;background:transparent;color:var(--ink);font-size:.78rem;padding:.28rem .7rem;cursor:pointer;transition:all .12s}
   .chip:hover{border-color:var(--terra)}
   .chip.on{background:var(--terra);color:#fff;border-color:var(--terra)}
-  .fav{position:absolute;top:.45rem;right:.45rem;z-index:6;width:1.7rem;height:1.7rem;border:none;border-radius:50%;background:rgba(255,255,255,.85);color:#9a9a9a;font-size:1.05rem;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,color .12s}
+  .fav{position:absolute;bottom:.45rem;right:.45rem;z-index:6;width:1.7rem;height:1.7rem;border:none;border-radius:50%;background:rgba(255,255,255,.85);color:#9a9a9a;font-size:1.05rem;line-height:1;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:transform .12s,color .12s}
   .fav:hover{transform:scale(1.15)}
   .fav.on{color:#ae2a56;background:rgba(255,255,255,.94)}
   :root.dark .fav{background:rgba(15,15,15,.65);color:#8a8a8a}
   :root.dark .fav.on{color:#e57ba3}
-  .fav.sheetfav{position:static;background:transparent;font-size:1.35rem;width:auto;height:auto}
+  .fav.dsfav{position:absolute;bottom:.55rem;right:.55rem;z-index:6;font-size:1.2rem}
   .fav.inl{position:static;background:transparent;font-size:.95rem;width:auto;height:auto;margin-left:auto;align-self:center;flex:0 0 auto}
   .favwrap{margin-left:auto;align-self:center}
   .favchip{font-size:.74rem;padding:.22rem .55rem;min-height:1.7rem;display:inline-flex;align-items:center}
@@ -716,8 +716,8 @@ function openSheet(b){
   ].join("");
   const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
-    `<div class="grab"></div><div class="closeRow"><button class="fav sheetfav${isFav(b)?" on":""}" data-fk="${esc(favKey(b))}" title="${isFav(b)?t.favRem:t.favAdd}" aria-label="${isFav(b)?t.favRem:t.favAdd}" onclick="event.stopPropagation();toggleFav(BOOKS[${BOOKS.indexOf(b)}],event)">${isFav(b)?"♥":"♡"}</button><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div></div>`+
+    `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
+    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div><button class="fav dsfav${isFav(b)?" on":""}" data-fk="${esc(favKey(b))}" title="${isFav(b)?t.favRem:t.favAdd}" aria-label="${isFav(b)?t.favRem:t.favAdd}" onclick="event.stopPropagation();toggleFav(BOOKS[${BOOKS.indexOf(b)}],event)">${isFav(b)?"♥":"♡"}</button></div>`+
     `<div class="dtitle">${esc(b.title)}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
