@@ -288,6 +288,7 @@
   #legal.open{display:block}
   #legal h4{margin:.7rem 0 .2rem;color:var(--ink);font-size:.78rem}
   #legal p{margin:.25rem 0}
+  #legal .legalnote{font-style:italic;font-size:.7rem;color:var(--mut)}
   /* ---------- desktop (laptop) pass ---------- */
   @media (min-width:48rem){
     .overlay{align-items:center;padding:1.5rem}
@@ -874,7 +875,7 @@ $("legalLink").addEventListener("click",e=>{
     <p>E-Mail: ${SITE_INFO}</p>
     <p>Verantwortlich nach § 18 Abs. 2 MStV: wie oben.</p>
     <h4>Datenschutzerklärung</h4>
-    <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Im Browser werden nur die gewählten Einstellungen (Sprache, Thema, Sortierung, Ansicht, Kiez und Buchsprache) lokal gespeichert (localStorage) und nicht übertragen.</p>
+    <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Im Browser werden nur die gewählten Einstellungen (Sprache, Thema, Sortierung, Ansicht, Kiez und Buchsprache) sowie deine Favoriten (♥) lokal gespeichert (localStorage) und nicht übertragen.</p>
     <p>Buchcover werden von externen Anbietern (u.a. Open Library) geladen; dabei werden technisch notwendige Daten (u.a. die IP-Adresse) an den jeweiligen Anbieter übermittelt (Hinweis nach § 27 MDStV / § 5 DDG). Ohne Verbindung oder ohne Cover wird ein farbiger Platzhalter angezeigt.</p>
     <p>Angebote und Wünsche werden über ein Google-Formular eingesammelt und vor der Veröffentlichung vom Betreiber geprüft; dabei gelten die Datenschutzhinweise von Google. Kontaktdaten werden niemals auf dieser Website veröffentlicht.</p>
     <p>Kontaktangaben (z. B. Name, E-Mail-Adresse), die über das Formular oder per E-Mail eingehen, werden vom Betreiber ausschließlich zur Vermittlung von Ausleihen und für Rückfragen gespeichert und verarbeitet (Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse am Betrieb der Plattform). Sie werden nicht auf dieser Website veröffentlicht, nicht an Dritte weitergegeben (außer soweit für die Vermittlung erforderlich) und so lange gespeichert, wie die zugehörigen Angebote oder Wünsche im Katalog geführt werden. Auf Wunsch werden die Kontaktdaten gelöscht — in diesem Fall werden auch die zugehörigen Einträge aus dem Katalog entfernt. Die Bearbeitung erfolgt teilweise automatisiert als unterstützendes Werkzeug des Betreibers; es gibt keine vollautomatisierten Entscheidungen mit rechtlicher Wirkung, und alle Vorgänge bleiben beim Betreiber einsehbar.</p>
@@ -885,7 +886,37 @@ $("legalLink").addEventListener("click",e=>{
     <p>Diese Website und ihr Betrieb werden mit Unterstützung von KI-Werkzeugen entwickelt und gepflegt (u. a. Texterstellung und -bearbeitung, technische Wartung, Unterstützung bei der Vermittlungs-Korrespondenz). Nutzer interagieren dabei nicht direkt mit KI-Systemen; die KI-Werkzeuge handeln als unterstützende Werkzeuge des Betreibers und unter dessen Verantwortung.</p>
     <h4>Nutzungshinweise &amp; Haftungsausschluss</h4>
     <p>La Diffusa ist ein nichtkommerzielles Gemeinschaftsprojekt, das Menschen für private Buchausleihen in Kontakt bringt. Ausleihen, Treffen, Fristen und Zustand der Bücher sind Vereinbarungen ausschließlich zwischen den beteiligten Personen; der Betreiber ist daran nicht beteiligt und übernimmt keine Verantwortung oder Haftung für Inhalte, Treffen, Schäden oder das Verhalten Dritter.</p>
-    <p>Die Community-Regeln (z. B. bis zu 3 Bücher pro Altersgruppe, faire Warteschlange) sind Gepflogenheiten der Gemeinschaft, keine vertraglichen Pflichten des Betreibers. Eine Garantie für Verfügbarkeit oder Richtigkeit der Inhalte besteht nicht. Die Haftung des Betreibers ist — soweit gesetzlich zulässig — auf Vorsatz und grobe Fahrlässigkeit beschränkt.</p>`;
+    <p>Die Community-Regeln (z. B. bis zu 3 Bücher pro Altersgruppe, faire Warteschlange) sind Gepflogenheiten der Gemeinschaft, keine vertraglichen Pflichten des Betreibers. Eine Garantie für Verfügbarkeit oder Richtigkeit der Inhalte besteht nicht. Die Haftung des Betreibers ist — soweit gesetzlich zulässig — auf Vorsatz und grobe Fahrlässigkeit beschränkt.</p>
+    <h4>Italiano — traduzione non vincolante</h4>
+    <p class="legalnote">Questa traduzione è offerta solo per trasparenza; giuridicamente fa fede la versione tedesca sopra.</p>
+    <p><b>Impressum</b> — Dati ai sensi del § 5 DDG. Responsabile del contenuto di questo sito (progetto comunitario non commerciale):</p>
+    <p>${impStr(IMP_NAME)}</p>
+    <p>E-mail: ${SITE_INFO}</p>
+    <p>Responsabile ai sensi del § 18 comma 2 MStV: come sopra.</p>
+    <p><b>Informativa sulla privacy</b> — Questo sito non usa cookie né tracciamento. Nel browser vengono salvate, tramite localStorage, solo le impostazioni scelte (lingua, tema, ordinamento, vista, Kiez e lingua dei libri) e i tuoi preferiti (♥), senza trasmetterle.</p>
+    <p>Le copertine dei libri vengono caricate da fornitori esterni (tra cui Open Library); in tal caso dati tecnicamente necessari (tra cui l'indirizzo IP) vengono trasmessi al fornitore (nota ai sensi del § 27 MDStV / § 5 DDG). Senza connessione o senza copertina viene mostrato un segnaposto colorato.</p>
+    <p>Offerte e desideri vengono raccolti tramite un Google Form e verificati dal gestore prima della pubblicazione; valgono le note sulla privacy di Google. I dati di contatto non vengono mai pubblicati su questo sito.</p>
+    <p>I dati di contatto (es. nome, indirizzo email) che arrivano tramite il form o per email vengono salvati e trattati dal gestore esclusivamente per mediare i prestiti e per rispondere (base giuridica: art. 6 par. 1 lett. f GDPR — legittimo interesse al funzionamento della piattaforma). Non vengono pubblicati sul sito e non vengono ceduti a terzi (salvo quanto strettamente necessario alla mediazione); restano salvati finché le relative offerte o richieste sono in catalogo. Su richiesta vengono cancellati — in tal caso anche le voci corrispondenti vengono rimosse dal catalogo. La lavorazione avviene in parte in modo automatizzato come strumento di supporto del gestore; non esistono decisioni completamente automatizzate con effetti giuridici, e tutte le pratiche restano consultabili dal gestore.</p>
+    <p>Hosting: GitHub Pages (github.com); vale l'informativa sulla privacy di GitHub.</p>
+    <p><b>Diritti degli interessati</b> — Hai diritto di accesso ai tuoi dati, nonché di rettifica, cancellazione, limitazione del trattamento e opposizione al trattamento dei tuoi dati personali, e di presentare reclamo a un'autorità di controllo per la protezione dei dati. Le richieste vanno inviate per email all'indirizzo indicato sopra.</p>
+    <p><b>Nota sull'uso dell'IA</b> — Questo sito e la sua gestione sono sviluppati e mantenuti con il supporto di strumenti di IA (tra cui scrittura e revisione di testi, manutenzione tecnica, supporto alla corrispondenza di mediazione). Gli utenti non interagiscono direttamente con sistemi di IA; gli strumenti di IA agiscono come supporto del gestore, sotto la sua responsabilità.</p>
+    <p><b>Note d'uso e responsabilità</b> — La Diffusa è un progetto comunitario non commerciale che mette in contatto persone per prestiti di libri tra privati. Prestiti, incontri, tempi e stato dei libri sono accordi esclusivamente tra le persone coinvolte; il gestore non vi partecipa e non assume alcuna responsabilità per contenuti, incontri, danni o il comportamento di terzi.</p>
+    <p>Le regole della community (es. fino a 3 libri per fascia d'età, coda equa) sono consuetudini della comunità, non obblighi contrattuali del gestore. Non esiste garanzia di disponibilità o correttezza dei contenuti. La responsabilità del gestore è — per quanto legalmente consentito — limitata a dolo e colpa grave.</p>
+    <h4>English — unofficial translation</h4>
+    <p class="legalnote">This translation is provided for transparency only; the German version above is legally binding.</p>
+    <p><b>Impressum</b> — Information pursuant to § 5 DDG. Responsible for the content of this website (non-commercial community project):</p>
+    <p>${impStr(IMP_NAME)}</p>
+    <p>E-mail: ${SITE_INFO}</p>
+    <p>Responsible pursuant to § 18 (2) MStV: as above.</p>
+    <p><b>Privacy policy</b> — This website uses no cookies and no tracking. Only your chosen settings (language, theme, sorting, view, Kiez and book language) and your favourites (♥) are stored locally in your browser (localStorage) and never transmitted.</p>
+    <p>Book covers are loaded from external providers (including Open Library); technically necessary data (including your IP address) is transmitted to the respective provider (notice pursuant to § 27 MDStV / § 5 DDG). Without a connection or without a cover, a coloured placeholder is shown.</p>
+    <p>Offers and requests are collected via a Google Form and reviewed by the operator before publication; Google's privacy notices apply. Contact details are never published on this website.</p>
+    <p>Contact details (e.g. name, e-mail address) received via the form or by e-mail are stored and processed by the operator solely to arrange loans and to answer questions (legal basis: Art. 6 (1) (f) GDPR — legitimate interest in operating the platform). They are not published on this website and are not passed on to third parties (except as far as necessary for arranging a loan); they are kept for as long as the related offers or requests remain in the catalogue. Upon request they are deleted — in that case the related entries are also removed from the catalogue. Processing is partly automated as a supporting tool of the operator; there are no fully automated decisions with legal effect, and all records remain viewable by the operator.</p>
+    <p>Hosting: GitHub Pages (github.com); GitHub's privacy policy applies.</p>
+    <p><b>Your rights</b> — You have the right to access, rectify, erase and restrict the processing of your personal data, to object to processing, and to lodge a complaint with a data protection authority. Please send requests by e-mail to the address given above.</p>
+    <p><b>Note on the use of AI</b> — This website and its operation are developed and maintained with the support of AI tools (including writing and editing texts, technical maintenance, and assistance with loan correspondence). Users do not interact directly with AI systems; the AI tools act as supporting tools of the operator, under his responsibility.</p>
+    <p><b>Terms of use &amp; liability</b> — La Diffusa is a non-commercial community project that connects people for private book loans. Loans, meetings, timings and the condition of books are arrangements exclusively between the people involved; the operator takes no part in them and assumes no responsibility or liability for content, meetings, damage or the behaviour of third parties.</p>
+    <p>The community rules (e.g. up to 3 books per age group, fair queue) are community customs, not contractual obligations of the operator. There is no guarantee of availability or accuracy of the content. The operator's liability is — as far as legally permissible — limited to intent and gross negligence.</p>`;
     L.dataset.filled="1";
   }
   L.classList.toggle("open");
