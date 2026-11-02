@@ -249,21 +249,37 @@
   .gcell .fb::after{inset:.6rem}
   .gcell .fb .ft{font-family:var(--font-head);font-size:.72rem;font-weight:600;line-height:1.35;letter-spacing:.02em;text-align:center;max-width:86%;text-shadow:0 1px 2px rgba(0,0,0,.35)}
   /* copertine senza immagine: rilegature per fascia d'età sul colore del libro */
-  .gcell .fb.fb-teen::before,.gcell .fb.fb-teen::after,.gcell .fb.fb-kid::before,.gcell .fb.fb-kid::after{content:"";border:none;background:none;border-radius:0}
+  .gcell .fb.fb-teen::before,.gcell .fb.fb-teen::after,.gcell .fb.fb-03::before,.gcell .fb.fb-03::after,.gcell .fb.fb-36::before,.gcell .fb.fb-36::after,.gcell .fb.fb-69::before,.gcell .fb.fb-69::after,.gcell .fb.fb-912::before,.gcell .fb.fb-912::after{content:"";border:none;background:none;border-radius:0}
   .gcell .fb.fb-teen::before{content:"";position:absolute;inset:.45rem;border:1px solid rgba(255,252,244,.6);border-radius:.2rem}
   .gcell .fb.fb-teen::after{content:"";position:absolute;top:50%;left:50%;width:1.7rem;height:1.7rem;margin:-.85rem 0 0 -.85rem;transform:rotate(45deg);border:2px solid rgba(255,252,244,.75);border-radius:.22rem}
-  .gcell .fb.fb-kid{background:radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)}
-  .gcell .fb.fb-kid::before{content:"";position:absolute;top:1.15rem;left:50%;width:1.85rem;height:2.2rem;margin-left:-.925rem;border:none;border-radius:50%/55% 55% 45% 45%;background:radial-gradient(circle at 32% 26%, #fffdf8 0 32%, rgba(255,252,244,.92) 100%)} /* palloncino */
-  .gcell .fb.fb-kid::after{content:"";position:absolute;top:3.5rem;left:50%;width:1px;height:.85rem;margin-left:.08rem;transform:rotate(8deg);background:rgba(255,252,244,.75)} /* filo */
+  /* giardino che cresce: seme (0-3) → germoglio (3-6) → piantina (6-9) → alberello (9-12) */
+  .gcell .fb.fb-03::before{content:"";position:absolute;top:1.55rem;left:50%;width:.95rem;height:1.3rem;margin-left:-.475rem;border:none;border-radius:50%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 30%, #fffdf8 0 30%, rgba(255,252,244,.92) 100%);transform:rotate(-18deg)} /* seme */
+  .gcell .fb.fb-03::after{content:"";position:absolute;top:2.95rem;left:50%;width:1px;height:.5rem;margin-left:.03rem;border:none;background:rgba(255,252,244,.55);transform:rotate(7deg)} /* radichetta */
+  .gcell .fb.fb-36{background:linear-gradient(rgba(255,252,244,.8),rgba(255,252,244,.8)) 50% 52% / 2px 1.15rem no-repeat,radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)} /* stelo */
+  .gcell .fb.fb-36::before{content:"";position:absolute;top:2rem;left:calc(50% - .8rem);width:.85rem;height:.5rem;border:none;border-radius:0 100% 0 100%;background:rgba(255,252,244,.9);transform:rotate(-14deg)} /* foglia sx */
+  .gcell .fb.fb-36::after{content:"";position:absolute;top:2rem;left:calc(50% - .05rem);width:.85rem;height:.5rem;border:none;border-radius:100% 0 100% 0;background:rgba(255,252,244,.9);transform:rotate(14deg)} /* foglia dx */
+  .gcell .fb.fb-69{background:linear-gradient(rgba(255,252,244,.8),rgba(255,252,244,.8)) 50% 55% / 2px 1.5rem no-repeat,radial-gradient(rgba(255,252,244,.92) 55%,rgba(0,0,0,0) 60%) 50% 12% / .8rem .8rem no-repeat,radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)} /* stelo + bocciolo */
+  .gcell .fb.fb-69::before{content:"";position:absolute;top:2.2rem;left:calc(50% - .85rem);width:.95rem;height:.55rem;border:none;border-radius:0 100% 0 100%;background:rgba(255,252,244,.9);transform:rotate(-14deg)}
+  .gcell .fb.fb-69::after{content:"";position:absolute;top:2.2rem;left:calc(50% - .1rem);width:.95rem;height:.55rem;border:none;border-radius:100% 0 100% 0;background:rgba(255,252,244,.9);transform:rotate(14deg)}
+  .gcell .fb.fb-912::before{content:"";position:absolute;top:1.15rem;left:50%;width:1.4rem;height:1.4rem;margin-left:-.7rem;border:none;border-radius:50%/55% 55% 45% 45%;background:radial-gradient(circle at 32% 26%, #fffdf8 0 32%, rgba(255,252,244,.92) 100%)} /* chioma */
+  .gcell .fb.fb-912::after{content:"";position:absolute;top:2.6rem;left:50%;width:2px;height:.85rem;margin-left:-1px;border:none;background:rgba(255,252,244,.8)} /* tronchetto */
   /* scheda dettaglio: stesse rilegature della griglia, in scala grande */
   .sheet .dcover .fb{position:absolute;inset:0;background:radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)}
   .sheet .dcover .fb::before{inset:.55rem;border-radius:.3rem}
   .sheet .dcover .fb::after{inset:.75rem;border-radius:.2rem}
   .sheet .dcover .fb.fb-teen::before{inset:.55rem;border:1.5px solid rgba(255,252,244,.6);border-radius:.3rem}
   .sheet .dcover .fb.fb-teen::after{content:"";position:absolute;top:50%;left:50%;width:5.2rem;height:5.2rem;margin:-2.6rem 0 0 -2.6rem;transform:rotate(45deg);border:2.5px solid rgba(255,252,244,.75);border-radius:.35rem}
-  .sheet .dcover .fb.fb-kid{background:radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)}
-  .sheet .dcover .fb.fb-kid::before{content:"";position:absolute;top:1.6rem;left:50%;width:2.5rem;height:2.95rem;margin-left:-1.25rem;border:none;border-radius:50%/55% 55% 45% 45%;background:radial-gradient(circle at 32% 26%, #fffdf8 0 32%, rgba(255,252,244,.92) 100%)} /* palloncino */
-  .sheet .dcover .fb.fb-kid::after{content:"";position:absolute;top:4.7rem;left:50%;width:1px;height:1.2rem;margin-left:.1rem;transform:rotate(8deg);background:rgba(255,252,244,.75)} /* filo */
+  /* giardino che cresce — versione scheda (più grande) */
+  .sheet .dcover .fb.fb-03::before{content:"";position:absolute;top:2.1rem;left:50%;width:1.35rem;height:1.85rem;margin-left:-.675rem;border:none;border-radius:50%/60% 60% 40% 40%;background:radial-gradient(circle at 35% 30%, #fffdf8 0 30%, rgba(255,252,244,.92) 100%);transform:rotate(-18deg)} /* seme */
+  .sheet .dcover .fb.fb-03::after{content:"";position:absolute;top:4.1rem;left:50%;width:1px;height:.75rem;margin-left:.04rem;border:none;background:rgba(255,252,244,.55);transform:rotate(7deg)} /* radichetta */
+  .sheet .dcover .fb.fb-36{background:linear-gradient(rgba(255,252,244,.8),rgba(255,252,244,.8)) 50% 52% / 3px 1.7rem no-repeat,radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)} /* stelo */
+  .sheet .dcover .fb.fb-36::before{content:"";position:absolute;top:2.8rem;left:calc(50% - 1.15rem);width:1.25rem;height:.7rem;border:none;border-radius:0 100% 0 100%;background:rgba(255,252,244,.9);transform:rotate(-14deg)}
+  .sheet .dcover .fb.fb-36::after{content:"";position:absolute;top:2.8rem;left:calc(50% - .1rem);width:1.25rem;height:.7rem;border:none;border-radius:100% 0 100% 0;background:rgba(255,252,244,.9);transform:rotate(14deg)}
+  .sheet .dcover .fb.fb-69{background:linear-gradient(rgba(255,252,244,.8),rgba(255,252,244,.8)) 50% 55% / 3px 2.2rem no-repeat,radial-gradient(rgba(255,252,244,.92) 55%,rgba(0,0,0,0) 60%) 50% 10% / 1.15rem 1.15rem no-repeat,radial-gradient(130% 130% at 30% 15%, rgba(255,255,255,.18), rgba(0,0,0,.28) 95%)} /* stelo + bocciolo */
+  .sheet .dcover .fb.fb-69::before{content:"";position:absolute;top:3.1rem;left:calc(50% - 1.2rem);width:1.35rem;height:.8rem;border:none;border-radius:0 100% 0 100%;background:rgba(255,252,244,.9);transform:rotate(-14deg)}
+  .sheet .dcover .fb.fb-69::after{content:"";position:absolute;top:3.1rem;left:calc(50% - .15rem);width:1.35rem;height:.8rem;border:none;border-radius:100% 0 100% 0;background:rgba(255,252,244,.9);transform:rotate(14deg)}
+  .sheet .dcover .fb.fb-912::before{content:"";position:absolute;top:1.7rem;left:50%;width:2rem;height:2rem;margin-left:-1rem;border:none;border-radius:50%/55% 55% 45% 45%;background:radial-gradient(circle at 32% 26%, #fffdf8 0 32%, rgba(255,252,244,.92) 100%)} /* chioma */
+  .sheet .dcover .fb.fb-912::after{content:"";position:absolute;top:3.8rem;left:50%;width:3px;height:1.2rem;margin-left:-1.5px;border:none;background:rgba(255,252,244,.8)} /* tronchetto */
   .sheet .dcover.wish .fb{background:none}
   .sheet .dcover.wish .fb::before,.sheet .dcover.wish .fb::after{display:none}
   .book.wish .cover,.gcell.wish .gcover,.sheet .dcover.wish{background:var(--terrabg)!important;border:2px dashed var(--terra)}
@@ -694,6 +710,7 @@ function cardRow(b){
 function fbTit(s){const w=String(s).split(" ");let out=[],tr=false;for(const x of w){if(out.length>=3){tr=true;break;}if(((out.join(" ")+" "+x).trim().length)>18){tr=true;break;}out.push(x);}if(!out.length){out=[String(s).slice(0,12)];tr=true;}return out.join(" ")+(tr?"\u2026":"");}
 function gib(n){const s="leri tavo smindi queno malto riveso fando piltri smanco diveto larbo sumi crovel opende travison lismo fenuto gardo beltri omavi sundi pelcro tarve monti rilu spado gendi flimo varbo santro milve dospo crande luve tarbo smendi quilo prano velto brindi salto merove quisto pandi fluvire scendo rabolto tinvera mostri plendi cavalto ronvelo smito peltri vondo lanzuri fresco mantivo splendo rivelto crando borvelo tindi sampo vrelto mando squila trivento palombo vindre scolta mervida quarvi blondi spresso talvi".split(" ");let o=[];for(let k=0;k<n;k++){o.push(s[(k*7+3)%s.length]);if(k%7===3||k%11===5)o[o.length-1]+=".";}return o.join(" ");}
 function ageKey(b){return b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}
+function fbCls(b){return b.age==="adults"?"adult":(b.age==="12+"?"teen":String(b.age).replace("-",""))}
 function ageTint(hex,age){
   // colore copertina rielaborato per fascia: bambini vivaci, ragazzi tonalita mature, adulti sobri
   if(typeof hex!=="string"||!/^#[0-9a-f]{6}$/i.test(hex))return hex;
@@ -724,7 +741,7 @@ function gridCells(list){
       <div class="gcover" style="background:${ageTint(b.cover,ageKey(b))}">
         ${cov}
         ${badge?`<span class="badge ${badgeCls}">${badge}</span>`:""}
-        <span class="fb ${b.type==="wish"?"":`fb-${b.age==="adults"?"adult":(b.age==="12+"?"teen":"kid")}`}">${fbPage(b)}</span>
+        <span class="fb ${b.type==="wish"?"":`fb-${fbCls(b)}`}">${fbPage(b)}</span>
         ${lentb?`<span class="lentb">${lentb}</span>`:""}
         ${heartBtn(b)}
       </div>
@@ -755,7 +772,7 @@ function openSheet(b){
   const owner = b.type==="wish" ? t.wishOwner : t.owner;
   $("sheet").innerHTML =
     `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
-    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+ageKey(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div><button class="fav dsfav${isFav(b)?" on":""}" data-fk="${esc(favKey(b))}" title="${isFav(b)?t.favRem:t.favAdd}" aria-label="${isFav(b)?t.favRem:t.favAdd}" onclick="event.stopPropagation();toggleFav(BOOKS[${BOOKS.indexOf(b)}],event)">${isFav(b)?"♥":"♡"}</button></div>`+
+    `<div class="dcover ${b.type==="wish"?"wish":""}" style="background:${ageTint(b.cover,ageKey(b))}">${coverImg(b,"L")}<div class="ncmsg fb ${b.type==="wish"?"":"fb-"+fbCls(b)}"><b>${b.type==="wish"?"✨":fbTit(b.title)}</b><span>${b.type==="wish"?t.wishCover:t.noCover}</span></div><button class="fav dsfav${isFav(b)?" on":""}" data-fk="${esc(favKey(b))}" title="${isFav(b)?t.favRem:t.favAdd}" aria-label="${isFav(b)?t.favRem:t.favAdd}" onclick="event.stopPropagation();toggleFav(BOOKS[${BOOKS.indexOf(b)}],event)">${isFav(b)?"♥":"♡"}</button></div>`+
     `<div class="dtitle">${esc(b.title)}</div>`+
     (b.author!=="—"&&b.author?`<div class="dauthor">${esc(b.author)}</div>`:"")+
     `<div class="dpills">${pills}</div>`+
