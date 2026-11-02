@@ -68,6 +68,12 @@
   .langSel{font-size:.85rem;border:1px solid var(--line);border-radius:.45rem;padding:.3rem .4rem;background:var(--card);color:var(--ink);margin-left:auto;height:1.85rem}
   .langSel:focus{font-size:1rem} /* iOS: no auto-zoom al focus (16px al momento del tap) */
   .themeBtn{border:1px solid var(--line);border-radius:.45rem;padding:.3rem .45rem;background:var(--card);cursor:pointer;font-size:.85rem;line-height:1.2;height:1.85rem}
+  .qrBtn{border:1px solid var(--line);border-radius:.45rem;padding:.3rem .55rem;background:var(--card);cursor:pointer;font-size:.85rem;font-weight:600;line-height:1.2;height:1.85rem}
+  .qrPanel{display:none;position:fixed;top:3.6rem;right:.6rem;z-index:90;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:.8rem .8rem .6rem;text-align:center}
+  .qrPanel.show{display:block}
+  .qrPanel svg{width:10.5rem;height:10.5rem;display:block;margin:0 auto}
+  .qrPanel .qrTitle{font-size:.78rem;font-weight:600;margin-bottom:.5rem;max-width:11rem}
+  .qrPanel .qrUrl{font-size:.62rem;color:var(--mut);margin-top:.5rem;word-break:break-all}
   .tagline{font-family:var(--font-head);font-style:italic;font-size:.85rem;color:var(--mut);margin-top:.35rem;max-width:46rem;margin-left:auto;margin-right:auto}
   .main{padding:0 .9rem;max-width:46rem;margin:0 auto}
   /* ---------- action buttons ---------- */
@@ -311,9 +317,15 @@
       <option value="de">Deutsch</option>
       <option value="en">English</option>
     </select>
+    <button id="qrBtn" class="qrBtn" aria-label="QR">QR</button>
     <button id="themeBtn" class="themeBtn" aria-label="Tema">🌙</button>
   </div>
   <p class="tagline" id="tagline"></p>
+</div>
+<div id="qrPanel" class="qrPanel" role="dialog" aria-label="QR">
+  <p class="qrTitle" id="qrTitle"></p>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-4 -4 37 37" shape-rendering="crispEdges"><rect x="-4" y="-4" width="37" height="37" fill="#fff"/><path d="M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM8 0h1v1h-1zM10 0h1v1h-1zM11 0h1v1h-1zM16 0h1v1h-1zM18 0h1v1h-1zM19 0h1v1h-1zM20 0h1v1h-1zM22 0h1v1h-1zM23 0h1v1h-1zM24 0h1v1h-1zM25 0h1v1h-1zM26 0h1v1h-1zM27 0h1v1h-1zM28 0h1v1h-1zM0 1h1v1h-1zM6 1h1v1h-1zM8 1h1v1h-1zM9 1h1v1h-1zM10 1h1v1h-1zM12 1h1v1h-1zM14 1h1v1h-1zM16 1h1v1h-1zM22 1h1v1h-1zM28 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM10 2h1v1h-1zM11 2h1v1h-1zM13 2h1v1h-1zM14 2h1v1h-1zM15 2h1v1h-1zM16 2h1v1h-1zM19 2h1v1h-1zM20 2h1v1h-1zM22 2h1v1h-1zM24 2h1v1h-1zM25 2h1v1h-1zM26 2h1v1h-1zM28 2h1v1h-1zM0 3h1v1h-1zM2 3h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM6 3h1v1h-1zM8 3h1v1h-1zM11 3h1v1h-1zM12 3h1v1h-1zM13 3h1v1h-1zM15 3h1v1h-1zM16 3h1v1h-1zM17 3h1v1h-1zM18 3h1v1h-1zM20 3h1v1h-1zM22 3h1v1h-1zM24 3h1v1h-1zM25 3h1v1h-1zM26 3h1v1h-1zM28 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM6 4h1v1h-1zM9 4h1v1h-1zM10 4h1v1h-1zM11 4h1v1h-1zM13 4h1v1h-1zM14 4h1v1h-1zM15 4h1v1h-1zM16 4h1v1h-1zM19 4h1v1h-1zM22 4h1v1h-1zM24 4h1v1h-1zM25 4h1v1h-1zM26 4h1v1h-1zM28 4h1v1h-1zM0 5h1v1h-1zM6 5h1v1h-1zM9 5h1v1h-1zM12 5h1v1h-1zM14 5h1v1h-1zM17 5h1v1h-1zM18 5h1v1h-1zM19 5h1v1h-1zM22 5h1v1h-1zM28 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM10 6h1v1h-1zM12 6h1v1h-1zM14 6h1v1h-1zM16 6h1v1h-1zM18 6h1v1h-1zM20 6h1v1h-1zM22 6h1v1h-1zM23 6h1v1h-1zM24 6h1v1h-1zM25 6h1v1h-1zM26 6h1v1h-1zM27 6h1v1h-1zM28 6h1v1h-1zM8 7h1v1h-1zM11 7h1v1h-1zM12 7h1v1h-1zM16 7h1v1h-1zM17 7h1v1h-1zM20 7h1v1h-1zM0 8h1v1h-1zM2 8h1v1h-1zM3 8h1v1h-1zM5 8h1v1h-1zM7 8h1v1h-1zM9 8h1v1h-1zM10 8h1v1h-1zM11 8h1v1h-1zM13 8h1v1h-1zM17 8h1v1h-1zM18 8h1v1h-1zM22 8h1v1h-1zM25 8h1v1h-1zM27 8h1v1h-1zM28 8h1v1h-1zM1 9h1v1h-1zM9 9h1v1h-1zM12 9h1v1h-1zM13 9h1v1h-1zM16 9h1v1h-1zM17 9h1v1h-1zM18 9h1v1h-1zM19 9h1v1h-1zM20 9h1v1h-1zM21 9h1v1h-1zM22 9h1v1h-1zM23 9h1v1h-1zM24 9h1v1h-1zM28 9h1v1h-1zM6 10h1v1h-1zM7 10h1v1h-1zM13 10h1v1h-1zM17 10h1v1h-1zM20 10h1v1h-1zM21 10h1v1h-1zM22 10h1v1h-1zM26 10h1v1h-1zM27 10h1v1h-1zM0 11h1v1h-1zM2 11h1v1h-1zM3 11h1v1h-1zM5 11h1v1h-1zM8 11h1v1h-1zM10 11h1v1h-1zM12 11h1v1h-1zM15 11h1v1h-1zM18 11h1v1h-1zM19 11h1v1h-1zM20 11h1v1h-1zM22 11h1v1h-1zM28 11h1v1h-1zM6 12h1v1h-1zM7 12h1v1h-1zM9 12h1v1h-1zM12 12h1v1h-1zM14 12h1v1h-1zM15 12h1v1h-1zM17 12h1v1h-1zM20 12h1v1h-1zM25 12h1v1h-1zM26 12h1v1h-1zM0 13h1v1h-1zM1 13h1v1h-1zM3 13h1v1h-1zM7 13h1v1h-1zM11 13h1v1h-1zM12 13h1v1h-1zM14 13h1v1h-1zM15 13h1v1h-1zM16 13h1v1h-1zM19 13h1v1h-1zM22 13h1v1h-1zM26 13h1v1h-1zM27 13h1v1h-1zM28 13h1v1h-1zM0 14h1v1h-1zM3 14h1v1h-1zM4 14h1v1h-1zM5 14h1v1h-1zM6 14h1v1h-1zM8 14h1v1h-1zM11 14h1v1h-1zM12 14h1v1h-1zM13 14h1v1h-1zM16 14h1v1h-1zM17 14h1v1h-1zM18 14h1v1h-1zM19 14h1v1h-1zM20 14h1v1h-1zM21 14h1v1h-1zM24 14h1v1h-1zM26 14h1v1h-1zM27 14h1v1h-1zM28 14h1v1h-1zM0 15h1v1h-1zM2 15h1v1h-1zM3 15h1v1h-1zM4 15h1v1h-1zM5 15h1v1h-1zM8 15h1v1h-1zM14 15h1v1h-1zM16 15h1v1h-1zM21 15h1v1h-1zM23 15h1v1h-1zM24 15h1v1h-1zM27 15h1v1h-1zM0 16h1v1h-1zM1 16h1v1h-1zM2 16h1v1h-1zM5 16h1v1h-1zM6 16h1v1h-1zM7 16h1v1h-1zM10 16h1v1h-1zM11 16h1v1h-1zM14 16h1v1h-1zM19 16h1v1h-1zM20 16h1v1h-1zM21 16h1v1h-1zM23 16h1v1h-1zM24 16h1v1h-1zM25 16h1v1h-1zM27 16h1v1h-1zM4 17h1v1h-1zM5 17h1v1h-1zM7 17h1v1h-1zM8 17h1v1h-1zM11 17h1v1h-1zM12 17h1v1h-1zM14 17h1v1h-1zM15 17h1v1h-1zM17 17h1v1h-1zM20 17h1v1h-1zM23 17h1v1h-1zM25 17h1v1h-1zM26 17h1v1h-1zM27 17h1v1h-1zM0 18h1v1h-1zM2 18h1v1h-1zM3 18h1v1h-1zM6 18h1v1h-1zM7 18h1v1h-1zM10 18h1v1h-1zM11 18h1v1h-1zM13 18h1v1h-1zM14 18h1v1h-1zM15 18h1v1h-1zM16 18h1v1h-1zM17 18h1v1h-1zM20 18h1v1h-1zM21 18h1v1h-1zM22 18h1v1h-1zM24 18h1v1h-1zM26 18h1v1h-1zM2 19h1v1h-1zM5 19h1v1h-1zM7 19h1v1h-1zM9 19h1v1h-1zM12 19h1v1h-1zM13 19h1v1h-1zM14 19h1v1h-1zM17 19h1v1h-1zM18 19h1v1h-1zM19 19h1v1h-1zM21 19h1v1h-1zM23 19h1v1h-1zM26 19h1v1h-1zM1 20h1v1h-1zM4 20h1v1h-1zM6 20h1v1h-1zM7 20h1v1h-1zM10 20h1v1h-1zM11 20h1v1h-1zM13 20h1v1h-1zM14 20h1v1h-1zM15 20h1v1h-1zM16 20h1v1h-1zM17 20h1v1h-1zM18 20h1v1h-1zM19 20h1v1h-1zM20 20h1v1h-1zM21 20h1v1h-1zM22 20h1v1h-1zM23 20h1v1h-1zM24 20h1v1h-1zM25 20h1v1h-1zM26 20h1v1h-1zM8 21h1v1h-1zM16 21h1v1h-1zM17 21h1v1h-1zM18 21h1v1h-1zM20 21h1v1h-1zM24 21h1v1h-1zM25 21h1v1h-1zM26 21h1v1h-1zM27 21h1v1h-1zM28 21h1v1h-1zM0 22h1v1h-1zM1 22h1v1h-1zM2 22h1v1h-1zM3 22h1v1h-1zM4 22h1v1h-1zM5 22h1v1h-1zM6 22h1v1h-1zM8 22h1v1h-1zM9 22h1v1h-1zM12 22h1v1h-1zM14 22h1v1h-1zM17 22h1v1h-1zM18 22h1v1h-1zM19 22h1v1h-1zM20 22h1v1h-1zM22 22h1v1h-1zM24 22h1v1h-1zM25 22h1v1h-1zM27 22h1v1h-1zM0 23h1v1h-1zM6 23h1v1h-1zM8 23h1v1h-1zM10 23h1v1h-1zM13 23h1v1h-1zM14 23h1v1h-1zM20 23h1v1h-1zM24 23h1v1h-1zM25 23h1v1h-1zM0 24h1v1h-1zM2 24h1v1h-1zM3 24h1v1h-1zM4 24h1v1h-1zM6 24h1v1h-1zM9 24h1v1h-1zM10 24h1v1h-1zM11 24h1v1h-1zM15 24h1v1h-1zM17 24h1v1h-1zM20 24h1v1h-1zM21 24h1v1h-1zM22 24h1v1h-1zM23 24h1v1h-1zM24 24h1v1h-1zM26 24h1v1h-1zM0 25h1v1h-1zM2 25h1v1h-1zM3 25h1v1h-1zM4 25h1v1h-1zM6 25h1v1h-1zM8 25h1v1h-1zM9 25h1v1h-1zM13 25h1v1h-1zM15 25h1v1h-1zM16 25h1v1h-1zM17 25h1v1h-1zM21 25h1v1h-1zM24 25h1v1h-1zM25 25h1v1h-1zM28 25h1v1h-1zM0 26h1v1h-1zM2 26h1v1h-1zM3 26h1v1h-1zM4 26h1v1h-1zM6 26h1v1h-1zM8 26h1v1h-1zM9 26h1v1h-1zM11 26h1v1h-1zM14 26h1v1h-1zM20 26h1v1h-1zM23 26h1v1h-1zM26 26h1v1h-1zM28 26h1v1h-1zM0 27h1v1h-1zM6 27h1v1h-1zM9 27h1v1h-1zM10 27h1v1h-1zM14 27h1v1h-1zM15 27h1v1h-1zM16 27h1v1h-1zM20 27h1v1h-1zM22 27h1v1h-1zM23 27h1v1h-1zM24 27h1v1h-1zM25 27h1v1h-1zM27 27h1v1h-1zM0 28h1v1h-1zM1 28h1v1h-1zM2 28h1v1h-1zM3 28h1v1h-1zM4 28h1v1h-1zM5 28h1v1h-1zM6 28h1v1h-1zM8 28h1v1h-1zM9 28h1v1h-1zM10 28h1v1h-1zM11 28h1v1h-1zM12 28h1v1h-1zM13 28h1v1h-1zM14 28h1v1h-1zM15 28h1v1h-1zM20 28h1v1h-1zM22 28h1v1h-1zM23 28h1v1h-1zM27 28h1v1h-1z" fill="#171717"/></svg>
+  <p class="qrUrl">https://apfallin.github.io/la-diffusa/</p>
 </div>
 
 <div class="main">
@@ -464,6 +476,7 @@ const T = {
     cSendSoon:"L'indirizzo email del sito è in arrivo — finché non c'è, il contatto avviene tramite il gestore.",
     cPriv:"Il tuo contatto resta privato: viene inoltrato solo a chi offre il libro, mai pubblicato.",
     cPrivW:"Il tuo contatto resta privato: viene inoltrato solo a chi cerca questo libro, mai pubblicato.",
+    qrTitle:"Mostra il QR per condividere il sito",
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Libro a sorpresa",diceMsg:"Il dado ha scelto per te",diceHint:"cerca la copertina evidenziata",
@@ -526,6 +539,7 @@ const T = {
     cSendSoon:"Die E-Mail-Adresse der Website kommt bald — bis dahin läuft der Kontakt über den Betreiber.",
     cPriv:"Deine Kontaktangabe bleibt privat: Sie wird nur an die bietende Person weitergeleitet, nie veröffentlicht.",
     cPrivW:"Deine Kontaktangabe bleibt privat: Sie wird nur an die suchende Person weitergeleitet, nie veröffentlicht.",
+    qrTitle:"Zeige diesen QR-Code, um die Seite zu teilen",
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überraschungsbuch",diceMsg:"Der Würfel hat für dich gewählt",diceHint:"suche die hervorgehobene Cover",
@@ -588,6 +602,7 @@ const T = {
     cSendSoon:"The site's email address is coming soon — meanwhile the contact goes through the site's keeper.",
     cPriv:"Your contact stays private: it's only forwarded to the person offering the book, never published.",
     cPrivW:"Your contact stays private: it's only forwarded to the person looking for this book, never published.",
+    qrTitle:"Show this QR to share the site",
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise book",diceMsg:"The dice picked for you",diceHint:"look for the highlighted cover",
@@ -831,6 +846,7 @@ function applyLang(){
   $("langSel").value=S.lang; // riflette lingua auto-rilevata o salvata
   $("tagline").textContent=t.tagline;
   $("howTitle").textContent=t.howTitle;
+  $("qrTitle").textContent=t.qrTitle;
   $("howList").innerHTML=t.how.map((s,i)=>`<li class="${i===t.how.length-1?"soon":""}">${s}</li>`).join("");
   $("faqTitle").textContent=t.faqTitle;
   $("faqList").innerHTML=t.faq.map(p=>`<div class="fitem"><div class="fq">${p[0]}</div><div class="fa">${p[1]}</div></div>`).join("");
@@ -960,7 +976,9 @@ $("dice").addEventListener("click",()=>{
 });
 $("totop").addEventListener("click",()=>{ try{window.scrollTo({top:0});}catch(e){window.scrollTo(0,0);} });
 window.addEventListener("scroll",()=>{ $("totop").classList.toggle("show",window.scrollY>400); },{passive:true});
-document.addEventListener("keydown",e=>{ if(e.key==="Escape") closeSheet(); });
+document.addEventListener("keydown",e=>{ if(e.key==="Escape"){ closeSheet(); $("qrPanel").classList.remove("show"); } });
+$("qrBtn").addEventListener("click",e=>{ e.stopPropagation(); $("qrPanel").classList.toggle("show"); });
+document.addEventListener("click",e=>{ if(!e.target.closest("#qrPanel")&&!e.target.closest("#qrBtn")) $("qrPanel").classList.remove("show"); });
 $("kiezSel").addEventListener("change",e=>{S.kiez=e.target.value;try{store.setItem("bb-kiez",S.kiez);}catch(err){} renderAll();});
 $("langBookSel").addEventListener("change",e=>{S.blang=e.target.value;try{store.setItem("bb-blang",S.blang);}catch(err){} renderAll();});
 $("genreSel").addEventListener("change",e=>{S.genre=e.target.value;renderAll();});
