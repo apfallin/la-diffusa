@@ -991,6 +991,12 @@ $("favChip").addEventListener("click",()=>{ S.fav=!S.fav; $("favChip").classList
 $("langSel").addEventListener("change",e=>{S.lang=e.target.value;try{store.setItem("bb-lang",S.lang);}catch(err){} applyLang();});
 
 applyLang();
+
+// Some mobile browsers (e.g. Firefox Android) restore form controls after a reload or
+// back navigation WITHOUT firing a change event -> the language select could show a
+// language different from the page (desync seen on Firefox Android, 2 Nov 2026).
+// pageshow fires AFTER that restore: re-sync every control with the real state.
+window.addEventListener("pageshow",()=>{ try{ $("langSel").value=S.lang; $("kiezSel").value=S.kiez; $("langBookSel").value=S.blang; $("genreSel").value=S.genre||""; $("q").value=S.q; }catch(e){} });
 </script>
 </body>
 </html>
