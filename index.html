@@ -69,7 +69,8 @@
   .langSel,.qrBtn,.themeBtn{font-size:.78rem;border:1px solid var(--line);border-radius:.45rem;padding:.26rem .45rem;background:var(--card);color:var(--ink);height:1.7rem;line-height:1.2;flex-shrink:0}
   .langSel{margin-left:auto}
   .langSel:focus{font-size:1rem} /* iOS: no auto-zoom al focus (16px al momento del tap) */
-  .qrBtn{font-weight:600}
+  .qrBtn{display:inline-flex;align-items:center;justify-content:center;padding:.26rem .5rem}
+  .qrBtn svg{width:14px;height:14px;display:block}
   .themeBtn{cursor:pointer}
   @media (max-width:26rem){ /* schermi stretti: logo più piccolo, così toprow non va mai a capo */
     .logo{font-size:1.15rem}
@@ -323,7 +324,7 @@
       <option value="de">Deutsch</option>
       <option value="en">English</option>
     </select>
-    <button id="qrBtn" class="qrBtn" aria-label="QR">QR</button>
+    <button id="qrBtn" class="qrBtn" aria-label="Mostra il QR per condividere il sito"><svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path fill-rule="evenodd" d="M3 3h7v7H3V3zm2 2v3h3V5H5zM14 3h7v7h-7V3zm2 2v3h3V5h-3zM3 14h7v7H3v-7zm2 2v3h3v-3H5zM14 14h3v3h-3v-3zM19 14h2v2h-2v-2zM14 19h7v2h-7v-2z"/></svg></button>
     <button id="themeBtn" class="themeBtn" aria-label="Tema">🌙</button>
   </div>
   <p class="tagline" id="tagline"></p>
@@ -887,6 +888,7 @@ function applyLang(){
   $("tagline").textContent=t.tagline;
   $("howTitle").textContent=t.howTitle;
   $("qrTitle").textContent=t.qrTitle;
+  $("qrBtn").setAttribute("aria-label",t.qrTitle); $("qrBtn").title=t.qrTitle;
   $("howList").innerHTML=t.how.map((s,i)=>`<li class="${i===t.how.length-1?"soon":""}">${s}</li>`).join("");
   $("faqTitle").textContent=t.faqTitle;
   $("faqList").innerHTML=t.faq.map(p=>`<div class="fitem"><div class="fq">${p[0]}</div><div class="fa">${p[1]}</div></div>`).join("");
