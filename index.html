@@ -463,6 +463,7 @@ const T = {
     cSendNow:"📨 Apri l'email pronta",
     cSendSoon:"L'indirizzo email del sito è in arrivo — finché non c'è, il contatto avviene tramite il gestore.",
     cPriv:"Il tuo contatto resta privato: viene inoltrato solo a chi offre il libro, mai pubblicato.",
+    cPrivW:"Il tuo contatto resta privato: viene inoltrato solo a chi cerca questo libro, mai pubblicato.",
     stateAvail:"✅ Disponibile al prestito",stateLent:"⏳ In prestito fino a",more:"mostra tutto",
     th:{t:"Titolo",a:"Autore",l:"Lingua",k:"Kiez",age:"Per",s:"Stato",o:"Da"},
     vList:"Lista",vTable:"Copertine",dice:"🎲 Libro a sorpresa",diceMsg:"Il dado ha scelto per te",diceHint:"cerca la copertina evidenziata",
@@ -524,6 +525,7 @@ const T = {
     cSendNow:"📨 E-Mail fertigstellen",
     cSendSoon:"Die E-Mail-Adresse der Website kommt bald — bis dahin läuft der Kontakt über den Betreiber.",
     cPriv:"Deine Kontaktangabe bleibt privat: Sie wird nur an die bietende Person weitergeleitet, nie veröffentlicht.",
+    cPrivW:"Deine Kontaktangabe bleibt privat: Sie wird nur an die suchende Person weitergeleitet, nie veröffentlicht.",
     stateAvail:"✅ Verfügbar zum Verleihen",stateLent:"⏳ Ausgeliehen bis",more:"mehr anzeigen",
     th:{t:"Titel",a:"Autor",l:"Sprache",k:"Kiez",age:"Für",s:"Status",o:"Von"},
     vList:"Liste",vTable:"Cover",dice:"🎲 Überraschungsbuch",diceMsg:"Der Würfel hat für dich gewählt",diceHint:"suche die hervorgehobene Cover",
@@ -585,6 +587,7 @@ const T = {
     cSendNow:"📨 Open the ready-made email",
     cSendSoon:"The site's email address is coming soon — meanwhile the contact goes through the site's keeper.",
     cPriv:"Your contact stays private: it's only forwarded to the person offering the book, never published.",
+    cPrivW:"Your contact stays private: it's only forwarded to the person looking for this book, never published.",
     stateAvail:"✅ Available to borrow",stateLent:"⏳ On loan until",more:"show more",
     th:{t:"Title",a:"Author",l:"Language",k:"Kiez",age:"For",s:"Status",o:"By"},
     vList:"List",vTable:"Covers",dice:"🎲 Surprise book",diceMsg:"The dice picked for you",diceHint:"look for the highlighted cover",
@@ -757,7 +760,7 @@ function contactSheet(b){
     (SITE_CONTACT?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
     `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
     `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
-    `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${t.cPriv}</div>`;
+    `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${b.type==="wish"?t.cPrivW:t.cPriv}</div>`;
   $("cmsg").value=msg;
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
