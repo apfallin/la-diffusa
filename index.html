@@ -666,9 +666,41 @@ function filtered(){
   );
 }
 
+const CID_MEMO = {}; // cover id trovati in questa sessione (evita ricerche doppie lista/griglia/scheda)
 function coverImg(b,size){
-  const src=b.coverUrl||(b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg?default=false`:"");
-  return src?`<img src="${src}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="${esc(b.title)}" onload="var fb=this.parentNode.querySelector('.fb');if(fb)fb.style.display='none'" onerror="this.remove()">`:"";
+  const src=b.coverUrl||coverSrc(b,size);
+  return src?`<img src="${src}" data-i="${BOOKS.indexOf(b)}" data-s="${size}" loading="lazy" decoding="async" referrerpolicy="no-referrer" alt="${esc(b.title)}" onload="var fb=this.parentNode.querySelector('.fb');if(fb)fb.style.display='none'" onerror="coverFail(this)">`:"";
+}
+function coverSrc(b,size){
+  // catena: coverId (match congelato nel dato) → cache locale (ricerca titolo+autore già riuscita) → ISBN
+  let cid=b.coverId;
+  if(!cid){ try{cid=store.getItem("bb-cid-"+favKey(b));}catch(e){} }
+  if(cid)return `https://covers.openlibrary.org/b/id/${cid}-${size}.jpg?default=false`;
+  return b.isbn?`https://covers.openlibrary.org/b/isbn/${b.isbn}-${size}.jpg?default=false`:"";
+}
+function coverFail(img){
+  // ISBN fallito o assente: UNA sola ricerca per titolo+autore su Open Library
+  // (puo' dare la copertina di un'edizione diversa, es. inglese: accettato da Andrea, 2 Nov 2026).
+  // Il cover id trovato si congela in localStorage: alle visite successive niente piu' ricerche runtime.
+  const b=BOOKS[+img.dataset.i], size=img.dataset.s||"M";
+  if(!b){img.remove();return;}
+  const fk=favKey(b);
+  if(CID_MEMO[fk]!==undefined){ if(CID_MEMO[fk]&&!img.dataset.tried){img.dataset.tried="1";img.src=`https://covers.openlibrary.org/b/id/${CID_MEMO[fk]}-${size}.jpg?default=false`;} else img.remove(); return; }
+  if(!img.dataset.tried && b.title && b.author && b.author!=="—" && b.type!=="wish"){
+    img.dataset.tried="1";
+    fetch(`https://openlibrary.org/search.json?limit=5&fields=cover_i&title=${encodeURIComponent(b.title)}&author=${encodeURIComponent(b.author)}`)
+      .then(r=>r.json())
+      .then(j=>{
+        const hit=(j.docs||[]).find(d=>d.cover_i);
+        CID_MEMO[fk]=hit?hit.cover_i:null;
+        if(!hit){img.remove();return;}
+        try{store.setItem("bb-cid-"+fk,String(hit.cover_i));}catch(e){}
+        img.src=`https://covers.openlibrary.org/b/id/${hit.cover_i}-${size}.jpg?default=false`;
+      })
+      .catch(()=>{CID_MEMO[fk]=null;img.remove();});
+    return;
+  }
+  img.remove();
 }
 function cardRow(b){
   const t=T[S.lang];
@@ -905,7 +937,7 @@ $("legalLink").addEventListener("click",e=>{
     <p>Verantwortlich nach § 18 Abs. 2 MStV: wie oben.</p>
     <h4>Datenschutzerklärung</h4>
     <p>Diese Website setzt keine Cookies und nutzt kein Tracking. Im Browser werden nur die gewählten Einstellungen (Sprache, Thema, Sortierung, Ansicht, Kiez und Buchsprache) sowie deine Favoriten (♥) lokal gespeichert (localStorage) und nicht übertragen.</p>
-    <p>Buchcover werden von externen Anbietern (u.a. Open Library) geladen; dabei werden technisch notwendige Daten (u.a. die IP-Adresse) an den jeweiligen Anbieter übermittelt (Hinweis nach § 27 MDStV / § 5 DDG). Ohne Verbindung oder ohne Cover wird ein farbiger Platzhalter angezeigt.</p>
+    <p>Buchcover werden von externen Anbietern (u.a. Open Library) geladen; bei fehlendem Cover wird zusätzlich eine Titel-/Autorensuche bei Open Library durchgeführt (Übermittlung von Titel und Autor des Buchs, keine personenbezogenen Daten). dabei werden technisch notwendige Daten (u.a. die IP-Adresse) an den jeweiligen Anbieter übermittelt (Hinweis nach § 27 MDStV / § 5 DDG). Ohne Verbindung oder ohne Cover wird ein farbiger Platzhalter angezeigt.</p>
     <p>Angebote und Wünsche werden über ein Google-Formular eingesammelt und vor der Veröffentlichung vom Betreiber geprüft; dabei gelten die Datenschutzhinweise von Google. Kontaktdaten werden niemals auf dieser Website veröffentlicht.</p>
     <p>Kontaktangaben (z. B. Name, E-Mail-Adresse), die über das Formular oder per E-Mail eingehen, werden vom Betreiber ausschließlich zur Vermittlung von Ausleihen und für Rückfragen gespeichert und verarbeitet (Rechtsgrundlage: Art. 6 Abs. 1 lit. f DSGVO — berechtigtes Interesse am Betrieb der Plattform). Sie werden nicht auf dieser Website veröffentlicht, nicht an Dritte weitergegeben (außer soweit für die Vermittlung erforderlich) und so lange gespeichert, wie die zugehörigen Angebote oder Wünsche im Katalog geführt werden. Auf Wunsch werden die Kontaktdaten gelöscht — in diesem Fall werden auch die zugehörigen Einträge aus dem Katalog entfernt. Die Bearbeitung erfolgt teilweise automatisiert als unterstützendes Werkzeug des Betreibers; es gibt keine vollautomatisierten Entscheidungen mit rechtlicher Wirkung, und alle Vorgänge bleiben beim Betreiber einsehbar.</p>
     <p>Hosting: GitHub Pages (github.com); es gilt die Datenschutzerklärung von GitHub.</p>
@@ -923,7 +955,7 @@ $("legalLink").addEventListener("click",e=>{
     <p>E-mail: ${SITE_INFO}</p>
     <p>Responsabile ai sensi del § 18 comma 2 MStV: come sopra.</p>
     <p><b>Informativa sulla privacy</b> — Questo sito non usa cookie né tracciamento. Nel browser vengono salvate, tramite localStorage, solo le impostazioni scelte (lingua, tema, ordinamento, vista, Kiez e lingua dei libri) e i tuoi preferiti (♥), senza trasmetterle.</p>
-    <p>Le copertine dei libri vengono caricate da fornitori esterni (tra cui Open Library); in tal caso dati tecnicamente necessari (tra cui l'indirizzo IP) vengono trasmessi al fornitore (nota ai sensi del § 27 MDStV / § 5 DDG). Senza connessione o senza copertina viene mostrato un segnaposto colorato.</p>
+    <p>Le copertine dei libri vengono caricate da fornitori esterni (tra cui Open Library); in tal caso dati tecnicamente necessari (tra cui l'indirizzo IP) vengono trasmessi al fornitore (nota ai sensi del § 27 MDStV / § 5 DDG); quando manca la copertina viene effettuata una ricerca per titolo e autore su Open Library (titolo e autore del libro, nessun dato personale). Senza connessione o senza copertina viene mostrato un segnaposto colorato.</p>
     <p>Offerte e desideri vengono raccolti tramite un Google Form e verificati dal gestore prima della pubblicazione; valgono le note sulla privacy di Google. I dati di contatto non vengono mai pubblicati su questo sito.</p>
     <p>I dati di contatto (es. nome, indirizzo email) che arrivano tramite il form o per email vengono salvati e trattati dal gestore esclusivamente per mediare i prestiti e per rispondere (base giuridica: art. 6 par. 1 lett. f GDPR — legittimo interesse al funzionamento della piattaforma). Non vengono pubblicati sul sito e non vengono ceduti a terzi (salvo quanto strettamente necessario alla mediazione); restano salvati finché le relative offerte o richieste sono in catalogo. Su richiesta vengono cancellati — in tal caso anche le voci corrispondenti vengono rimosse dal catalogo. La lavorazione avviene in parte in modo automatizzato come strumento di supporto del gestore; non esistono decisioni completamente automatizzate con effetti giuridici, e tutte le pratiche restano consultabili dal gestore.</p>
     <p>Hosting: GitHub Pages (github.com); vale l'informativa sulla privacy di GitHub.</p>
@@ -938,7 +970,7 @@ $("legalLink").addEventListener("click",e=>{
     <p>E-mail: ${SITE_INFO}</p>
     <p>Responsible pursuant to § 18 (2) MStV: as above.</p>
     <p><b>Privacy policy</b> — This website uses no cookies and no tracking. Only your chosen settings (language, theme, sorting, view, Kiez and book language) and your favourites (♥) are stored locally in your browser (localStorage) and never transmitted.</p>
-    <p>Book covers are loaded from external providers (including Open Library); technically necessary data (including your IP address) is transmitted to the respective provider (notice pursuant to § 27 MDStV / § 5 DDG). Without a connection or without a cover, a coloured placeholder is shown.</p>
+    <p>Book covers are loaded from external providers (including Open Library); technically necessary data (including your IP address) is transmitted to the respective provider (notice pursuant to § 27 MDStV / § 5 DDG); when a cover is missing, a search by title and author is performed on Open Library (book title and author only, no personal data). Without a connection or without a cover, a coloured placeholder is shown.</p>
     <p>Offers and requests are collected via a Google Form and reviewed by the operator before publication; Google's privacy notices apply. Contact details are never published on this website.</p>
     <p>Contact details (e.g. name, e-mail address) received via the form or by e-mail are stored and processed by the operator solely to arrange loans and to answer questions (legal basis: Art. 6 (1) (f) GDPR — legitimate interest in operating the platform). They are not published on this website and are not passed on to third parties (except as far as necessary for arranging a loan); they are kept for as long as the related offers or requests remain in the catalogue. Upon request they are deleted — in that case the related entries are also removed from the catalogue. Processing is partly automated as a supporting tool of the operator; there are no fully automated decisions with legal effect, and all records remain viewable by the operator.</p>
     <p>Hosting: GitHub Pages (github.com); GitHub's privacy policy applies.</p>
@@ -1031,4 +1063,3 @@ window.addEventListener("pageshow",()=>{ try{ $("langSel").value=S.lang; $("kiez
 </script>
 </body>
 </html>
-
