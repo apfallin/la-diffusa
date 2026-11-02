@@ -287,6 +287,7 @@
   .gtitle{font-size:.76rem;font-weight:600;font-family:var(--font-head);line-height:1.25;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;min-height:1.9rem}
   .gtitle.wphrase{font-style:italic;color:var(--terra);font-weight:500}
   .wkind{font-size:.68rem;color:var(--mut);font-style:italic;font-family:var(--font-head);line-height:1.2;margin-top:.1rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .gauthor{font-size:.68rem;color:var(--mut);font-family:var(--font-head);line-height:1.2;margin-top:.05rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .gmeta{font-size:.68rem;margin-top:.25rem;display:flex;flex-direction:column;gap:.08rem}
   .gmeta .row1{display:flex;justify-content:space-between;gap:.3rem}
   .gmeta .l{color:var(--terra);font-style:italic}
@@ -764,7 +765,7 @@ function gridCells(list){
       </div>
       <div class="ginfo">
         <div class="gtitle${b.type==="wish"?" wphrase":""}" title="${esc(b.title+(b.author&&b.author!=="—"?" — "+b.author:""))}">${esc(b.title)}</div>
-        ${b.type==="wish"?`<div class="wkind">${t.wishK[b.kind]||t.kindTitle}</div>`:""}
+        ${b.type==="wish"?`<div class="wkind">${t.wishK[b.kind]||t.kindTitle}</div>`:(b.author&&b.author!=="—"?`<div class="gauthor">${esc(b.author)}</div>`:"")}
         <div class="gmeta">
           <div class="row1"><span class="l">${b.lang}</span><span class="k">${b.kiez}</span></div>
         </div>
