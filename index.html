@@ -65,10 +65,17 @@
   .logo{font-family:var(--font-head);font-size:1.5rem;font-weight:700;letter-spacing:-.02em;display:flex;align-items:center;gap:.45rem}
   .logo .bk{color:var(--green);font-style:italic}
   .logo .mark{font-size:1.3rem}
-  .langSel{font-size:.85rem;border:1px solid var(--line);border-radius:.45rem;padding:.3rem .4rem;background:var(--card);color:var(--ink);margin-left:auto;height:1.85rem}
+  /* terzina uniforme lingua · QR · tema: UNA regola condivisa, compatta — mai farli divergere (lezione Berlin Events, 2 Nov: su Firefox il tema andava a capo) */
+  .langSel,.qrBtn,.themeBtn{font-size:.78rem;border:1px solid var(--line);border-radius:.45rem;padding:.26rem .45rem;background:var(--card);color:var(--ink);height:1.7rem;line-height:1.2;flex-shrink:0}
+  .langSel{margin-left:auto}
   .langSel:focus{font-size:1rem} /* iOS: no auto-zoom al focus (16px al momento del tap) */
-  .themeBtn{border:1px solid var(--line);border-radius:.45rem;padding:.3rem .45rem;background:var(--card);cursor:pointer;font-size:.85rem;line-height:1.2;height:1.85rem}
-  .qrBtn{border:1px solid var(--line);border-radius:.45rem;padding:.3rem .55rem;background:var(--card);cursor:pointer;font-size:.85rem;font-weight:600;line-height:1.2;height:1.85rem}
+  .qrBtn{font-weight:600}
+  .themeBtn{cursor:pointer}
+  @media (max-width:26rem){ /* schermi stretti: logo più piccolo, così toprow non va mai a capo */
+    .logo{font-size:1.15rem}
+    .logo .mark{font-size:1rem}
+    .toprow{gap:.45rem}
+  }
   .qrPanel{display:none;position:fixed;top:3.6rem;right:.6rem;z-index:90;background:var(--card);border:1px solid var(--line);border-radius:var(--radius);box-shadow:var(--shadow);padding:.8rem .8rem .6rem;text-align:center}
   .qrPanel.show{display:block}
   .qrPanel svg{width:10.5rem;height:10.5rem;display:block;margin:0 auto}
