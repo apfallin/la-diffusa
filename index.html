@@ -214,6 +214,7 @@
   .sheet .contact.offer{background:var(--green);color:#fff}
   .sheet .contact.wishc{background:var(--terra);color:#fff}
   .sheet .dfoot{margin-top:.5rem;text-align:center;font-size:.7rem;color:var(--mut)}
+  .sheet .pauseNote{margin-top:.7rem;padding:.8rem .9rem;background:var(--terrabg);border:1px solid var(--terraline);border-left:4px solid var(--terra);border-radius:.7rem;font-size:.9rem;font-weight:600;line-height:1.5;color:var(--ink);text-align:left}
   .sheet .cmsg{width:100%;box-sizing:border-box;margin-top:.7rem;border:1px solid var(--line);border-radius:.65rem;padding:.7rem;font-size:1rem;font-family:inherit;background:var(--paper);color:var(--ink);resize:none}
   .sheet .durLbl{display:block;margin-top:.6rem;font-size:.75rem;color:var(--mut)}
   .sheet select.ctl{width:100%;margin:.3rem 0 .1rem}
@@ -816,6 +817,7 @@ function contactSheet(b){
   $("sheet").innerHTML=
     `<div class="grab"></div><div class="closeRow"><button class="close" id="sheetClose">✕</button></div>`+
     `<div class="dtitle">${t.cTitle}</div>`+
+    (PAUSED?`<div class="pauseNote">\u23f8\ufe0f ${t.pausedMsg}</div>`:"")+
     `<div class="downer">${t.cIntro}</div>`+
     `<textarea class="cmsg" id="cmsg" rows="4" readonly></textarea>`+
     `<label class="durLbl" for="durSel">${b.type==="wish"?t.dLabelW:t.dLabel}</label>`+
@@ -823,7 +825,7 @@ function contactSheet(b){
     (SITE_CONTACT&&!PAUSED?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
     `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
     `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
-    `<div class="dfoot">${PAUSED?t.pausedMsg:(SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon)} ${b.type==="wish"?t.cPrivW:t.cPriv}</div>`;
+    `<div class="dfoot">${PAUSED?(b.type==="wish"?t.cPrivW:t.cPriv):(SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon)+" "+(b.type==="wish"?t.cPrivW:t.cPriv)}</div>`;
   $("cmsg").value=msg;
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
