@@ -424,6 +424,7 @@ const KIEZE = ["Mitte","Neukölln","Kreuzberg","Friedrichshain","Pankow","Weddin
 const BOOKLANGS = ["Italiano","English","Français"]; // NO Deutsch: la lingua del luogo la coprono le biblioteche VBB — il concetto del sito sono i libri in ALTRE lingue
 const GENRES = ["fiction","mystery","sff","comics","poetry","nonfiction","history"];
 const SITE_CONTACT = "6btksjfx@anonaddy.me"; // alias email pubblico del sito
+const PAUSED = true; // 3 Nov 2026: pausa tecnica (casella del gestore non raggiungibile) - form e richieste email disattivati. Rimettere a false per riattivare.
 const SITE_INFO = "ladiffusa.fjkrx@passinbox.com"; // contatto gestore nel footer/Impressum
 
 // ============ UI STRINGS ============
@@ -440,6 +441,7 @@ const T = {
     howFaq:"Hai altri dubbi? Guarda le domande frequenti, in fondo alla pagina ↓",
     mailSent:"Se hai inviato l’e-mail preimpostata, il sistema ti manderà conferma entro 24 ore.",
     formSent:"Se hai inviato il form, il tuo libro arriva in catalogo in genere entro un giorno: lo troverai qui.",
+    pausedMsg:"Pausa tecnica: offerte e richieste sono temporaneamente sospese, il servizio riapre presto. Nel frattempo puoi sfogliare lo scaffale!",
     faqTitle:"Domande frequenti",
     faq:[["È gratis?","Sì, è tutto gratuito: uno scambio tra vicini, nessun costo, nessuna registrazione."],
       ["Serve un account?","No: si usa direttamente dal telefono e il sistema mette in contatto le persone."],
@@ -504,6 +506,7 @@ const T = {
     howFaq:"Noch Fragen? Schau in die häufigen Fragen, unten auf der Seite ↓",
     mailSent:"Wenn du die vorausgefüllte E-Mail gesendet hast, sendet dir das System innerhalb von 24 Stunden eine Bestätigung.",
     formSent:"Wenn du das Formular gesendet hast, steht dein Buch in der Regel innerhalb eines Tages im Katalog.",
+    pausedMsg:"Technische Pause: Angebote und Anfragen sind vor\u00fcbergehend ausgesetzt, der Dienst \u00f6ffnet bald wieder. Bis dahin kannst du das Regal durchst\u00f6bern!",
     faqTitle:"Häufige Fragen",
     faq:[["Ist es kostenlos?","Ja, alles kostenlos: ein Austausch zwischen Nachbarn, ohne Kosten, ohne Registrierung."],
       ["Brauche ich ein Konto?","Nein: alles läuft direkt vom Handy, das System stellt den Kontakt her."],
@@ -568,6 +571,7 @@ const T = {
     howFaq:"More questions? See the FAQ at the bottom of the page ↓",
     mailSent:"If you sent the prefilled email, the system will send you confirmation within 24 hours.",
     formSent:"If you submitted the form, your book usually lands in the catalog within a day — you'll find it here.",
+    pausedMsg:"Technical pause: offers and requests are temporarily on hold, the service will reopen soon. In the meantime, feel free to browse the shelf!",
     faqTitle:"Frequently asked questions",
     faq:[["Is it free?","Yes, everything is free: an exchange between neighbours, no costs, no sign-up."],
       ["Do I need an account?","No: everything runs straight from your phone, and the system puts people in touch."],
@@ -816,10 +820,10 @@ function contactSheet(b){
     `<textarea class="cmsg" id="cmsg" rows="4" readonly></textarea>`+
     `<label class="durLbl" for="durSel">${b.type==="wish"?t.dLabelW:t.dLabel}</label>`+
     `<select id="durSel" class="ctl" onchange="updMsg()"><option value="">${t.dDef}</option>${t.dOpts.map((o,i)=>`<option value="${i}">${o}</option>`).join("")}</select>`+
-    (SITE_CONTACT?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
+    (SITE_CONTACT&&!PAUSED?`<a class="contact offer" id="mailBtn" href="mailto:${SITE_CONTACT}?subject=${encodeURIComponent(t.cSubj(b.title,b))}&body=${encodeURIComponent(msg)}">${t.cSendNow}</a>`:"")+
     `<button class="contact ${SITE_CONTACT?"ghost":"offer"}" id="copyBtn" onclick="copyMsg()">${t.cCopy}</button>`+
     `<button class="contact ghost" onclick="openSheet(BOOKS[${BOOKS.indexOf(b)}])">← ${t.cBack}</button>`+
-    `<div class="dfoot">${SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon} ${b.type==="wish"?t.cPrivW:t.cPriv}</div>`;
+    `<div class="dfoot">${PAUSED?t.pausedMsg:(SITE_CONTACT?t.cSend(SITE_CONTACT):t.cSendSoon)} ${b.type==="wish"?t.cPrivW:t.cPriv}</div>`;
   $("cmsg").value=msg;
   $("overlay").style.display="flex";
   $("sheetClose").addEventListener("click",closeSheet);
@@ -827,7 +831,7 @@ function contactSheet(b){
   if(mb) mb.addEventListener("click",()=>{ MAILTS=Date.now(); setTimeout(()=>toast(T[S.lang].mailSent,20000),2500); });
 }
 let MAILTS=0, FORMTS=0;
-["btnOffer","btnWish"].forEach(id=>{ const el=$(id); if(el) el.addEventListener("click",()=>{ FORMTS=Date.now(); toast(T[S.lang].formSent,20000); }); });
+["btnOffer","btnWish"].forEach(id=>{ const el=$(id); if(el){ if(PAUSED){ el.removeAttribute("href"); el.removeAttribute("target"); el.addEventListener("click",e=>{ e.preventDefault(); toast(T[S.lang].pausedMsg,20000); }); } else el.addEventListener("click",()=>{ FORMTS=Date.now(); toast(T[S.lang].formSent,20000); }); } });
 document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState!=="visible")return;
   const t=T[S.lang];
